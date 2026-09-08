@@ -11,12 +11,11 @@ app.use(express.json())
 
 const PORT = 3000
 
-// Composición de dependencias
 const repositorioEquipos = new RepositorioEquiposMySQL()
 const crearEquipo = new CrearEquipo(repositorioEquipos)
 const equipoController = new EquipoController(crearEquipo)
 
-// Rutas
+
 app.use(crearEquipoRoutes(equipoController))
 
 app.get('/', (_req, res) => {
