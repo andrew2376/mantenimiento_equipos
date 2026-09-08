@@ -1,1 +1,0 @@
-export { EquipoDAOMySQL as RepositorioEquiposMySQL } from './EquipoDAOMySQL.js'

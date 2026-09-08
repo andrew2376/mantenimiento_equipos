@@ -1,76 +1,71 @@
-import { describe, it, beforeEach } from 'node:test'
-import assert from 'node:assert/strict'
-import { EquipoDAOEnMemoria } from '../dobles/EquipoDAOEnMemoria.js'
-import { RegistrarEquipo } from '../../src/aplicacion/casos-uso/RegistrarEquipo.js'
-import { ObtenerEquipos } from '../../src/aplicacion/casos-uso/ObtenerEquipos.js'
+import { describe, it, expect, beforeEach } from 'vitest'
+import { EquipoDAOEnMemoria } from '../dobles/EquipoDAOEnMemoria'
+import { RegistrarEquipo, SerialYaRegistrado } from '../../src/aplicacion/casos-uso/RegistrarEquipo'
+import { ConsultarEquipos, EquipoNoEncontrado } from '../../src/aplicacion/casos-uso/ConsultarEquipos'
 
-describe('Dominio y Casos de Uso: Equipos', () => {
-  let equipoDAO: EquipoDAOEnMemoria
+describe('Módulo de Equipos - Pruebas Unitarias', () => {
+  let dao: EquipoDAOEnMemoria
   let registrarEquipo: RegistrarEquipo
-  let obtenerEquipos: ObtenerEquipos
+  let consultarEquipos: ConsultarEquipos
 
   beforeEach(() => {
-    equipoDAO = new EquipoDAOEnMemoria()
-    registrarEquipo = new RegistrarEquipo(equipoDAO)
-    obtenerEquipos = new ObtenerEquipos(equipoDAO)
+    dao = new EquipoDAOEnMemoria()
+    registrarEquipo = new RegistrarEquipo(dao)
+    consultarEquipos = new ConsultarEquipos(dao)
   })
 
-  it('debe registrar un nuevo equipo y devolver su DTO', async () => {
+  it('debe registrar un nuevo equipo correctamente', async () => {
     const nuevo = await registrarEquipo.ejecutar({
-      codigoInventario: 'EQ-001',
-      nombre: 'Portátil Dell Latitude',
+      serial: 'EQ-001',
+      nombre: 'Laptop Dell Inspiron 15',
       tipo: 'PORTATIL',
-      marca: 'Dell',
-      modelo: 'Latitude 5420',
-      numeroSerie: 'SN12345678',
-      ubicacion: 'Laboratorio 1',
-      estado: 'OPERATIVO'
+      ubicacion: 'Laboratorio de Sistemas 1',
     })
 
-    assert.ok(nuevo.id)
-    assert.equal(nuevo.codigoInventario, 'EQ-001')
-    assert.equal(nuevo.nombre, 'Portátil Dell Latitude')
-    assert.equal(nuevo.estado, 'OPERATIVO')
+    expect(nuevo.id).toBe(1)
+    expect(nuevo.serial).toBe('EQ-001')
+    expect(nuevo.estado).toBe('OPERATIVO')
+    expect(nuevo.creadoEn).toBeInstanceOf(Date)
+  })
+
+  it('debe lanzar error si se intenta registrar un serial duplicado', async () => {
+    await registrarEquipo.ejecutar({
+      serial: 'EQ-001',
+      nombre: 'Laptop 1',
+      ubicacion: 'Oficina A',
+    })
+
+    await expect(
+      registrarEquipo.ejecutar({
+        serial: 'eq-001', // debe ser case-insensitive
+        nombre: 'Laptop 2',
+        ubicacion: 'Oficina B',
+      })
+    ).rejects.toThrow(SerialYaRegistrado)
+  })
+
+  it('debe consultar un equipo por su ID', async () => {
+    const creado = await registrarEquipo.ejecutar({
+      serial: 'EQ-002',
+      nombre: 'PC Torre HP',
+      tipo: 'ESCRITORIO',
+      ubicacion: 'Biblioteca',
+    })
+
+    const encontrado = await consultarEquipos.porId(creado.id)
+    expect(encontrado.serial).toBe('EQ-002')
+    expect(encontrado.nombre).toBe('PC Torre HP')
+  })
+
+  it('debe lanzar error al consultar un ID de equipo inexistente', async () => {
+    await expect(consultarEquipos.porId(999)).rejects.toThrow(EquipoNoEncontrado)
   })
 
   it('debe listar todos los equipos registrados', async () => {
-    await registrarEquipo.ejecutar({
-      codigoInventario: 'EQ-001',
-      nombre: 'Portátil Dell',
-      tipo: 'PORTATIL',
-      marca: 'Dell',
-      ubicacion: 'Sala A',
-      estado: 'OPERATIVO'
-    })
+    await registrarEquipo.ejecutar({ serial: 'EQ-101', nombre: 'PC 1', ubicacion: 'Lab 1' })
+    await registrarEquipo.ejecutar({ serial: 'EQ-102', nombre: 'PC 2', ubicacion: 'Lab 2' })
 
-    await registrarEquipo.ejecutar({
-      codigoInventario: 'EQ-002',
-      nombre: 'PC Escritorio HP',
-      tipo: 'ESCRITORIO',
-      marca: 'HP',
-      ubicacion: 'Sala B',
-      estado: 'OPERATIVO'
-    })
-
-    const lista = await obtenerEquipos.ejecutar()
-    assert.equal(lista.length, 2)
-    assert.equal(lista[0].codigoInventario, 'EQ-001')
-    assert.equal(lista[1].codigoInventario, 'EQ-002')
-  })
-
-  it('debe obtener un equipo por su ID', async () => {
-    const creado = await registrarEquipo.ejecutar({
-      codigoInventario: 'EQ-003',
-      nombre: 'Servidor Lenovo',
-      tipo: 'SERVIDOR',
-      marca: 'Lenovo',
-      ubicacion: 'Data Center',
-      estado: 'OPERATIVO'
-    })
-
-    const encontrado = await obtenerEquipos.ejecutarPorId(creado.id)
-    assert.notEqual(encontrado, null)
-    assert.equal(encontrado?.codigoInventario, 'EQ-003')
+    const lista = await consultarEquipos.listarTodos()
+    expect(lista).toHaveLength(2)
   })
 })
-

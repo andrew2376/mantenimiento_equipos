@@ -1,66 +1,53 @@
 export const TIPOS_MANTENIMIENTO = ['PREVENTIVO', 'CORRECTIVO'] as const
 export type TipoMantenimiento = (typeof TIPOS_MANTENIMIENTO)[number]
 
-export const ESTADOS_MANTENIMIENTO = ['SOLICITADO', 'EN_PROCESO', 'FINALIZADO', 'CANCELADO'] as const
+export const ESTADOS_MANTENIMIENTO = ['PENDIENTE', 'EN_PROCESO', 'FINALIZADO', 'CANCELADO'] as const
 export type EstadoMantenimiento = (typeof ESTADOS_MANTENIMIENTO)[number]
 
-/**
- * Entidad del dominio: Mantenimiento / Solicitud de Servicio Técnico.
- * Sin sufijo: concepto del negocio.
- */
+/** Entidad de Dominio: Mantenimiento / Solicitud de Mantenimiento */
 export interface Mantenimiento {
   id: number
+  descripcion: string
+  tipo: TipoMantenimiento
+  estado: EstadoMantenimiento
+  diagnostico: string | null
+  tecnico: string | null
+  fecha: Date
   equipoId: number
-  solicitante: string
-  tecnicoAsignado?: string
-  tipo: TipoMantenimiento | string
-  descripcionFalla: string
-  diagnostico?: string
-  actividadesRealizadas?: string
-  repuestosUtilizados?: string
-  estado: EstadoMantenimiento | string
-  fechaSolicitud: Date
-  fechaFinalizacion?: Date
-  createdAt?: Date
-  updatedAt?: Date
 }
 
-/** Estructura para registrar un nuevo mantenimiento. */
-export type MantenimientoNuevo = Omit<Mantenimiento, 'id' | 'createdAt' | 'updatedAt'>
+/** Estructura para registrar un nuevo mantenimiento */
+export type MantenimientoNuevo = Omit<Mantenimiento, 'id' | 'fecha'>
 
-/** Formato de transporte que cruza la frontera HTTP. */
+/** DTO que viaja al exterior */
 export interface MantenimientoDTO {
   id: number
+  descripcion: string
+  tipo: TipoMantenimiento
+  estado: EstadoMantenimiento
+  diagnostico: string | null
+  tecnico: string | null
+  fecha: string
   equipoId: number
-  solicitante: string
-  tecnicoAsignado?: string
-  tipo: string
-  descripcionFalla: string
-  diagnostico?: string
-  actividadesRealizadas?: string
-  repuestosUtilizados?: string
-  estado: string
-  fechaSolicitud: Date
-  fechaFinalizacion?: Date
-  createdAt?: Date
-  updatedAt?: Date
 }
 
-export function aMantenimientoDTO(mantenimiento: Mantenimiento): MantenimientoDTO {
+export function esTipoMantenimiento(valor: unknown): valor is TipoMantenimiento {
+  return TIPOS_MANTENIMIENTO.includes(valor as TipoMantenimiento)
+}
+
+export function esEstadoMantenimiento(valor: unknown): valor is EstadoMantenimiento {
+  return ESTADOS_MANTENIMIENTO.includes(valor as EstadoMantenimiento)
+}
+
+export function aMantenimientoDTO(m: Mantenimiento): MantenimientoDTO {
   return {
-    id: mantenimiento.id,
-    equipoId: mantenimiento.equipoId,
-    solicitante: mantenimiento.solicitante,
-    tecnicoAsignado: mantenimiento.tecnicoAsignado,
-    tipo: mantenimiento.tipo,
-    descripcionFalla: mantenimiento.descripcionFalla,
-    diagnostico: mantenimiento.diagnostico,
-    actividadesRealizadas: mantenimiento.actividadesRealizadas,
-    repuestosUtilizados: mantenimiento.repuestosUtilizados,
-    estado: mantenimiento.estado,
-    fechaSolicitud: mantenimiento.fechaSolicitud,
-    fechaFinalizacion: mantenimiento.fechaFinalizacion,
-    createdAt: mantenimiento.createdAt,
-    updatedAt: mantenimiento.updatedAt
+    id: m.id,
+    descripcion: m.descripcion,
+    tipo: m.tipo,
+    estado: m.estado,
+    diagnostico: m.diagnostico,
+    tecnico: m.tecnico,
+    fecha: m.fecha.toISOString(),
+    equipoId: m.equipoId,
   }
 }

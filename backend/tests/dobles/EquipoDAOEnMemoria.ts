@@ -1,43 +1,47 @@
-import type { Equipo, EquipoNuevo } from '../../src/dominio/modelo/Equipo.js'
-import type { EquipoDAO } from '../../src/dominio/puertos/index.js'
+import type { Equipo, EquipoNuevo, EstadoEquipo } from '../../src/dominio/modelo/Equipo'
+import type { EquipoDAO } from '../../src/dominio/puertos'
 
 export class EquipoDAOEnMemoria implements EquipoDAO {
-  private equipos: Equipo[] = []
-  private idConsecutivo = 1
+  private idAutoincrement = 1
+  public readonly registros: Map<number, Equipo> = new Map()
 
-  async guardar(datos: EquipoNuevo | Equipo): Promise<Equipo> {
-    const id = 'id' in datos && datos.id ? datos.id : this.idConsecutivo++
-    const equipo: Equipo = {
-      ...datos,
+  async guardar(equipo: EquipoNuevo): Promise<Equipo> {
+    const id = this.idAutoincrement++
+    const nuevo: Equipo = {
       id,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      serial: equipo.serial,
+      nombre: equipo.nombre,
+      tipo: equipo.tipo,
+      ubicacion: equipo.ubicacion,
+      estado: equipo.estado,
+      creadoEn: new Date(),
     }
-    this.equipos.push(equipo)
-    return equipo
-  }
-
-  async listar(): Promise<Equipo[]> {
-    return [...this.equipos]
+    this.registros.set(id, nuevo)
+    return nuevo
   }
 
   async porId(id: number): Promise<Equipo | null> {
-    return this.equipos.find((e) => e.id === id) ?? null
+    return this.registros.get(id) ?? null
   }
 
-  async porCodigoInventario(codigo: string): Promise<Equipo | null> {
-    return this.equipos.find((e) => e.codigoInventario === codigo) ?? null
+  async porSerial(serial: string): Promise<Equipo | null> {
+    for (const eq of this.registros.values()) {
+      if (eq.serial.toUpperCase() === serial.toUpperCase()) {
+        return eq
+      }
+    }
+    return null
   }
 
-  async actualizar(equipo: Equipo): Promise<Equipo> {
-    const index = this.equipos.findIndex((e) => e.id === equipo.id)
-    if (index === -1) throw new Error('Equipo no encontrado')
-    this.equipos[index] = { ...equipo, updatedAt: new Date() }
-    return this.equipos[index]
+  async listar(): Promise<Equipo[]> {
+    return Array.from(this.registros.values()).reverse()
   }
 
-  async eliminar(id: number): Promise<void> {
-    this.equipos = this.equipos.filter((e) => e.id !== id)
+  async actualizarEstado(id: number, estado: EstadoEquipo): Promise<Equipo | null> {
+    const eq = this.registros.get(id)
+    if (!eq) return null
+    const actualizado = { ...eq, estado }
+    this.registros.set(id, actualizado)
+    return actualizado
   }
 }
-

@@ -1,43 +1,51 @@
-import type { Mantenimiento, MantenimientoNuevo } from '../../src/dominio/modelo/Mantenimiento.js'
-import type { MantenimientoDAO } from '../../src/dominio/puertos/index.js'
+import type { Mantenimiento, MantenimientoNuevo } from '../../src/dominio/modelo/Mantenimiento'
+import type { ActualizarMantenimientoDatos, MantenimientoDAO } from '../../src/dominio/puertos'
 
 export class MantenimientoDAOEnMemoria implements MantenimientoDAO {
-  private mantenimientos: Mantenimiento[] = []
-  private idConsecutivo = 1
+  private idAutoincrement = 1
+  public readonly registros: Map<number, Mantenimiento> = new Map()
 
-  async guardar(datos: MantenimientoNuevo | Mantenimiento): Promise<Mantenimiento> {
-    const id = 'id' in datos && datos.id ? datos.id : this.idConsecutivo++
-    const mantenimiento: Mantenimiento = {
-      ...datos,
+  async guardar(m: MantenimientoNuevo): Promise<Mantenimiento> {
+    const id = this.idAutoincrement++
+    const nuevo: Mantenimiento = {
       id,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      descripcion: m.descripcion,
+      tipo: m.tipo,
+      estado: m.estado,
+      diagnostico: m.diagnostico,
+      tecnico: m.tecnico,
+      fecha: new Date(),
+      equipoId: m.equipoId,
     }
-    this.mantenimientos.push(mantenimiento)
-    return mantenimiento
-  }
-
-  async listar(): Promise<Mantenimiento[]> {
-    return [...this.mantenimientos]
+    this.registros.set(id, nuevo)
+    return nuevo
   }
 
   async porId(id: number): Promise<Mantenimiento | null> {
-    return this.mantenimientos.find((m) => m.id === id) ?? null
+    return this.registros.get(id) ?? null
   }
 
-  async porEquipoId(equipoId: number): Promise<Mantenimiento[]> {
-    return this.mantenimientos.filter((m) => m.equipoId === equipoId)
+  async listarPorEquipo(equipoId: number): Promise<Mantenimiento[]> {
+    return Array.from(this.registros.values())
+      .filter((m) => m.equipoId === equipoId)
+      .reverse()
   }
 
-  async actualizar(mantenimiento: Mantenimiento): Promise<Mantenimiento> {
-    const index = this.mantenimientos.findIndex((m) => m.id === mantenimiento.id)
-    if (index === -1) throw new Error('Mantenimiento no encontrado')
-    this.mantenimientos[index] = { ...mantenimiento, updatedAt: new Date() }
-    return this.mantenimientos[index]
+  async listar(): Promise<Mantenimiento[]> {
+    return Array.from(this.registros.values()).reverse()
   }
 
-  async eliminar(id: number): Promise<void> {
-    this.mantenimientos = this.mantenimientos.filter((m) => m.id !== id)
+  async actualizar(id: number, datos: ActualizarMantenimientoDatos): Promise<Mantenimiento | null> {
+    const actual = this.registros.get(id)
+    if (!actual) return null
+
+    const actualizado: Mantenimiento = {
+      ...actual,
+      estado: datos.estado ?? actual.estado,
+      diagnostico: datos.diagnostico !== undefined ? datos.diagnostico : actual.diagnostico,
+      tecnico: datos.tecnico !== undefined ? datos.tecnico : actual.tecnico,
+    }
+    this.registros.set(id, actualizado)
+    return actualizado
   }
 }
-

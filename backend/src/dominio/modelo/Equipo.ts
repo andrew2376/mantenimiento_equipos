@@ -1,57 +1,50 @@
-export const ESTADOS_EQUIPO = ['OPERATIVO', 'EN_MANTENIMIENTO', 'DE_BAJA', 'EN_REPARACION'] as const
-export type EstadoEquipo = (typeof ESTADOS_EQUIPO)[number]
-
-export const TIPOS_EQUIPO = ['PORTATIL', 'ESCRITORIO', 'TODO_EN_UNO', 'SERVIDOR', 'IMPRESORA', 'OTRO'] as const
+export const TIPOS_EQUIPO = ['PORTATIL', 'ESCRITORIO', 'SERVIDOR', 'TODO_EN_UNO', 'OTRO'] as const
 export type TipoEquipo = (typeof TIPOS_EQUIPO)[number]
 
-/**
- * Entidad del dominio: Equipo de Cómputo.
- * Sin sufijo: representa el concepto central del negocio.
- */
+export const ESTADOS_EQUIPO = ['OPERATIVO', 'EN_MANTENIMIENTO', 'DE_BAJA', 'EN_REVISION'] as const
+export type EstadoEquipo = (typeof ESTADOS_EQUIPO)[number]
+
+/** Entidad de Dominio: Equipo de Cómputo */
 export interface Equipo {
   id: number
-  codigoInventario: string
+  serial: string
   nombre: string
-  tipo: TipoEquipo | string
-  marca: string
-  modelo?: string
-  numeroSerie?: string
+  tipo: TipoEquipo
   ubicacion: string
-  estado: EstadoEquipo | string
-  createdAt?: Date
-  updatedAt?: Date
+  estado: EstadoEquipo
+  creadoEn: Date
 }
 
-/** Estructura para crear un nuevo equipo (el DAO asigna el ID y fechas). */
-export type EquipoNuevo = Omit<Equipo, 'id' | 'createdAt' | 'updatedAt'>
+/** Estructura para registrar un nuevo equipo (el DAO asigna id y fecha) */
+export type EquipoNuevo = Omit<Equipo, 'id' | 'creadoEn'>
 
-/** Formato de transporte que cruza la frontera HTTP. */
+/** DTO que viaja al exterior por HTTP */
 export interface EquipoDTO {
   id: number
-  codigoInventario: string
+  serial: string
   nombre: string
-  tipo: string
-  marca: string
-  modelo?: string
-  numeroSerie?: string
+  tipo: TipoEquipo
   ubicacion: string
-  estado: string
-  createdAt?: Date
-  updatedAt?: Date
+  estado: EstadoEquipo
+  creadoEn: string
+}
+
+export function esTipoEquipo(valor: unknown): valor is TipoEquipo {
+  return TIPOS_EQUIPO.includes(valor as TipoEquipo)
+}
+
+export function esEstadoEquipo(valor: unknown): valor is EstadoEquipo {
+  return ESTADOS_EQUIPO.includes(valor as EstadoEquipo)
 }
 
 export function aEquipoDTO(equipo: Equipo): EquipoDTO {
   return {
     id: equipo.id,
-    codigoInventario: equipo.codigoInventario,
+    serial: equipo.serial,
     nombre: equipo.nombre,
     tipo: equipo.tipo,
-    marca: equipo.marca,
-    modelo: equipo.modelo,
-    numeroSerie: equipo.numeroSerie,
     ubicacion: equipo.ubicacion,
     estado: equipo.estado,
-    createdAt: equipo.createdAt,
-    updatedAt: equipo.updatedAt
+    creadoEn: equipo.creadoEn.toISOString(),
   }
 }

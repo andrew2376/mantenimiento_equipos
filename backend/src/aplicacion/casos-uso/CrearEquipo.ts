@@ -1,1 +1,0 @@
-export { RegistrarEquipo as CrearEquipo } from './RegistrarEquipo.js'

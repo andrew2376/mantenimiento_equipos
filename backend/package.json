@@ -1,28 +1,36 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Backend API para Sistema de Mantenimiento de Equipos",
-  "main": "dist/main.js",
+  "description": "Backend para Sistema de Gestión y Trazabilidad de Mantenimiento de Equipos",
+  "main": "dist/src/main.js",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "dev": "tsx watch --env-file=.env src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js",
-    "test": "tsx --test tests/unidad/*.test.ts",
-    "arquitectura": "node -e \"const fs=require('fs'); const check=(dir)=>{fs.readdirSync(dir,{withFileTypes:true}).forEach(f=>{const p=dir+'/'+f.name; if(f.isDirectory()) check(p); else if(f.name.endsWith('.ts')){const c=fs.readFileSync(p,'utf-8'); if(c.includes('infraestructura')) {console.error('Violación de arquitectura en '+p); process.exit(1);}}})}; check('src/dominio'); check('src/aplicacion'); console.log('✓ Regla arquitectónica verificada: Dominio y Aplicación no importan Infraestructura');\""
+    "start": "node --env-file=.env dist/src/main.js",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
-  "author": "",
+  "author": "Antonia Gallego",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^5.2.1",
-    "mysql2": "^3.12.0"
+    "@prisma/client": "^6.4.1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
+    "prisma": "^6.4.1",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^3.0.7"
   }
 }

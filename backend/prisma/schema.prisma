@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Equipo {
+  id             Int             @id @default(autoincrement())
+  serial         String          @unique
+  nombre         String
+  tipo           String          @default("PORTATIL")
+  ubicacion      String
+  estado         String          @default("OPERATIVO")
+  creadoEn       DateTime        @default(now()) @map("creado_en")
+  mantenimientos Mantenimiento[]
+
+  @@map("equipos")
+}
+
+model Mantenimiento {
+  id          Int      @id @default(autoincrement())
+  descripcion String   @db.Text
+  tipo        String   @default("CORRECTIVO")
+  estado      String   @default("PENDIENTE")
+  diagnostico String?  @db.Text
+  tecnico     String?
+  fecha       DateTime @default(now())
+  equipoId    Int      @map("equipo_id")
+  equipo      Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+
+  @@map("mantenimientos")
+}

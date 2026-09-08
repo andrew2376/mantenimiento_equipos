@@ -1,33 +1,46 @@
-import { EquipoDAOMySQL } from './infraestructura/persistencia/EquipoDAOMySQL.js'
-import { MantenimientoDAOMySQL } from './infraestructura/persistencia/MantenimientoDAOMySQL.js'
+// Raíz de composición: único punto de entrada donde se instancian las implementaciones
+// concretas de infraestructura y se inyectan en los casos de uso y servidor HTTP.
 
-import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo.js'
-import { ObtenerEquipos } from './aplicacion/casos-uso/ObtenerEquipos.js'
-import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento.js'
-import { ObtenerMantenimientos } from './aplicacion/casos-uso/ObtenerMantenimientos.js'
+import { prisma } from './infraestructura/persistencia/prisma'
+import { EquipoDAOPrisma } from './infraestructura/persistencia/EquipoDAOPrisma'
+import { MantenimientoDAOPrisma } from './infraestructura/persistencia/MantenimientoDAOPrisma'
 
-import { crearServidor } from './infraestructura/http/servidor.js'
+import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
+import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
+import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
+import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
+import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
 
-const PORT = Number(process.env.PORT) || 3000
+import { crearServidor } from './infraestructura/http/servidor'
 
-// 1. Instanciación de adaptadores de infraestructura (Persistencia MySQL)
-const equipoDAO = new EquipoDAOMySQL()
-const mantenimientoDAO = new MantenimientoDAOMySQL()
+// 1. Adaptadores de persistencia (Infraestructura)
+const equipoDAO = new EquipoDAOPrisma(prisma)
+const mantenimientoDAO = new MantenimientoDAOPrisma(prisma)
 
-// 2. Instanciación de casos de uso (Capa de Aplicación)
+// 2. Casos de uso (Aplicación)
 const registrarEquipo = new RegistrarEquipo(equipoDAO)
-const obtenerEquipos = new ObtenerEquipos(equipoDAO)
-const registrarMantenimiento = new RegistrarMantenimiento(mantenimientoDAO)
-const obtenerMantenimientos = new ObtenerMantenimientos(mantenimientoDAO)
+const consultarEquipos = new ConsultarEquipos(equipoDAO)
 
-// 3. Creación y arranque del servidor HTTP
+const registrarMantenimiento = new RegistrarMantenimiento(mantenimientoDAO, equipoDAO)
+const consultarMantenimientos = new ConsultarMantenimientos(mantenimientoDAO, equipoDAO)
+const actualizarEstadoMantenimiento = new ActualizarEstadoMantenimiento(mantenimientoDAO, equipoDAO)
+
+// 3. Servidor HTTP (Infraestructura)
 const app = crearServidor({
-  registrarEquipo,
-  obtenerEquipos,
-  registrarMantenimiento,
-  obtenerMantenimientos
+  equipos: {
+    registrarEquipo,
+    consultarEquipos,
+  },
+  mantenimientos: {
+    registrarMantenimiento,
+    consultarMantenimientos,
+    actualizarEstadoMantenimiento,
+  },
 })
 
+// 4. Iniciar servidor
+const PORT = Number(process.env['PORT'] ?? 3000)
 app.listen(PORT, () => {
-  console.log(`⚡ Servidor ejecutándose en http://localhost:${PORT}`)
+  console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`)
+  console.log(`📡 Endpoints disponibles en http://localhost:${PORT}/api`)
 })

@@ -1,16 +1,37 @@
-import type { Equipo, EquipoNuevo, EquipoDTO } from '../../dominio/modelo/Equipo.js'
-import { aEquipoDTO } from '../../dominio/modelo/Equipo.js'
-import type { EquipoDAO } from '../../dominio/puertos/index.js'
+import type { Equipo, EstadoEquipo, TipoEquipo } from '../../dominio/modelo/Equipo'
+import type { EquipoDAO } from '../../dominio/puertos'
 
-export class RegistrarEquipo {
-  constructor(private readonly equipoDAO: EquipoDAO) {}
-
-  async ejecutar(datos: EquipoNuevo | Equipo): Promise<EquipoDTO> {
-    const equipo = await this.equipoDAO.guardar(datos)
-    return aEquipoDTO(equipo)
+export class SerialYaRegistrado extends Error {
+  constructor(serial: string) {
+    super(`Ya existe un equipo registrado con el serial: ${serial}`)
+    this.name = 'SerialYaRegistrado'
   }
 }
 
-// Alias para compatibilidad con código previo
-export { RegistrarEquipo as CrearEquipo }
+export interface RegistroEquipoDTO {
+  serial: string
+  nombre: string
+  tipo?: TipoEquipo
+  ubicacion: string
+  estado?: EstadoEquipo
+}
 
+export class RegistrarEquipo {
+  constructor(private readonly equipos: EquipoDAO) {}
+
+  async ejecutar(datos: RegistroEquipoDTO): Promise<Equipo> {
+    const serial = datos.serial.trim().toUpperCase()
+    const existente = await this.equipos.porSerial(serial)
+    if (existente) {
+      throw new SerialYaRegistrado(serial)
+    }
+
+    return this.equipos.guardar({
+      serial,
+      nombre: datos.nombre.trim(),
+      tipo: datos.tipo ?? 'PORTATIL',
+      ubicacion: datos.ubicacion.trim(),
+      estado: datos.estado ?? 'OPERATIVO',
+    })
+  }
+}

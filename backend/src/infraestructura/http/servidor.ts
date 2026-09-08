@@ -1,45 +1,52 @@
-import express, { Express } from 'express'
-import { crearRutasEquipos } from './rutas/equipos.js'
-import { crearRutasMantenimientos } from './rutas/mantenimientos.js'
-import type { RegistrarEquipo } from '../../aplicacion/casos-uso/RegistrarEquipo.js'
-import type { ObtenerEquipos } from '../../aplicacion/casos-uso/ObtenerEquipos.js'
-import type { RegistrarMantenimiento } from '../../aplicacion/casos-uso/RegistrarMantenimiento.js'
-import type { ObtenerMantenimientos } from '../../aplicacion/casos-uso/ObtenerMantenimientos.js'
+import express, { Router } from 'express'
+import type { ErrorRequestHandler, Express } from 'express'
+import cors from 'cors'
+import { rutasEquipos, type DependenciasEquipos } from './rutas/equipos'
+import { rutasMantenimientos, type DependenciasMantenimientos } from './rutas/mantenimientos'
 
 export interface DependenciasServidor {
-  registrarEquipo: RegistrarEquipo
-  obtenerEquipos: ObtenerEquipos
-  registrarMantenimiento: RegistrarMantenimiento
-  obtenerMantenimientos: ObtenerMantenimientos
+  equipos: DependenciasEquipos
+  mantenimientos: DependenciasMantenimientos
+}
+
+const manejadorErrores: ErrorRequestHandler = (error, _req, res, _next) => {
+  console.error('[Error no controlado]', error)
+  res.status(500).json({ error: 'Error interno del servidor' })
 }
 
 export function crearServidor(deps: DependenciasServidor): Express {
   const app = express()
 
+  // Middlewares globales
+  app.use(cors())
   app.use(express.json())
 
-  // Rutas de la API
-  app.use(crearRutasEquipos(deps.registrarEquipo, deps.obtenerEquipos))
-  app.use(crearRutasMantenimientos(deps.registrarMantenimiento, deps.obtenerMantenimientos))
+  // Enrutador principal de la API
+  const api = Router()
 
-  // Endpoint de salud y bienvenida
-  app.get('/', (_req, res) => {
+  // Endpoint de salud / monitoreo
+  api.get('/salud', (_req, res) => {
     res.json({
-      nombre: 'API Sistema de Mantenimiento de Equipos',
+      estado: 'ok',
+      servicio: 'Sistema de Gestión y Trazabilidad de Mantenimiento de Equipos',
       version: '1.0.0',
-      arquitectura: 'Hexagonal (Puertos y Adaptadores)',
-      endpoints: [
-        'POST /equipos',
-        'GET /equipos',
-        'GET /equipos/:id',
-        'POST /mantenimientos',
-        'GET /mantenimientos',
-        'GET /mantenimientos/:id',
-        'GET /mantenimientos?equipoId=:id'
-      ]
     })
   })
 
+  // Montar rutas de módulos
+  api.use('/equipos', rutasEquipos(deps.equipos))
+  api.use('/mantenimientos', rutasMantenimientos(deps.mantenimientos))
+
+  // Montar API con prefijo /api
+  app.use('/api', api)
+
+  // Manejo de rutas inexistentes
+  app.use((_req, res) => {
+    res.status(404).json({ error: 'Ruta no encontrada' })
+  })
+
+  // Middleware de errores
+  app.use(manejadorErrores)
+
   return app
 }
-
