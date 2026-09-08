@@ -1,19 +1,23 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API para Sistema de Mantenimiento de Equipos",
+  "main": "dist/main.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "test": "tsx --test tests/unidad/*.test.ts",
+    "arquitectura": "node -e \"const fs=require('fs'); const check=(dir)=>{fs.readdirSync(dir,{withFileTypes:true}).forEach(f=>{const p=dir+'/'+f.name; if(f.isDirectory()) check(p); else if(f.name.endsWith('.ts')){const c=fs.readFileSync(p,'utf-8'); if(c.includes('infraestructura')) {console.error('Violación de arquitectura en '+p); process.exit(1);}}})}; check('src/dominio'); check('src/aplicacion'); console.log('✓ Regla arquitectónica verificada: Dominio y Aplicación no importan Infraestructura');\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "mysql2": "^3.12.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
