@@ -1,50 +1,76 @@
-export const TIPOS_EQUIPO = ['PORTATIL', 'ESCRITORIO', 'SERVIDOR', 'TODO_EN_UNO', 'OTRO'] as const
+export const TIPOS_EQUIPO = [
+  'PORTATIL',
+  'ESCRITORIO',
+  'SERVIDOR',
+  'TODO_EN_UNO',
+  'OTRO'
+] as const
+
 export type TipoEquipo = (typeof TIPOS_EQUIPO)[number]
 
-export const ESTADOS_EQUIPO = ['OPERATIVO', 'EN_MANTENIMIENTO', 'DE_BAJA', 'EN_REVISION'] as const
-export type EstadoEquipo = (typeof ESTADOS_EQUIPO)[number]
-
-/** Entidad de Dominio: Equipo de Cómputo */
+/**
+ * Entidad de Dominio: Equipo de Cómputo
+ */
 export interface Equipo {
   id: number
-  serial: string
+  codigoInventario: string
   nombre: string
   tipo: TipoEquipo
+  marca: string
+  modelo?: string
+  numeroSerie?: string
   ubicacion: string
-  estado: EstadoEquipo
-  creadoEn: Date
+  estado: number
+  createdAt: Date
+  updatedAt: Date
 }
 
-/** Estructura para registrar un nuevo equipo (el DAO asigna id y fecha) */
-export type EquipoNuevo = Omit<Equipo, 'id' | 'creadoEn'>
+/**
+ * Estructura para registrar un nuevo equipo.
+ * El DAO asigna id y fechas.
+ */
+export type EquipoNuevo = Omit<
+  Equipo,
+  'id' | 'createdAt' | 'updatedAt'
+>
 
-/** DTO que viaja al exterior por HTTP */
+/**
+ * DTO que viaja al exterior por HTTP.
+ */
 export interface EquipoDTO {
   id: number
-  serial: string
+  codigoInventario: string
   nombre: string
   tipo: TipoEquipo
+  marca: string
+  modelo?: string
+  numeroSerie?: string
   ubicacion: string
-  estado: EstadoEquipo
-  creadoEn: string
+  estado: number
+  createdAt: string
+  updatedAt: string
 }
 
-export function esTipoEquipo(valor: unknown): valor is TipoEquipo {
+export function esTipoEquipo(
+  valor: unknown
+): valor is TipoEquipo {
   return TIPOS_EQUIPO.includes(valor as TipoEquipo)
 }
 
-export function esEstadoEquipo(valor: unknown): valor is EstadoEquipo {
-  return ESTADOS_EQUIPO.includes(valor as EstadoEquipo)
-}
-
-export function aEquipoDTO(equipo: Equipo): EquipoDTO {
+export function aEquipoDTO(
+  equipo: Equipo
+): EquipoDTO {
   return {
     id: equipo.id,
-    serial: equipo.serial,
+    codigoInventario: equipo.codigoInventario,
     nombre: equipo.nombre,
     tipo: equipo.tipo,
+    marca: equipo.marca,
+    modelo: equipo.modelo,
+    numeroSerie: equipo.numeroSerie,
     ubicacion: equipo.ubicacion,
     estado: equipo.estado,
-    creadoEn: equipo.creadoEn.toISOString(),
+    createdAt: equipo.createdAt.toISOString(),
+    updatedAt: equipo.updatedAt.toISOString()
   }
 }

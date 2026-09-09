@@ -1,37 +1,90 @@
-import type { Equipo, EstadoEquipo, TipoEquipo } from '../../dominio/modelo/Equipo'
-import type { EquipoDAO } from '../../dominio/puertos'
+import type {
+  Equipo,
+  EquipoNuevo,
+  TipoEquipo
+} from '../../dominio/modelo/Equipo.js'
 
-export class SerialYaRegistrado extends Error {
-  constructor(serial: string) {
-    super(`Ya existe un equipo registrado con el serial: ${serial}`)
-    this.name = 'SerialYaRegistrado'
+import type { EquipoDAO } from '../../dominio/puertos/index.js'
+
+export class NumeroSerieYaRegistrado extends Error {
+
+  constructor(numeroSerie: string) {
+    super(
+      `Ya existe un equipo registrado con el número de serie: ${numeroSerie}`
+    )
+
+    this.name = 'NumeroSerieYaRegistrado'
   }
 }
 
 export interface RegistroEquipoDTO {
-  serial: string
+
+  codigoInventario: string
+
   nombre: string
+
   tipo?: TipoEquipo
+
+  marca: string
+
+  modelo?: string
+
+  numeroSerie?: string
+
   ubicacion: string
-  estado?: EstadoEquipo
+
+  estado?: number
 }
 
 export class RegistrarEquipo {
-  constructor(private readonly equipos: EquipoDAO) {}
 
-  async ejecutar(datos: RegistroEquipoDTO): Promise<Equipo> {
-    const serial = datos.serial.trim().toUpperCase()
-    const existente = await this.equipos.porSerial(serial)
-    if (existente) {
-      throw new SerialYaRegistrado(serial)
+  constructor(
+    private readonly equipos: EquipoDAO
+  ) {}
+
+  async ejecutar(
+    datos: RegistroEquipoDTO
+  ): Promise<Equipo> {
+
+    const numeroSerie = datos.numeroSerie
+      ?.trim()
+      .toUpperCase()
+
+    if (numeroSerie) {
+
+      const equipos = await this.equipos.todos()
+
+      const existente = equipos.find(
+        equipo =>
+          equipo.numeroSerie?.toUpperCase() === numeroSerie
+      )
+
+      if (existente) {
+        throw new NumeroSerieYaRegistrado(numeroSerie)
+      }
     }
 
-    return this.equipos.guardar({
-      serial,
+    const nuevoEquipo: EquipoNuevo = {
+
+      codigoInventario: datos.codigoInventario
+        .trim()
+        .toUpperCase(),
+
       nombre: datos.nombre.trim(),
+
       tipo: datos.tipo ?? 'PORTATIL',
+
+      marca: datos.marca.trim(),
+
+      modelo: datos.modelo?.trim() || undefined,
+
+      numeroSerie,
+
       ubicacion: datos.ubicacion.trim(),
-      estado: datos.estado ?? 'OPERATIVO',
-    })
+
+      estado: datos.estado ?? 1
+    }
+
+    return this.equipos.guardar(nuevoEquipo)
   }
 }

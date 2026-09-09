@@ -1,0 +1,332 @@
+<div class="equipos-container">
+
+  <!-- ==========================================
+       ENCABEZADO
+       ========================================== -->
+
+  <div class="equipos-header">
+
+    <div>
+
+      <h1>
+        Equipos de cómputo
+      </h1>
+
+      <p>
+        Gestión y registro de los equipos
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      (click)="abrirFormulario()"
+    >
+      + Nuevo equipo
+    </button>
+
+  </div>
+
+
+  <!-- ==========================================
+       CARGANDO
+       ========================================== -->
+
+  @if (cargando) {
+
+    <div class="mensaje">
+      Cargando equipos...
+    </div>
+
+  }
+
+
+  <!-- ==========================================
+       ERROR
+       ========================================== -->
+
+  @if (error) {
+
+    <div class="mensaje error">
+      {{ error }}
+    </div>
+
+  }
+
+
+  <!-- ==========================================
+       CONTENIDO
+       ========================================== -->
+
+  @if (!cargando && !error) {
+
+
+    <!-- ========================================
+         BARRA DE BÚSQUEDA
+         ======================================== -->
+
+    @if (equipos.length > 0) {
+
+      <div class="busqueda-container">
+
+        <div class="busqueda">
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="11"
+              cy="11"
+              r="7"
+            ></circle>
+
+            <path
+              d="m20 20-4-4"
+            ></path>
+
+          </svg>
+
+
+          <input
+            type="text"
+            placeholder="Buscar equipo por código, nombre, marca, serie..."
+            [(ngModel)]="textoBusqueda"
+            (input)="buscarEquipos()"
+          />
+
+
+          @if (textoBusqueda) {
+
+            <button
+              type="button"
+              class="btn-limpiar-busqueda"
+              title="Limpiar búsqueda"
+              (click)="limpiarBusqueda()"
+            >
+              ×
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- ========================================
+         SIN EQUIPOS REGISTRADOS
+         ======================================== -->
+
+    @if (equipos.length === 0) {
+
+      <div class="mensaje">
+        No hay equipos registrados.
+      </div>
+
+    }
+
+
+    <!-- ========================================
+         SIN RESULTADOS DE BÚSQUEDA
+         ======================================== -->
+
+    @if (
+      equipos.length > 0 &&
+      equiposFiltrados.length === 0
+    ) {
+
+      <div class="mensaje">
+
+        No se encontraron equipos que coincidan
+        con "{{ textoBusqueda }}".
+
+      </div>
+
+    }
+
+
+    <!-- ========================================
+         EQUIPOS REGISTRADOS
+         ======================================== -->
+
+    @if (equiposFiltrados.length > 0) {
+
+      <div class="tabla-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Código
+              </th>
+
+              <th>
+                Equipo
+              </th>
+
+              <th>
+                Tipo
+              </th>
+
+              <th>
+                Marca
+              </th>
+
+              <th>
+                Modelo
+              </th>
+
+              <th>
+                N.º Serie
+              </th>
+
+              <th>
+                Ubicación
+              </th>
+
+              <th>
+                Estado
+              </th>
+
+              <th>
+                Acciones
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              equipo of equiposFiltrados;
+              track equipo.id
+            ) {
+
+              <tr>
+
+                <td>
+                  {{ equipo.codigoInventario }}
+                </td>
+
+
+                <td>
+                  {{ equipo.nombre }}
+                </td>
+
+
+                <td>
+                  {{ equipo.tipo }}
+                </td>
+
+
+                <td>
+                  {{ equipo.marca }}
+                </td>
+
+
+                <td>
+                  {{ equipo.modelo || '—' }}
+                </td>
+
+
+                <td>
+                  {{ equipo.numeroSerie || '—' }}
+                </td>
+
+
+                <td>
+                  {{ equipo.ubicacion }}
+                </td>
+
+
+                <td>
+
+                  @if (equipo.estado === 1) {
+
+                    <span class="estado activo">
+                      Disponible
+                    </span>
+
+                  } @else {
+
+                    <span class="estado inactivo">
+                      En mantenimiento
+                    </span>
+
+                  }
+
+                </td>
+
+
+                <!-- ==================================
+                     ACCIONES
+                     ================================== -->
+
+                <td class="acciones">
+
+                  <button
+                    type="button"
+                    class="btn-icono"
+                    title="Editar equipo"
+                    (click)="abrirFormulario(equipo)"
+                  >
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+
+                      <path
+                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3Z"
+                      ></path>
+
+                      <path
+                        d="m13.5 7.5 3 3"
+                      ></path>
+
+                      <path
+                        d="M14 4h6v6"
+                      ></path>
+
+                    </svg>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  }
+
+</div>
+
+
+@if (mostrarFormulario) {
+
+  <app-equipo-form
+    [equipoEditar]="equipoSeleccionado"
+    (cerrar)="cerrarFormulario()"
+    (guardado)="cargarEquipos()"
+  />
+
+}

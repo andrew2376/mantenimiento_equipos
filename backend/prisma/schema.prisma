@@ -1,21 +1,26 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/infraestructura/persistencia/generado"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model Equipo {
-  id             Int             @id @default(autoincrement())
-  serial         String          @unique
-  nombre         String
-  tipo           String          @default("PORTATIL")
-  ubicacion      String
-  estado         String          @default("OPERATIVO")
-  creadoEn       DateTime        @default(now()) @map("creado_en")
-  mantenimientos Mantenimiento[]
+  id              Int             @id @default(autoincrement()) @db.UnsignedInt
+  codigoInventario String          @unique(map: "codigo_inventario") @map("codigo_inventario") @db.VarChar(30)
+  nombre          String          @db.VarChar(100)
+  tipo            String          @db.VarChar(50)
+  marca           String          @db.VarChar(50)
+  modelo          String?         @db.VarChar(100)
+  numeroSerie     String?         @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
+  ubicacion       String          @db.VarChar(100)
+  estado          Int             @default(1) @db.TinyInt
+  createdAt       DateTime        @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt       DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
+
+  mantenimientos  Mantenimiento[]
 
   @@map("equipos")
 }

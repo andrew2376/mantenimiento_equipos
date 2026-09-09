@@ -1,3 +1,15 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { EquipoList } from './features/equipos/equipo-list/equipo-list';
+
+export const routes: Routes = [
+  {
+    path: 'equipos',
+    component: EquipoList
+  },
+  {
+    path: '',
+    redirectTo: 'equipos',
+    pathMatch: 'full'
+  }
+];
