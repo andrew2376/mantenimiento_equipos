@@ -8,19 +8,18 @@ datasource db {
 }
 
 model Equipo {
-  id              Int             @id @default(autoincrement()) @db.UnsignedInt
+  id               Int             @id @default(autoincrement()) @db.UnsignedInt
   codigoInventario String          @unique(map: "codigo_inventario") @map("codigo_inventario") @db.VarChar(30)
-  nombre          String          @db.VarChar(100)
-  tipo            String          @db.VarChar(50)
-  marca           String          @db.VarChar(50)
-  modelo          String?         @db.VarChar(100)
-  numeroSerie     String?         @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
-  ubicacion       String          @db.VarChar(100)
-  estado          Int             @default(1) @db.TinyInt
-  createdAt       DateTime        @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt       DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
-
-  mantenimientos  Mantenimiento[]
+  nombre           String          @db.VarChar(100)
+  tipo             String          @db.VarChar(50)
+  marca            String          @db.VarChar(50)
+  modelo           String?         @db.VarChar(100)
+  numeroSerie      String?         @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
+  ubicacion        String          @db.VarChar(100)
+  estado           Int             @default(1) @db.TinyInt
+  createdAt        DateTime        @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt        DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
+  mantenimientos   Mantenimiento[]
 
   @@map("equipos")
 }
@@ -28,26 +27,33 @@ model Equipo {
 model Mantenimiento {
   id          Int      @id @default(autoincrement())
   descripcion String   @db.Text
-  tipo        String   @default("CORRECTIVO")
-  estado      String   @default("PENDIENTE")
+  tipo        String   @default("CORRECTIVO") @db.VarChar(20)
+  estado      String   @default("PENDIENTE") @db.VarChar(20)
   diagnostico String?  @db.Text
-  tecnico     String?
-  fecha       DateTime @default(now())
-  equipoId    Int      @map("equipo_id")
-  equipo      Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+  tecnico     String?  @db.VarChar(255)
+  fecha       DateTime @default(now()) @db.DateTime(0)
+  equipoId    Int      @map("equipo_id") @db.UnsignedInt
+  equipo      Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade, map: "fk_mantenimiento_equipo")
 
+  @@index([equipoId], map: "fk_mantenimiento_equipo")
   @@map("mantenimientos")
 }
 
-
 model Usuario {
-  id        Int      @id @default(autoincrement()) @db.UnsignedInt
-  nombre    String   @db.VarChar(100)
-  correo    String   @unique @db.VarChar(150)
-  claveHash String   @map("clave_hash") @db.VarChar(255)
-  rol       String   @default("SOLICITANTE") @db.VarChar(20)
-  activo    Boolean  @default(true)
-  creadoEn  DateTime @default(now()) @map("creado_en") @db.DateTime(0)
+  id        Int          @id @default(autoincrement()) @db.UnsignedInt
+  nombre    String       @db.VarChar(100)
+  correo    String       @unique(map: "correo") @db.VarChar(150)
+  claveHash String       @map("clave_hash") @db.VarChar(255)
+  rol       usuarios_rol @default(SOLICITANTE)
+  activo    Boolean      @default(true)
+  creadoEn  DateTime     @default(now()) @map("creado_en") @db.DateTime(0)
 
   @@map("usuarios")
+}
+
+enum usuarios_rol {
+  SOLICITANTE
+  TECNICO
+  ADMINISTRADOR
+  SUPERVISOR
 }
