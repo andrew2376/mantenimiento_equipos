@@ -18,9 +18,15 @@ import {
   type DependenciasMantenimientos
 } from './rutas/mantenimientos'
 
+import {
+  rutasUsuarios,
+  type DependenciasUsuarios
+} from './rutas/usuarios'
+
 export interface DependenciasServidor {
   equipos: DependenciasEquipos
   mantenimientos: DependenciasMantenimientos
+  usuarios: DependenciasUsuarios
 }
 
 const swaggerDocument = {
@@ -464,6 +470,12 @@ export function crearServidor(
       deps.mantenimientos
     )
   )
+  api.use(
+  '/usuarios',
+  rutasUsuarios(
+    deps.usuarios
+  )
+)
 
   app.use(
     '/api',
@@ -483,4 +495,4 @@ export function crearServidor(
   )
 
   return app
-}
+} 

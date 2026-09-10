@@ -27,3 +27,8 @@ export type Equipo = Prisma.EquipoModel
  * 
  */
 export type Mantenimiento = Prisma.MantenimientoModel
+/**
+ * Model Usuario
+ * 
+ */
+export type Usuario = Prisma.UsuarioModel

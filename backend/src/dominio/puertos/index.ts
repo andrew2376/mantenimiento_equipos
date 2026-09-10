@@ -9,6 +9,11 @@ import type {
   EstadoMantenimiento
 } from '../modelo/Mantenimiento.js'
 
+import type {
+  Usuario,
+  UsuarioNuevo
+} from '../modelo/Usuario.js'
+
 /**
  * Puertos de Dominio:
  * Contratos que deben satisfacer los adaptadores
@@ -16,7 +21,6 @@ import type {
  */
 
 export interface EquipoDAO {
-
   guardar(
     equipo: EquipoNuevo
   ): Promise<Equipo>
@@ -36,17 +40,33 @@ export interface EquipoDAO {
   ): Promise<void>
 }
 
+export interface UsuarioDAO {
+  guardar(
+    usuario: UsuarioNuevo
+  ): Promise<Usuario>
+
+  porId(
+    id: number
+  ): Promise<Usuario | null>
+
+  porCorreo(
+    correo: string
+  ): Promise<Usuario | null>
+
+  todos(): Promise<Usuario[]>
+
+  actualizar(
+    usuario: Usuario
+  ): Promise<Usuario>
+}
+
 export interface ActualizarMantenimientoDatos {
-
   estado?: EstadoMantenimiento
-
   diagnostico?: string
-
   tecnico?: string
 }
 
 export interface MantenimientoDAO {
-
   guardar(
     mantenimiento: MantenimientoNuevo
   ): Promise<Mantenimiento>
@@ -65,4 +85,13 @@ export interface MantenimientoDAO {
     id: number,
     datos: ActualizarMantenimientoDatos
   ): Promise<Mantenimiento | null>
+}
+
+export interface ServicioClaves {
+  generarHash(clave: string): Promise<string>
+
+  comparar(
+    clave: string,
+    hash: string
+  ): Promise<boolean>
 }

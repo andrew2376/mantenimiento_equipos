@@ -1,41 +1,63 @@
-// Raíz de composición: único punto de entrada donde se instancian las implementaciones
-// concretas de infraestructura y se inyectan en los casos de uso y servidor HTTP.
+// Raíz de composición: único punto de entrada donde se instancian
+// las implementaciones concretas de infraestructura y se inyectan
+// en los casos de uso y servidor HTTP.
 
 import { prisma } from './infraestructura/persistencia/prisma'
 
 import { EquipoDAOPrisma } from './infraestructura/persistencia/EquipoDAOPrisma'
-
 import { MantenimientoDAOPrisma } from './infraestructura/persistencia/MantenimientoDAOPrisma'
+import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrisma'
+
+import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
 import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
-
 import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
-
 import { ActualizarEquipo } from './aplicacion/casos-uso/ActualizarEquipo'
 
 import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
-
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
-
 import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
+
+import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
+import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
+import { ActualizarUsuario } from './aplicacion/casos-uso/ActualizarUsuario'
 
 import { crearServidor } from './infraestructura/http/servidor'
 
 
 // 1. Adaptadores de persistencia (Infraestructura)
 
-const equipoDAO = new EquipoDAOPrisma(prisma)
+const equipoDAO =
+  new EquipoDAOPrisma(prisma)
 
-const mantenimientoDAO = new MantenimientoDAOPrisma(prisma)
+const mantenimientoDAO =
+  new MantenimientoDAOPrisma(prisma)
+
+const usuarioDAO =
+  new UsuarioDAOPrisma(prisma)
 
 
-// 2. Casos de uso (Aplicación)
+// 2. Servicios de infraestructura
 
-const registrarEquipo = new RegistrarEquipo(equipoDAO)
+const servicioClaves =
+  new ServicioClavesBcrypt()
 
-const consultarEquipos = new ConsultarEquipos(equipoDAO)
 
-const actualizarEquipo = new ActualizarEquipo(equipoDAO)
+// 3. Casos de uso (Aplicación)
+
+// Equipos
+
+const registrarEquipo =
+  new RegistrarEquipo(equipoDAO)
+
+const consultarEquipos =
+  new ConsultarEquipos(equipoDAO)
+
+const actualizarEquipo =
+  new ActualizarEquipo(equipoDAO)
+
+
+// Mantenimientos
 
 const registrarMantenimiento =
   new RegistrarMantenimiento(
@@ -56,7 +78,22 @@ const actualizarEstadoMantenimiento =
   )
 
 
-// 3. Servidor HTTP (Infraestructura)
+// Usuarios
+
+const registrarUsuario =
+  new RegistrarUsuario(
+    usuarioDAO,
+    servicioClaves
+  )
+
+const consultarUsuarios =
+  new ConsultarUsuarios(usuarioDAO)
+
+const actualizarUsuario =
+  new ActualizarUsuario(usuarioDAO)
+
+
+// 4. Servidor HTTP (Infraestructura)
 
 const app = crearServidor({
 
@@ -72,10 +109,16 @@ const app = crearServidor({
     actualizarEstadoMantenimiento,
   },
 
+  usuarios: {
+    registrarUsuario,
+    consultarUsuarios,
+    actualizarUsuario,
+  },
+
 })
 
 
-// 4. Iniciar servidor
+// 5. Iniciar servidor
 
 const PORT = Number(
   process.env['PORT'] ?? 3000

@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Equipo: 'Equipo',
-  Mantenimiento: 'Mantenimiento'
+  Mantenimiento: 'Mantenimiento',
+  Usuario: 'Usuario'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -102,6 +103,19 @@ export const MantenimientoScalarFieldEnum = {
 export type MantenimientoScalarFieldEnum = (typeof MantenimientoScalarFieldEnum)[keyof typeof MantenimientoScalarFieldEnum]
 
 
+export const UsuarioScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  correo: 'correo',
+  claveHash: 'claveHash',
+  rol: 'rol',
+  activo: 'activo',
+  creadoEn: 'creadoEn'
+} as const
+
+export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -140,4 +154,14 @@ export const MantenimientoOrderByRelevanceFieldEnum = {
 } as const
 
 export type MantenimientoOrderByRelevanceFieldEnum = (typeof MantenimientoOrderByRelevanceFieldEnum)[keyof typeof MantenimientoOrderByRelevanceFieldEnum]
+
+
+export const UsuarioOrderByRelevanceFieldEnum = {
+  nombre: 'nombre',
+  correo: 'correo',
+  claveHash: 'claveHash',
+  rol: 'rol'
+} as const
+
+export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
 

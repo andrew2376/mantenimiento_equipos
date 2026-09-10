@@ -1113,3 +1113,30 @@ td:first-child {
 
   color: #6c5ce7;
 }
+
+.checkbox-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: fit-content !important;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  accent-color: #6d5ce7;
+}
+
+.checkbox-label span {
+  display: inline-block !important;
+  margin: 0 !important;
+  color: #334155;
+  font-size: 15px;
+  font-weight: 500;
+}
