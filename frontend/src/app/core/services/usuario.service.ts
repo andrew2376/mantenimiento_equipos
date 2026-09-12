@@ -23,6 +23,16 @@ export interface UsuarioNuevo {
   activo: boolean;
 }
 
+export interface LoginDatos {
+  correo: string;
+  clave: string;
+}
+
+export interface LoginRespuesta {
+  token: string;
+  usuario: Usuario;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,6 +59,13 @@ export class UsuarioService {
     return this.http.post<Usuario>(
       this.apiUrl,
       usuario
+    );
+  }
+
+  login(datos: LoginDatos): Observable<LoginRespuesta> {
+    return this.http.post<LoginRespuesta>(
+      `${this.apiUrl}/login`,
+      datos
     );
   }
 }

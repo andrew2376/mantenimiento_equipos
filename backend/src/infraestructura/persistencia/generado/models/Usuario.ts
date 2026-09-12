@@ -39,7 +39,7 @@ export type UsuarioMinAggregateOutputType = {
   nombre: string | null
   correo: string | null
   claveHash: string | null
-  rol: string | null
+  rol: $Enums.usuarios_rol | null
   activo: boolean | null
   creadoEn: Date | null
 }
@@ -49,7 +49,7 @@ export type UsuarioMaxAggregateOutputType = {
   nombre: string | null
   correo: string | null
   claveHash: string | null
-  rol: string | null
+  rol: $Enums.usuarios_rol | null
   activo: boolean | null
   creadoEn: Date | null
 }
@@ -196,7 +196,7 @@ export type UsuarioGroupByOutputType = {
   nombre: string
   correo: string
   claveHash: string
-  rol: string
+  rol: $Enums.usuarios_rol
   activo: boolean
   creadoEn: Date
   _count: UsuarioCountAggregateOutputType | null
@@ -229,7 +229,7 @@ export type UsuarioWhereInput = {
   nombre?: Prisma.StringFilter<"Usuario"> | string
   correo?: Prisma.StringFilter<"Usuario"> | string
   claveHash?: Prisma.StringFilter<"Usuario"> | string
-  rol?: Prisma.StringFilter<"Usuario"> | string
+  rol?: Prisma.Enumusuarios_rolFilter<"Usuario"> | $Enums.usuarios_rol
   activo?: Prisma.BoolFilter<"Usuario"> | boolean
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
 }
@@ -253,7 +253,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   nombre?: Prisma.StringFilter<"Usuario"> | string
   claveHash?: Prisma.StringFilter<"Usuario"> | string
-  rol?: Prisma.StringFilter<"Usuario"> | string
+  rol?: Prisma.Enumusuarios_rolFilter<"Usuario"> | $Enums.usuarios_rol
   activo?: Prisma.BoolFilter<"Usuario"> | boolean
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
 }, "id" | "correo">
@@ -281,7 +281,7 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   nombre?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   correo?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   claveHash?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
-  rol?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
+  rol?: Prisma.Enumusuarios_rolWithAggregatesFilter<"Usuario"> | $Enums.usuarios_rol
   activo?: Prisma.BoolWithAggregatesFilter<"Usuario"> | boolean
   creadoEn?: Prisma.DateTimeWithAggregatesFilter<"Usuario"> | Date | string
 }
@@ -290,7 +290,7 @@ export type UsuarioCreateInput = {
   nombre: string
   correo: string
   claveHash: string
-  rol?: string
+  rol?: $Enums.usuarios_rol
   activo?: boolean
   creadoEn?: Date | string
 }
@@ -300,7 +300,7 @@ export type UsuarioUncheckedCreateInput = {
   nombre: string
   correo: string
   claveHash: string
-  rol?: string
+  rol?: $Enums.usuarios_rol
   activo?: boolean
   creadoEn?: Date | string
 }
@@ -309,7 +309,7 @@ export type UsuarioUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   correo?: Prisma.StringFieldUpdateOperationsInput | string
   claveHash?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -319,7 +319,7 @@ export type UsuarioUncheckedUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   correo?: Prisma.StringFieldUpdateOperationsInput | string
   claveHash?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -329,7 +329,7 @@ export type UsuarioCreateManyInput = {
   nombre: string
   correo: string
   claveHash: string
-  rol?: string
+  rol?: $Enums.usuarios_rol
   activo?: boolean
   creadoEn?: Date | string
 }
@@ -338,7 +338,7 @@ export type UsuarioUpdateManyMutationInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   correo?: Prisma.StringFieldUpdateOperationsInput | string
   claveHash?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -348,7 +348,7 @@ export type UsuarioUncheckedUpdateManyInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   correo?: Prisma.StringFieldUpdateOperationsInput | string
   claveHash?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -397,6 +397,10 @@ export type UsuarioSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type Enumusuarios_rolFieldUpdateOperationsInput = {
+  set?: $Enums.usuarios_rol
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -435,7 +439,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     nombre: string
     correo: string
     claveHash: string
-    rol: string
+    rol: $Enums.usuarios_rol
     activo: boolean
     creadoEn: Date
   }, ExtArgs["result"]["usuario"]>
@@ -811,7 +815,7 @@ export interface UsuarioFieldRefs {
   readonly nombre: Prisma.FieldRef<"Usuario", 'String'>
   readonly correo: Prisma.FieldRef<"Usuario", 'String'>
   readonly claveHash: Prisma.FieldRef<"Usuario", 'String'>
-  readonly rol: Prisma.FieldRef<"Usuario", 'String'>
+  readonly rol: Prisma.FieldRef<"Usuario", 'usuarios_rol'>
   readonly activo: Prisma.FieldRef<"Usuario", 'Boolean'>
   readonly creadoEn: Prisma.FieldRef<"Usuario", 'DateTime'>
 }

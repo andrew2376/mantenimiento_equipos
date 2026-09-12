@@ -21,7 +21,7 @@ import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/Actualizar
 import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
 import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
 import { ActualizarUsuario } from './aplicacion/casos-uso/ActualizarUsuario'
-
+import { IniciarSesion } from './aplicacion/casos-uso/iniciarSesion'
 import { crearServidor } from './infraestructura/http/servidor'
 
 
@@ -92,6 +92,12 @@ const consultarUsuarios =
 const actualizarUsuario =
   new ActualizarUsuario(usuarioDAO)
 
+const iniciarSesion =
+  new IniciarSesion(
+    usuarioDAO,
+    servicioClaves
+  )
+
 
 // 4. Servidor HTTP (Infraestructura)
 
@@ -113,6 +119,7 @@ const app = crearServidor({
     registrarUsuario,
     consultarUsuarios,
     actualizarUsuario,
+    iniciarSesion,
   },
 
 })
@@ -135,3 +142,4 @@ app.listen(PORT, () => {
   )
 
 })
+

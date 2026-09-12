@@ -137,9 +137,26 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type Enumusuarios_rolFilter<$PrismaModel = never> = {
+  equals?: $Enums.usuarios_rol | Prisma.Enumusuarios_rolFieldRefInput<$PrismaModel>
+  in?: $Enums.usuarios_rol[]
+  notIn?: $Enums.usuarios_rol[]
+  not?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel> | $Enums.usuarios_rol
+}
+
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type Enumusuarios_rolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.usuarios_rol | Prisma.Enumusuarios_rolFieldRefInput<$PrismaModel>
+  in?: $Enums.usuarios_rol[]
+  notIn?: $Enums.usuarios_rol[]
+  not?: Prisma.NestedEnumusuarios_rolWithAggregatesFilter<$PrismaModel> | $Enums.usuarios_rol
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel>
 }
 
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -290,9 +307,26 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type NestedEnumusuarios_rolFilter<$PrismaModel = never> = {
+  equals?: $Enums.usuarios_rol | Prisma.Enumusuarios_rolFieldRefInput<$PrismaModel>
+  in?: $Enums.usuarios_rol[]
+  notIn?: $Enums.usuarios_rol[]
+  not?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel> | $Enums.usuarios_rol
+}
+
 export type NestedBoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type NestedEnumusuarios_rolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.usuarios_rol | Prisma.Enumusuarios_rolFieldRefInput<$PrismaModel>
+  in?: $Enums.usuarios_rol[]
+  notIn?: $Enums.usuarios_rol[]
+  not?: Prisma.NestedEnumusuarios_rolWithAggregatesFilter<$PrismaModel> | $Enums.usuarios_rol
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumusuarios_rolFilter<$PrismaModel>
 }
 
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

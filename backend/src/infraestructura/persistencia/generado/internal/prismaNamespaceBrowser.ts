@@ -159,8 +159,7 @@ export type MantenimientoOrderByRelevanceFieldEnum = (typeof MantenimientoOrderB
 export const UsuarioOrderByRelevanceFieldEnum = {
   nombre: 'nombre',
   correo: 'correo',
-  claveHash: 'claveHash',
-  rol: 'rol'
+  claveHash: 'claveHash'
 } as const
 
 export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]

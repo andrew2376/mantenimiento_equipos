@@ -1,205 +1,129 @@
-<div class="app-layout">
+@if (mostrarMenu()) {
 
-  <!-- ==========================================
-       MENÚ LATERAL
-       ========================================== -->
+  <div class="app-layout">
 
-  <aside class="sidebar">
+    <aside class="sidebar">
 
-    <!-- Logo / nombre -->
+      <div class="sidebar-brand">
 
-    <div class="sidebar-brand">
-
-      <div class="brand-icon">
-        M
-      </div>
-
-      <div class="brand-text">
-
-        <strong>
-          ManteniSys
-        </strong>
-
-        <span>
-          Gestión de mantenimiento
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <!-- Navegación -->
-
-    <nav class="sidebar-nav">
-
-      <p class="nav-title">
-        PRINCIPAL
-      </p>
-
-
-      <a
-        routerLink="/equipos"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ▣
-        </span>
-
-        <span>
-          Equipos
-        </span>
-
-      </a>
-
-
-      <a
-        routerLink="/tickets"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ▤
-        </span>
-
-        <span>
-          Tickets
-        </span>
-
-      </a>
-
-
-      <a
-        routerLink="/mantenimientos"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          🔧
-        </span>
-
-        <span>
-          Mantenimiento
-        </span>
-
-      </a>
-
-
-      <a
-        routerLink="/historial"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ◷
-        </span>
-
-        <span>
-          Historial
-        </span>
-
-      </a>
-
-
-      <p class="nav-title nav-title-space">
-        GESTIÓN
-      </p>
-
-
-      <a
-        routerLink="/usuarios"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ◉
-        </span>
-
-        <span>
-          Usuarios
-        </span>
-
-      </a>
-
-
-      <a
-        routerLink="/reportes"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ▥
-        </span>
-
-        <span>
-          Reportes
-        </span>
-
-      </a>
-
-    </nav>
-
-
-    <!-- Parte inferior -->
-
-    <div class="sidebar-bottom">
-
-      <a
-        routerLink="/configuracion"
-        class="nav-item"
-      >
-
-        <span class="nav-icon">
-          ⚙
-        </span>
-
-        <span>
-          Configuración
-        </span>
-
-      </a>
-
-
-      <div class="sidebar-user">
-
-        <div class="user-avatar">
-          A
+        <div class="brand-icon">
+          M
         </div>
 
-        <div class="user-info">
+        <div class="brand-text">
+          <strong>ManteniSys</strong>
+          <span>Gestión de mantenimiento</span>
+        </div>
 
-          <strong>
-            Administrador
-          </strong>
+      </div>
 
-          <span>
-            Administrador
-          </span>
+
+      <nav class="sidebar-nav">
+
+        <p class="nav-title">
+          PRINCIPAL
+        </p>
+
+        <a
+          routerLink="/equipos"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">▣</span>
+          <span>Equipos</span>
+        </a>
+
+        <a
+          routerLink="/tickets"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">▤</span>
+          <span>Tickets</span>
+        </a>
+
+        <a
+          routerLink="/mantenimientos"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">🔧</span>
+          <span>Mantenimiento</span>
+        </a>
+
+        <a
+          routerLink="/historial"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">◷</span>
+          <span>Historial</span>
+        </a>
+
+
+        <p class="nav-title nav-title-space">
+          GESTIÓN
+        </p>
+
+        <a
+          routerLink="/usuarios"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">◉</span>
+          <span>Usuarios</span>
+        </a>
+
+        <a
+          routerLink="/reportes"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">▥</span>
+          <span>Reportes</span>
+        </a>
+
+      </nav>
+
+
+      <div class="sidebar-bottom">
+
+        <a
+          routerLink="/configuracion"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">⚙</span>
+          <span>Configuración</span>
+        </a>
+
+
+        <div class="sidebar-user">
+
+          <div class="user-avatar">
+            A
+          </div>
+
+          <div class="user-info">
+            <strong>Administrador</strong>
+            <span>Administrador</span>
+          </div>
 
         </div>
 
       </div>
 
-    </div>
-
-  </aside>
+    </aside>
 
 
-  <!-- ==========================================
-       CONTENIDO PRINCIPAL
-       ========================================== -->
+    <main class="main-content">
+      <router-outlet />
+    </main>
 
-  <main class="main-content">
+  </div>
 
-    <router-outlet />
+} @else {
 
-  </main>
+  <router-outlet />
 
-</div>
+}

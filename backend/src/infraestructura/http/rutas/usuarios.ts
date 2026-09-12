@@ -1,3 +1,4 @@
+
 import { Router } from 'express'
 
 import type { RegistrarUsuario } from '../../../aplicacion/casos-uso/RegistrarUsuario'
@@ -5,6 +6,8 @@ import type { RegistrarUsuario } from '../../../aplicacion/casos-uso/RegistrarUs
 import type { ConsultarUsuarios } from '../../../aplicacion/casos-uso/ConsultarUsuarios'
 
 import type { ActualizarUsuario } from '../../../aplicacion/casos-uso/ActualizarUsuario'
+
+import type { IniciarSesion } from '../../../aplicacion/casos-uso/iniciarSesion'
 
 export interface DependenciasUsuarios {
 
@@ -14,13 +17,54 @@ export interface DependenciasUsuarios {
 
   actualizarUsuario: ActualizarUsuario
 
+  iniciarSesion: IniciarSesion
+
 }
+
 
 export function rutasUsuarios(
   deps: DependenciasUsuarios
 ): Router {
 
   const router = Router()
+
+
+  // POST /api/usuarios/login
+  router.post('/login', async (req, res, next) => {
+
+    try {
+
+      const {
+  correo,
+  clave
+} = req.body ?? {}
+      if (
+        typeof correo !== 'string' ||
+        typeof clave !== 'string'
+      ) {
+
+        res.status(400).json({
+          error: 'correo y clave son obligatorios'
+        })
+
+        return
+      }
+
+      const resultado =
+        await deps.iniciarSesion.ejecutar({
+          correo,
+          clave
+        })
+
+      res.status(200).json(resultado)
+
+    } catch (error) {
+
+      next(error)
+
+    }
+
+  })
 
 
   // POST /api/usuarios
@@ -138,7 +182,6 @@ export function rutasUsuarios(
         })
 
         return
-
       }
 
       const usuario =
@@ -172,3 +215,4 @@ export function rutasUsuarios(
   return router
 
 }
+

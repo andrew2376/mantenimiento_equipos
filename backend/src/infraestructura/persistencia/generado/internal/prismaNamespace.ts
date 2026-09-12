@@ -743,8 +743,7 @@ export type MantenimientoOrderByRelevanceFieldEnum = (typeof MantenimientoOrderB
 export const UsuarioOrderByRelevanceFieldEnum = {
   nombre: 'nombre',
   correo: 'correo',
-  claveHash: 'claveHash',
-  rol: 'rol'
+  claveHash: 'claveHash'
 } as const
 
 export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
@@ -774,6 +773,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'usuarios_rol'
+ */
+export type Enumusuarios_rolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'usuarios_rol'>
     
 
 

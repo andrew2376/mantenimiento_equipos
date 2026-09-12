@@ -1,9 +1,17 @@
 import { Routes } from '@angular/router';
 
 import { EquipoList } from './features/equipos/equipo-list/equipo-list';
+
 import { UsuarioList } from './features/usuarios/usuario-list/usuario-list';
 
+import { Login } from './features/usuarios/login/login';
+
 export const routes: Routes = [
+
+  {
+    path: 'login',
+    component: Login
+  },
 
   {
     path: 'equipos',
@@ -17,7 +25,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'equipos',
+    redirectTo: 'login',
     pathMatch: 'full'
   }
 
