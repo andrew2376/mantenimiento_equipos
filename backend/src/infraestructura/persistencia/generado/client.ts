@@ -54,3 +54,8 @@ export type Mantenimiento = Prisma.MantenimientoModel
  * 
  */
 export type Usuario = Prisma.UsuarioModel
+/**
+ * Model tickets
+ * 
+ */
+export type tickets = Prisma.ticketsModel

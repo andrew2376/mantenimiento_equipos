@@ -1,403 +1,452 @@
 <section class="equipos-container">
 
-  <!-- HEADER -->
-  <div class="equipos-header">
 
-    <div>
-      <h1>Usuarios</h1>
-      <p>Gestiona los usuarios registrados en el sistema.</p>
-    </div>
-
-    <button
-      type="button"
-      (click)="abrirModal()"
-    >
-      + Nuevo usuario
-    </button>
-
-  </div>
-
-
-  <!-- BÚSQUEDA -->
   @if (!cargando() && !error() && usuarios().length > 0) {
+
+  <div class="toolbar-modulo">
 
     <div class="busqueda-container">
 
       <div class="busqueda">
 
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <circle
-            cx="11"
-            cy="11"
-            r="7"
-          ></circle>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
 
-          <path
-            d="m20 20-3.5-3.5"
-          ></path>
+          <circle cx="11" cy="11" r="7"></circle>
+
+          <path d="m20 20-3.5-3.5"></path>
+
         </svg>
 
-        <input
-          type="text"
-          placeholder="Buscar usuario..."
-        >
+
+        <input type="text" placeholder="Buscar usuario...">
 
       </div>
 
     </div>
 
+
+    <button type="button" class="btn-nuevo-modulo" (click)="abrirModal()">
+
+      + Nuevo usuario
+
+    </button>
+
+  </div>
+
   }
 
 
-  <!-- CARGANDO -->
+  <!-- ==========================================
+       CARGANDO
+       ========================================== -->
+
   @if (cargando()) {
 
-    <div class="mensaje">
-      Cargando usuarios...
-    </div>
+  <div class="mensaje">
+
+    Cargando usuarios...
+
+  </div>
 
   }
 
 
-  <!-- ERROR -->
+  <!-- ==========================================
+       ERROR
+       ========================================== -->
+
   @if (error()) {
 
-    <div class="mensaje error">
-      {{ error() }}
-    </div>
+  <div class="mensaje error">
+
+    {{ error() }}
+
+  </div>
 
   }
 
 
-  <!-- SIN USUARIOS -->
+  <!-- ==========================================
+       SIN USUARIOS
+       ========================================== -->
+
   @if (!cargando() && !error() && usuarios().length === 0) {
 
-    <div class="mensaje">
-      No hay usuarios registrados.
-    </div>
+  <div class="mensaje">
+
+    No hay usuarios registrados.
+
+  </div>
 
   }
 
 
-  <!-- TABLA -->
+  <!-- ==========================================
+       TABLA
+       ========================================== -->
+
   @if (!cargando() && !error() && usuarios().length > 0) {
 
-    <div class="tabla-container">
+  <div class="tabla-container">
 
-      <table>
+    <table>
 
-        <thead>
+      <thead>
 
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Creado</th>
-            <th>Acciones</th>
-          </tr>
+        <tr>
 
-        </thead>
+          <th>
+            Nombre
+          </th>
 
-        <tbody>
+          <th>
+            Correo
+          </th>
 
-          @for (usuario of usuarios(); track usuario.id) {
+          <th>
+            Rol
+          </th>
 
-            <tr>
+          <th>
+            Estado
+          </th>
 
-              <td>
-                {{ usuario.nombre }}
-              </td>
+          <th>
+            Creado
+          </th>
 
-              <td>
-                {{ usuario.correo }}
-              </td>
+          <th>
+            Acciones
+          </th>
 
-              <td>
-                {{ usuario.rol }}
-              </td>
+        </tr>
 
-              <td>
+      </thead>
 
-                @if (usuario.activo) {
 
-                  <span class="estado activo">
-                    Activo
-                  </span>
+      <tbody>
 
-                } @else {
+        @for (
+        usuario of usuarios();
+        track usuario.id
+        ) {
 
-                  <span class="estado inactivo">
-                    Inactivo
-                  </span>
+        <tr>
 
-                }
+          <!-- ==================================
+                   NOMBRE
+                   ================================== -->
 
-              </td>
+          <td>
 
-              <td>
-                {{ usuario.creadoEn | date:'dd/MM/yyyy' }}
-              </td>
+            {{ usuario.nombre }}
 
-              <td class="acciones">
+          </td>
 
-                <button
-                  type="button"
-                  class="btn-icono"
-                  title="Editar usuario"
-                >
 
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
+          <!-- ==================================
+                   CORREO
+                   ================================== -->
 
-                    <path
-                      d="M12 20h9"
-                    ></path>
+          <td>
 
-                    <path
-                      d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"
-                    ></path>
+            {{ usuario.correo }}
 
-                  </svg>
+          </td>
 
-                </button>
 
-              </td>
+          <!-- ==================================
+                   ROL
+                   ================================== -->
 
-            </tr>
+          <td>
 
-          }
+            {{ usuario.rol }}
 
-        </tbody>
+          </td>
 
-      </table>
 
-    </div>
+          <!-- ==================================
+                   ESTADO
+                   ================================== -->
+
+          <td>
+
+            @if (usuario.activo) {
+
+            <span class="estado activo">
+
+              Activo
+
+            </span>
+
+            } @else {
+
+            <span class="estado inactivo">
+
+              Inactivo
+
+            </span>
+
+            }
+
+          </td>
+
+
+          <!-- ==================================
+                   FECHA DE CREACIÓN
+                   ================================== -->
+
+          <td>
+
+            {{ usuario.creadoEn | date:'dd/MM/yyyy' }}
+
+          </td>
+
+
+          <!-- ==================================
+                   ACCIONES
+                   ================================== -->
+
+          <td class="acciones">
+
+            <button type="button" class="btn-icono" title="Editar usuario">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M12 20h9"></path>
+
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+
+              </svg>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
 
   }
 
 </section>
 
 
-<!-- ========================= -->
-<!-- MODAL NUEVO USUARIO       -->
-<!-- ========================= -->
+<!-- ==========================================
+     MODAL NUEVO USUARIO
+     ========================================== -->
 
 @if (modalAbierto()) {
 
-  <div class="modal-overlay">
+<div class="modal-overlay">
 
-    <div class="modal">
+  <div class="modal">
 
-      <!-- ENCABEZADO -->
 
-      <div class="modal-header">
+    <!-- ==================================
+           ENCABEZADO MODAL
+           ================================== -->
 
-        <div>
+    <div class="modal-header">
 
-          <h2>Nuevo usuario</h2>
+      <div>
 
-          <p>
-            Registra un nuevo usuario en el sistema.
-          </p>
+        <h2>
+          Nuevo usuario
+        </h2>
 
-        </div>
-
-        <button
-          type="button"
-          class="modal-close"
-          aria-label="Cerrar"
-          (click)="cerrarModal()"
-          [disabled]="guardando()"
-        >
-          ×
-        </button>
+        <p>
+          Registra un nuevo usuario en el sistema.
+        </p>
 
       </div>
 
 
-      <!-- FORMULARIO -->
+      <button type="button" class="modal-close" aria-label="Cerrar" (click)="cerrarModal()" [disabled]="guardando()">
 
-      <form
-        (ngSubmit)="guardarUsuario()"
-      >
+        ×
 
-        <div class="form-grid">
-
-          <!-- NOMBRE -->
-
-          <div class="form-group">
-
-            <label for="nombre">
-              Nombre
-            </label>
-
-            <input
-              id="nombre"
-              name="nombre"
-              type="text"
-              [(ngModel)]="nombre"
-              placeholder="Nombre completo"
-              autocomplete="off"
-            />
-
-          </div>
-
-
-          <!-- CORREO -->
-
-          <div class="form-group">
-
-            <label for="correo">
-              Correo
-            </label>
-
-            <input
-              id="correo"
-              name="correo"
-              type="email"
-              [(ngModel)]="correo"
-              placeholder="correo@ejemplo.com"
-              autocomplete="off"
-            />
-
-          </div>
-
-
-          <!-- CONTRASEÑA -->
-
-          <div class="form-group">
-
-            <label for="clave">
-              Contraseña
-            </label>
-
-            <input
-              id="clave"
-              name="clave"
-              type="password"
-              [(ngModel)]="clave"
-              placeholder="Contraseña"
-              autocomplete="new-password"
-            />
-
-          </div>
-
-
-          <!-- ROL -->
-
-          <div class="form-group">
-
-            <label for="rol">
-              Rol
-            </label>
-
-            <select
-              id="rol"
-              name="rol"
-              [(ngModel)]="rol"
-            >
-
-              <option value="SOLICITANTE">
-                Solicitante
-              </option>
-
-              <option value="TECNICO">
-                Técnico
-              </option>
-
-              <option value="ADMINISTRADOR">
-                Administrador
-              </option>
-
-              <option value="SUPERVISOR">
-                Supervisor
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <!-- USUARIO ACTIVO -->
-
-          <div class="form-group form-group-full">
-
-            <label
-              for="activo"
-              class="checkbox-label"
-            >
-              <input
-                id="activo"
-                name="activo"
-                type="checkbox"
-                [(ngModel)]="activo"
-              />
-
-              <span>
-                Usuario activo
-              </span>
-
-            </label>
-
-          </div>
-
-        </div>
-
-
-        <!-- ERROR -->
-
-        @if (errorFormulario()) {
-
-          <div class="form-error">
-            {{ errorFormulario() }}
-          </div>
-
-        }
-
-
-        <!-- ACCIONES -->
-
-        <div class="modal-actions">
-
-          <button
-            type="button"
-            class="btn-cancelar"
-            (click)="cerrarModal()"
-            [disabled]="guardando()"
-          >
-            Cancelar
-          </button>
-
-          <button
-            type="submit"
-            class="btn-guardar"
-            [disabled]="guardando()"
-          >
-
-            @if (guardando()) {
-
-              Guardando...
-
-            } @else {
-
-              Guardar usuario
-
-            }
-
-          </button>
-
-        </div>
-
-      </form>
+      </button>
 
     </div>
 
+
+    <!-- ==================================
+           FORMULARIO
+           ================================== -->
+
+    <form (ngSubmit)="guardarUsuario()">
+
+      <div class="form-grid">
+
+
+        <!-- ==================================
+               NOMBRE
+               ================================== -->
+
+        <div class="form-group">
+
+          <label for="nombre">
+
+            Nombre
+
+          </label>
+
+          <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" placeholder="Nombre completo"
+            autocomplete="off" />
+
+        </div>
+
+
+        <!-- ==================================
+               CORREO
+               ================================== -->
+
+        <div class="form-group">
+
+          <label for="correo">
+
+            Correo
+
+          </label>
+
+          <input id="correo" name="correo" type="email" [(ngModel)]="correo" placeholder="correo@ejemplo.com"
+            autocomplete="off" />
+
+        </div>
+
+
+        <!-- ==================================
+               CONTRASEÑA
+               ================================== -->
+
+        <div class="form-group">
+
+          <label for="clave">
+
+            Contraseña
+
+          </label>
+
+          <input id="clave" name="clave" type="password" [(ngModel)]="clave" placeholder="Contraseña"
+            autocomplete="new-password" />
+
+        </div>
+
+
+        <!-- ==================================
+               ROL
+               ================================== -->
+
+        <div class="form-group">
+
+          <label for="rol">
+
+            Rol
+
+          </label>
+
+          <select id="rol" name="rol" [(ngModel)]="rol">
+
+            <option value="SOLICITANTE">
+              Solicitante
+            </option>
+
+            <option value="TECNICO">
+              Técnico
+            </option>
+
+            <option value="ADMINISTRADOR">
+              Administrador
+            </option>
+
+            <option value="SUPERVISOR">
+              Supervisor
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- ==================================
+               USUARIO ACTIVO
+               ================================== -->
+
+        <div class="form-group form-group-full">
+
+          <label for="activo" class="checkbox-label">
+
+            <input id="activo" name="activo" type="checkbox" [(ngModel)]="activo" />
+
+            <span>
+
+              Usuario activo
+
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+             ERROR
+             ================================== -->
+
+      @if (errorFormulario()) {
+
+      <div class="form-error">
+
+        {{ errorFormulario() }}
+
+      </div>
+
+      }
+
+
+      <!-- ==================================
+             ACCIONES
+             ================================== -->
+
+      <div class="modal-actions">
+
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()" [disabled]="guardando()">
+
+          Cancelar
+
+        </button>
+
+
+        <button type="submit" class="btn-guardar" [disabled]="guardando()">
+
+          @if (guardando()) {
+
+          Guardando...
+
+          } @else {
+
+          Guardar usuario
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
+
+</div>
 
 }

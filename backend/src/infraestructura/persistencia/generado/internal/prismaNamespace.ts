@@ -399,7 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Equipo: 'Equipo',
   Mantenimiento: 'Mantenimiento',
-  Usuario: 'Usuario'
+  Usuario: 'Usuario',
+  tickets: 'tickets'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "equipo" | "mantenimiento" | "usuario"
+    modelProps: "equipo" | "mantenimiento" | "usuario" | "tickets"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -617,6 +618,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    tickets: {
+      payload: Prisma.$ticketsPayload<ExtArgs>
+      fields: Prisma.ticketsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ticketsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ticketsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        findFirst: {
+          args: Prisma.ticketsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ticketsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        findMany: {
+          args: Prisma.ticketsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>[]
+        }
+        create: {
+          args: Prisma.ticketsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        createMany: {
+          args: Prisma.ticketsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ticketsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        update: {
+          args: Prisma.ticketsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        deleteMany: {
+          args: Prisma.ticketsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ticketsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ticketsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ticketsPayload>
+        }
+        aggregate: {
+          args: Prisma.TicketsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTickets>
+        }
+        groupBy: {
+          args: Prisma.ticketsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TicketsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ticketsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TicketsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -700,6 +767,23 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const TicketsScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descripcion: 'descripcion',
+  prioridad: 'prioridad',
+  estado: 'estado',
+  equipo_id: 'equipo_id',
+  solicitante_id: 'solicitante_id',
+  tecnico_id: 'tecnico_id',
+  fecha_cierre: 'fecha_cierre',
+  creado_en: 'creado_en',
+  actualizado_en: 'actualizado_en'
+} as const
+
+export type TicketsScalarFieldEnum = (typeof TicketsScalarFieldEnum)[keyof typeof TicketsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -747,6 +831,16 @@ export const UsuarioOrderByRelevanceFieldEnum = {
 } as const
 
 export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
+
+
+export const ticketsOrderByRelevanceFieldEnum = {
+  titulo: 'titulo',
+  descripcion: 'descripcion',
+  prioridad: 'prioridad',
+  estado: 'estado'
+} as const
+
+export type ticketsOrderByRelevanceFieldEnum = (typeof ticketsOrderByRelevanceFieldEnum)[keyof typeof ticketsOrderByRelevanceFieldEnum]
 
 
 
@@ -950,6 +1044,7 @@ export type GlobalOmitConfig = {
   equipo?: Prisma.EquipoOmit
   mantenimiento?: Prisma.MantenimientoOmit
   usuario?: Prisma.UsuarioOmit
+  tickets?: Prisma.ticketsOmit
 }
 
 /* Types for Logging */

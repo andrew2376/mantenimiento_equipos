@@ -20,6 +20,7 @@ model Equipo {
   createdAt        DateTime        @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt        DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
   mantenimientos   Mantenimiento[]
+  tickets          tickets[]
 
   @@map("equipos")
 }
@@ -40,15 +41,38 @@ model Mantenimiento {
 }
 
 model Usuario {
-  id        Int          @id @default(autoincrement()) @db.UnsignedInt
-  nombre    String       @db.VarChar(100)
-  correo    String       @unique(map: "correo") @db.VarChar(150)
-  claveHash String       @map("clave_hash") @db.VarChar(255)
-  rol       usuarios_rol @default(SOLICITANTE)
-  activo    Boolean      @default(true)
-  creadoEn  DateTime     @default(now()) @map("creado_en") @db.DateTime(0)
+  id                                       Int          @id @default(autoincrement()) @db.UnsignedInt
+  nombre                                   String       @db.VarChar(100)
+  correo                                   String       @unique(map: "correo") @db.VarChar(150)
+  claveHash                                String       @map("clave_hash") @db.VarChar(255)
+  rol                                      usuarios_rol @default(SOLICITANTE)
+  activo                                   Boolean      @default(true)
+  creadoEn                                 DateTime     @default(now()) @map("creado_en") @db.DateTime(0)
+  tickets_tickets_solicitante_idTousuarios tickets[]    @relation("tickets_solicitante_idTousuarios")
+  tickets_tickets_tecnico_idTousuarios     tickets[]    @relation("tickets_tecnico_idTousuarios")
 
   @@map("usuarios")
+}
+
+model tickets {
+  id                                        Int       @id @default(autoincrement()) @db.UnsignedInt
+  titulo                                    String    @db.VarChar(150)
+  descripcion                               String    @db.Text
+  prioridad                                 String    @default("MEDIA") @db.VarChar(20)
+  estado                                    String    @default("ABIERTO") @db.VarChar(30)
+  equipo_id                                 Int       @db.UnsignedInt
+  solicitante_id                            Int       @db.UnsignedInt
+  tecnico_id                                Int?      @db.UnsignedInt
+  fecha_cierre                              DateTime? @db.DateTime(0)
+  creado_en                                 DateTime  @default(now()) @db.DateTime(0)
+  actualizado_en                            DateTime  @default(now()) @db.DateTime(0)
+  equipos                                   Equipo    @relation(fields: [equipo_id], references: [id], map: "fk_ticket_equipo")
+  usuarios_tickets_solicitante_idTousuarios Usuario   @relation("tickets_solicitante_idTousuarios", fields: [solicitante_id], references: [id], map: "fk_ticket_solicitante")
+  usuarios_tickets_tecnico_idTousuarios     Usuario?  @relation("tickets_tecnico_idTousuarios", fields: [tecnico_id], references: [id], map: "fk_ticket_tecnico")
+
+  @@index([equipo_id], map: "fk_ticket_equipo")
+  @@index([solicitante_id], map: "fk_ticket_solicitante")
+  @@index([tecnico_id], map: "fk_ticket_tecnico")
 }
 
 enum usuarios_rol {

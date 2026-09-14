@@ -232,6 +232,8 @@ export type UsuarioWhereInput = {
   rol?: Prisma.Enumusuarios_rolFilter<"Usuario"> | $Enums.usuarios_rol
   activo?: Prisma.BoolFilter<"Usuario"> | boolean
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.TicketsListRelationFilter
+  tickets_tickets_tecnico_idTousuarios?: Prisma.TicketsListRelationFilter
 }
 
 export type UsuarioOrderByWithRelationInput = {
@@ -242,6 +244,8 @@ export type UsuarioOrderByWithRelationInput = {
   rol?: Prisma.SortOrder
   activo?: Prisma.SortOrder
   creadoEn?: Prisma.SortOrder
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsOrderByRelationAggregateInput
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsOrderByRelationAggregateInput
   _relevance?: Prisma.UsuarioOrderByRelevanceInput
 }
 
@@ -256,6 +260,8 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   rol?: Prisma.Enumusuarios_rolFilter<"Usuario"> | $Enums.usuarios_rol
   activo?: Prisma.BoolFilter<"Usuario"> | boolean
   creadoEn?: Prisma.DateTimeFilter<"Usuario"> | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.TicketsListRelationFilter
+  tickets_tickets_tecnico_idTousuarios?: Prisma.TicketsListRelationFilter
 }, "id" | "correo">
 
 export type UsuarioOrderByWithAggregationInput = {
@@ -293,6 +299,8 @@ export type UsuarioCreateInput = {
   rol?: $Enums.usuarios_rol
   activo?: boolean
   creadoEn?: Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsCreateNestedManyWithoutUsuarios_tickets_solicitante_idTousuariosInput
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsCreateNestedManyWithoutUsuarios_tickets_tecnico_idTousuariosInput
 }
 
 export type UsuarioUncheckedCreateInput = {
@@ -303,6 +311,8 @@ export type UsuarioUncheckedCreateInput = {
   rol?: $Enums.usuarios_rol
   activo?: boolean
   creadoEn?: Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUncheckedCreateNestedManyWithoutUsuarios_tickets_solicitante_idTousuariosInput
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUncheckedCreateNestedManyWithoutUsuarios_tickets_tecnico_idTousuariosInput
 }
 
 export type UsuarioUpdateInput = {
@@ -312,6 +322,8 @@ export type UsuarioUpdateInput = {
   rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUpdateManyWithoutUsuarios_tickets_solicitante_idTousuariosNestedInput
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUpdateManyWithoutUsuarios_tickets_tecnico_idTousuariosNestedInput
 }
 
 export type UsuarioUncheckedUpdateInput = {
@@ -322,6 +334,8 @@ export type UsuarioUncheckedUpdateInput = {
   rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
   activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUncheckedUpdateManyWithoutUsuarios_tickets_solicitante_idTousuariosNestedInput
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUncheckedUpdateManyWithoutUsuarios_tickets_tecnico_idTousuariosNestedInput
 }
 
 export type UsuarioCreateManyInput = {
@@ -397,6 +411,16 @@ export type UsuarioSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type UsuarioScalarRelationFilter = {
+  is?: Prisma.UsuarioWhereInput
+  isNot?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioNullableScalarRelationFilter = {
+  is?: Prisma.UsuarioWhereInput | null
+  isNot?: Prisma.UsuarioWhereInput | null
+}
+
 export type Enumusuarios_rolFieldUpdateOperationsInput = {
   set?: $Enums.usuarios_rol
 }
@@ -405,6 +429,190 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTickets_tickets_solicitante_idTousuariosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioCreateNestedOneWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_tecnico_idTousuariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTickets_tickets_tecnico_idTousuariosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutTickets_tickets_solicitante_idTousuariosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTickets_tickets_solicitante_idTousuariosInput
+  upsert?: Prisma.UsuarioUpsertWithoutTickets_tickets_solicitante_idTousuariosInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUpdateWithoutTickets_tickets_solicitante_idTousuariosInput>, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_solicitante_idTousuariosInput>
+}
+
+export type UsuarioUpdateOneWithoutTickets_tickets_tecnico_idTousuariosNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_tecnico_idTousuariosInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTickets_tickets_tecnico_idTousuariosInput
+  upsert?: Prisma.UsuarioUpsertWithoutTickets_tickets_tecnico_idTousuariosInput
+  disconnect?: Prisma.UsuarioWhereInput | boolean
+  delete?: Prisma.UsuarioWhereInput | boolean
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUpdateWithoutTickets_tickets_tecnico_idTousuariosInput>, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_tecnico_idTousuariosInput>
+}
+
+export type UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  nombre: string
+  correo: string
+  claveHash: string
+  rol?: $Enums.usuarios_rol
+  activo?: boolean
+  creadoEn?: Date | string
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsCreateNestedManyWithoutUsuarios_tickets_tecnico_idTousuariosInput
+}
+
+export type UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  id?: number
+  nombre: string
+  correo: string
+  claveHash: string
+  rol?: $Enums.usuarios_rol
+  activo?: boolean
+  creadoEn?: Date | string
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUncheckedCreateNestedManyWithoutUsuarios_tickets_tecnico_idTousuariosInput
+}
+
+export type UsuarioCreateOrConnectWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput>
+}
+
+export type UsuarioCreateWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  nombre: string
+  correo: string
+  claveHash: string
+  rol?: $Enums.usuarios_rol
+  activo?: boolean
+  creadoEn?: Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsCreateNestedManyWithoutUsuarios_tickets_solicitante_idTousuariosInput
+}
+
+export type UsuarioUncheckedCreateWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  id?: number
+  nombre: string
+  correo: string
+  claveHash: string
+  rol?: $Enums.usuarios_rol
+  activo?: boolean
+  creadoEn?: Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUncheckedCreateNestedManyWithoutUsuarios_tickets_solicitante_idTousuariosInput
+}
+
+export type UsuarioCreateOrConnectWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_tecnico_idTousuariosInput>
+}
+
+export type UsuarioUpsertWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_solicitante_idTousuariosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_solicitante_idTousuariosInput>
+}
+
+export type UsuarioUpdateWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  correo?: Prisma.StringFieldUpdateOperationsInput | string
+  claveHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUpdateManyWithoutUsuarios_tickets_tecnico_idTousuariosNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutTickets_tickets_solicitante_idTousuariosInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  correo?: Prisma.StringFieldUpdateOperationsInput | string
+  claveHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_tecnico_idTousuarios?: Prisma.ticketsUncheckedUpdateManyWithoutUsuarios_tickets_tecnico_idTousuariosNestedInput
+}
+
+export type UsuarioUpsertWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_tecnico_idTousuariosInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_tecnico_idTousuariosInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutTickets_tickets_tecnico_idTousuariosInput, Prisma.UsuarioUncheckedUpdateWithoutTickets_tickets_tecnico_idTousuariosInput>
+}
+
+export type UsuarioUpdateWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  correo?: Prisma.StringFieldUpdateOperationsInput | string
+  claveHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUpdateManyWithoutUsuarios_tickets_solicitante_idTousuariosNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutTickets_tickets_tecnico_idTousuariosInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  correo?: Prisma.StringFieldUpdateOperationsInput | string
+  claveHash?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.Enumusuarios_rolFieldUpdateOperationsInput | $Enums.usuarios_rol
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets_tickets_solicitante_idTousuarios?: Prisma.ticketsUncheckedUpdateManyWithoutUsuarios_tickets_solicitante_idTousuariosNestedInput
+}
+
+
+/**
+ * Count Type UsuarioCountOutputType
+ */
+
+export type UsuarioCountOutputType = {
+  tickets_tickets_solicitante_idTousuarios: number
+  tickets_tickets_tecnico_idTousuarios: number
+}
+
+export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tickets_tickets_solicitante_idTousuarios?: boolean | UsuarioCountOutputTypeCountTickets_tickets_solicitante_idTousuariosArgs
+  tickets_tickets_tecnico_idTousuarios?: boolean | UsuarioCountOutputTypeCountTickets_tickets_tecnico_idTousuariosArgs
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UsuarioCountOutputType
+   */
+  select?: Prisma.UsuarioCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountTickets_tickets_solicitante_idTousuariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ticketsWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountTickets_tickets_tecnico_idTousuariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ticketsWhereInput
+}
 
 
 export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -415,6 +623,9 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   rol?: boolean
   activo?: boolean
   creadoEn?: boolean
+  tickets_tickets_solicitante_idTousuarios?: boolean | Prisma.Usuario$tickets_tickets_solicitante_idTousuariosArgs<ExtArgs>
+  tickets_tickets_tecnico_idTousuarios?: boolean | Prisma.Usuario$tickets_tickets_tecnico_idTousuariosArgs<ExtArgs>
+  _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
 
@@ -430,10 +641,18 @@ export type UsuarioSelectScalar = {
 }
 
 export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "correo" | "claveHash" | "rol" | "activo" | "creadoEn", ExtArgs["result"]["usuario"]>
+export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tickets_tickets_solicitante_idTousuarios?: boolean | Prisma.Usuario$tickets_tickets_solicitante_idTousuariosArgs<ExtArgs>
+  tickets_tickets_tecnico_idTousuarios?: boolean | Prisma.Usuario$tickets_tickets_tecnico_idTousuariosArgs<ExtArgs>
+  _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Usuario"
-  objects: {}
+  objects: {
+    tickets_tickets_solicitante_idTousuarios: Prisma.$ticketsPayload<ExtArgs>[]
+    tickets_tickets_tecnico_idTousuarios: Prisma.$ticketsPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     nombre: string
@@ -782,6 +1001,8 @@ readonly fields: UsuarioFieldRefs;
  */
 export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  tickets_tickets_solicitante_idTousuarios<T extends Prisma.Usuario$tickets_tickets_solicitante_idTousuariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$tickets_tickets_solicitante_idTousuariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ticketsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tickets_tickets_tecnico_idTousuarios<T extends Prisma.Usuario$tickets_tickets_tecnico_idTousuariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$tickets_tickets_tecnico_idTousuariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ticketsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -835,6 +1056,10 @@ export type UsuarioFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter, which Usuario to fetch.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -853,6 +1078,10 @@ export type UsuarioFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter, which Usuario to fetch.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -870,6 +1099,10 @@ export type UsuarioFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * Filter, which Usuario to fetch.
    */
@@ -919,6 +1152,10 @@ export type UsuarioFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter, which Usuario to fetch.
    */
   where?: Prisma.UsuarioWhereInput
@@ -966,6 +1203,10 @@ export type UsuarioFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * Filter, which Usuarios to fetch.
    */
@@ -1015,6 +1256,10 @@ export type UsuarioCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * The data needed to create a Usuario.
    */
   data: Prisma.XOR<Prisma.UsuarioCreateInput, Prisma.UsuarioUncheckedCreateInput>
@@ -1043,6 +1288,10 @@ export type UsuarioUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
   /**
    * The data needed to update a Usuario.
    */
@@ -1084,6 +1333,10 @@ export type UsuarioUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * The filter to search for the Usuario to update in case it exists.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -1110,6 +1363,10 @@ export type UsuarioDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
+  /**
    * Filter which Usuario to delete.
    */
   where: Prisma.UsuarioWhereUniqueInput
@@ -1130,6 +1387,54 @@ export type UsuarioDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Usuario.tickets_tickets_solicitante_idTousuarios
+ */
+export type Usuario$tickets_tickets_solicitante_idTousuariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tickets
+   */
+  select?: Prisma.ticketsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tickets
+   */
+  omit?: Prisma.ticketsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ticketsInclude<ExtArgs> | null
+  where?: Prisma.ticketsWhereInput
+  orderBy?: Prisma.ticketsOrderByWithRelationInput | Prisma.ticketsOrderByWithRelationInput[]
+  cursor?: Prisma.ticketsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TicketsScalarFieldEnum | Prisma.TicketsScalarFieldEnum[]
+}
+
+/**
+ * Usuario.tickets_tickets_tecnico_idTousuarios
+ */
+export type Usuario$tickets_tickets_tecnico_idTousuariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tickets
+   */
+  select?: Prisma.ticketsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tickets
+   */
+  omit?: Prisma.ticketsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ticketsInclude<ExtArgs> | null
+  where?: Prisma.ticketsWhereInput
+  orderBy?: Prisma.ticketsOrderByWithRelationInput | Prisma.ticketsOrderByWithRelationInput[]
+  cursor?: Prisma.ticketsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TicketsScalarFieldEnum | Prisma.TicketsScalarFieldEnum[]
+}
+
+/**
  * Usuario without action
  */
 export type UsuarioDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1141,4 +1446,8 @@ export type UsuarioDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Usuario
    */
   omit?: Prisma.UsuarioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsuarioInclude<ExtArgs> | null
 }

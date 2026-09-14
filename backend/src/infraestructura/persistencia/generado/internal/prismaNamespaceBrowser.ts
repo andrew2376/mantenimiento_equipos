@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Equipo: 'Equipo',
   Mantenimiento: 'Mantenimiento',
-  Usuario: 'Usuario'
+  Usuario: 'Usuario',
+  tickets: 'tickets'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -116,6 +117,23 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const TicketsScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descripcion: 'descripcion',
+  prioridad: 'prioridad',
+  estado: 'estado',
+  equipo_id: 'equipo_id',
+  solicitante_id: 'solicitante_id',
+  tecnico_id: 'tecnico_id',
+  fecha_cierre: 'fecha_cierre',
+  creado_en: 'creado_en',
+  actualizado_en: 'actualizado_en'
+} as const
+
+export type TicketsScalarFieldEnum = (typeof TicketsScalarFieldEnum)[keyof typeof TicketsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -163,4 +181,14 @@ export const UsuarioOrderByRelevanceFieldEnum = {
 } as const
 
 export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
+
+
+export const ticketsOrderByRelevanceFieldEnum = {
+  titulo: 'titulo',
+  descripcion: 'descripcion',
+  prioridad: 'prioridad',
+  estado: 'estado'
+} as const
+
+export type ticketsOrderByRelevanceFieldEnum = (typeof ticketsOrderByRelevanceFieldEnum)[keyof typeof ticketsOrderByRelevanceFieldEnum]
 

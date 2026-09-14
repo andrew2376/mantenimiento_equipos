@@ -14,6 +14,11 @@ import type {
   UsuarioNuevo
 } from '../modelo/Usuario.js'
 
+import type {
+  Ticket,
+  TicketNuevo
+} from '../modelo/Ticket.js'
+
 /**
  * Puertos de Dominio:
  * Contratos que deben satisfacer los adaptadores
@@ -21,6 +26,7 @@ import type {
  */
 
 export interface EquipoDAO {
+
   guardar(
     equipo: EquipoNuevo
   ): Promise<Equipo>
@@ -41,6 +47,7 @@ export interface EquipoDAO {
 }
 
 export interface UsuarioDAO {
+
   guardar(
     usuario: UsuarioNuevo
   ): Promise<Usuario>
@@ -61,12 +68,16 @@ export interface UsuarioDAO {
 }
 
 export interface ActualizarMantenimientoDatos {
+
   estado?: EstadoMantenimiento
+
   diagnostico?: string
+
   tecnico?: string
 }
 
 export interface MantenimientoDAO {
+
   guardar(
     mantenimiento: MantenimientoNuevo
   ): Promise<Mantenimiento>
@@ -87,8 +98,28 @@ export interface MantenimientoDAO {
   ): Promise<Mantenimiento | null>
 }
 
+export interface TicketDAO {
+
+  guardar(
+    ticket: TicketNuevo
+  ): Promise<Ticket>
+
+  porId(
+    id: number
+  ): Promise<Ticket | null>
+
+  todos(): Promise<Ticket[]>
+
+  actualizar(
+    ticket: Ticket
+  ): Promise<Ticket>
+}
+
 export interface ServicioClaves {
-  generarHash(clave: string): Promise<string>
+
+  generarHash(
+    clave: string
+  ): Promise<string>
 
   comparar(
     clave: string,

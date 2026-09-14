@@ -1,0 +1,248 @@
+<div class="modal-overlay">
+
+  <div class="modal">
+
+    <!-- ==========================================
+         ENCABEZADO
+         ========================================== -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <h2>
+          Nuevo ticket
+        </h2>
+
+        <p>
+          Registra una nueva solicitud de mantenimiento
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="btn-cerrar modal-close"
+        title="Cerrar"
+        (click)="cancelar()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         ERROR
+         ========================================== -->
+
+    @if (error) {
+
+      <div class="mensaje error">
+        {{ error }}
+      </div>
+
+    }
+
+
+    <!-- ==========================================
+         FORMULARIO
+         ========================================== -->
+
+    <form
+      (ngSubmit)="guardar()"
+    >
+
+      <!-- TÍTULO -->
+
+      <div class="form-group">
+
+        <label for="titulo">
+          Título
+        </label>
+
+        <input
+          id="titulo"
+          type="text"
+          name="titulo"
+          [(ngModel)]="titulo"
+          placeholder="Ej. Equipo no enciende"
+          maxlength="150"
+          required
+        />
+
+      </div>
+
+
+      <!-- DESCRIPCIÓN -->
+
+      <div class="form-group">
+
+        <label for="descripcion">
+          Descripción
+        </label>
+
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          [(ngModel)]="descripcion"
+          placeholder="Describe el problema del equipo..."
+          rows="4"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <!-- PRIORIDAD -->
+
+      <div class="form-group">
+
+        <label for="prioridad">
+          Prioridad
+        </label>
+
+        <select
+          id="prioridad"
+          name="prioridad"
+          [(ngModel)]="prioridad"
+        >
+
+          <option value="BAJA">
+            Baja
+          </option>
+
+          <option value="MEDIA">
+            Media
+          </option>
+
+          <option value="ALTA">
+            Alta
+          </option>
+
+          <option value="CRITICA">
+            Crítica
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- EQUIPO -->
+
+      <div class="form-group">
+
+        <label for="equipo">
+          Equipo
+        </label>
+
+        <select
+          id="equipo"
+          name="equipo"
+          [(ngModel)]="equipoId"
+          required
+        >
+
+          <option [ngValue]="null">
+            Selecciona un equipo
+          </option>
+
+          @for (
+            equipo of equipos;
+            track equipo.id
+          ) {
+
+            <option [ngValue]="equipo.id">
+
+              {{ equipo.codigoInventario }}
+              -
+              {{ equipo.nombre }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- SOLICITANTE -->
+
+      <div class="form-group">
+
+        <label for="solicitante">
+          Solicitante
+        </label>
+
+        <select
+          id="solicitante"
+          name="solicitante"
+          [(ngModel)]="solicitanteId"
+          required
+        >
+
+          <option [ngValue]="null">
+            Selecciona el solicitante
+          </option>
+
+          @for (
+            usuario of usuarios;
+            track usuario.id
+          ) {
+
+            <option [ngValue]="usuario.id">
+
+              {{ usuario.nombre }}
+
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           BOTONES
+           ========================================== -->
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()"
+          [disabled]="guardando"
+        >
+          Cancelar
+        </button>
+
+
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="guardando"
+        >
+
+          @if (guardando) {
+
+            Guardando...
+
+          } @else {
+
+            Guardar ticket
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

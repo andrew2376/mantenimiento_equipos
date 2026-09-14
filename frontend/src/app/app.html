@@ -1,129 +1,246 @@
 @if (mostrarMenu()) {
 
-  <div class="app-layout">
+<div class="app-layout">
 
-    <aside class="sidebar">
+  <!-- ==========================================
+         SIDEBAR
+         ========================================== -->
 
-      <div class="sidebar-brand">
+  <aside class="sidebar">
 
-        <div class="brand-icon">
-          M
+    <div class="sidebar-brand">
+
+      <div class="brand-icon">
+        M
+      </div>
+
+      <div class="brand-text">
+
+        <strong>
+          ManteniSys
+        </strong>
+
+        <span>
+          Gestión de mantenimiento
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <p class="nav-title">
+        PRINCIPAL
+      </p>
+
+
+      <a routerLink="/equipos" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ▣
+        </span>
+
+        <span>
+          Equipos
+        </span>
+
+      </a>
+
+
+      <a routerLink="/tickets" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ▤
+        </span>
+
+        <span>
+          Tickets
+        </span>
+
+      </a>
+
+
+      <a routerLink="/mantenimientos" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          🔧
+        </span>
+
+        <span>
+          Mantenimiento
+        </span>
+
+      </a>
+
+
+      <a routerLink="/historial" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ◷
+        </span>
+
+        <span>
+          Historial
+        </span>
+
+      </a>
+
+
+      <p class="nav-title nav-title-space">
+        GESTIÓN
+      </p>
+
+
+      <a routerLink="/usuarios" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ◉
+        </span>
+
+        <span>
+          Usuarios
+        </span>
+
+      </a>
+
+
+      <a routerLink="/reportes" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ▥
+        </span>
+
+        <span>
+          Reportes
+        </span>
+
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a routerLink="/configuracion" routerLinkActive="active" class="nav-item">
+
+        <span class="nav-icon">
+          ⚙
+        </span>
+
+        <span>
+          Configuración
+        </span>
+
+      </a>
+
+
+      <div class="sidebar-user">
+
+        <div class="user-avatar">
+          A
         </div>
 
-        <div class="brand-text">
-          <strong>ManteniSys</strong>
-          <span>Gestión de mantenimiento</span>
+        <div class="user-info">
+
+          <strong>
+            Administrador
+          </strong>
+
+          <span>
+            Administrador
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ==========================================
+         CONTENIDO PRINCIPAL
+         ========================================== -->
+
+  <main class="main-content">
+
+
+    <!-- ========================================
+           NAVBAR SUPERIOR
+           ======================================== -->
+
+    <header class="top-navbar">
+
+      <div class="navbar-left">
+
+        <button type="button" class="navbar-menu-button" aria-label="Abrir menú">
+          ☰
+        </button>
+
+
+        <div class="navbar-title">
+
+          <span>
+            {{ paginaActual() }}
+          </span>
+
         </div>
 
       </div>
 
 
-      <nav class="sidebar-nav">
+      <div class="navbar-right">
 
-        <p class="nav-title">
-          PRINCIPAL
-        </p>
-
-        <a
-          routerLink="/equipos"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">▣</span>
-          <span>Equipos</span>
-        </a>
-
-        <a
-          routerLink="/tickets"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">▤</span>
-          <span>Tickets</span>
-        </a>
-
-        <a
-          routerLink="/mantenimientos"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">🔧</span>
-          <span>Mantenimiento</span>
-        </a>
-
-        <a
-          routerLink="/historial"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">◷</span>
-          <span>Historial</span>
-        </a>
+        <button type="button" class="navbar-notification" title="Notificaciones">
+          🔔
+        </button>
 
 
-        <p class="nav-title nav-title-space">
-          GESTIÓN
-        </p>
+        <div class="navbar-user">
 
-        <a
-          routerLink="/usuarios"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">◉</span>
-          <span>Usuarios</span>
-        </a>
-
-        <a
-          routerLink="/reportes"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">▥</span>
-          <span>Reportes</span>
-        </a>
-
-      </nav>
-
-
-      <div class="sidebar-bottom">
-
-        <a
-          routerLink="/configuracion"
-          routerLinkActive="active"
-          class="nav-item"
-        >
-          <span class="nav-icon">⚙</span>
-          <span>Configuración</span>
-        </a>
-
-
-        <div class="sidebar-user">
-
-          <div class="user-avatar">
+          <div class="navbar-user-avatar">
             A
           </div>
 
-          <div class="user-info">
-            <strong>Administrador</strong>
-            <span>Administrador</span>
+
+          <div class="navbar-user-info">
+
+            <strong>
+              Administrador
+            </strong>
+
+            <span>
+              Administrador
+            </span>
+
           </div>
 
         </div>
 
       </div>
 
-    </aside>
+    </header>
 
 
-    <main class="main-content">
+    <!-- ========================================
+           CONTENIDO DE LAS PÁGINAS
+           ======================================== -->
+
+    <div class="page-content">
+
       <router-outlet />
-    </main>
 
-  </div>
+    </div>
+
+  </main>
+
+</div>
 
 } @else {
 
-  <router-outlet />
+<router-outlet />
 
 }

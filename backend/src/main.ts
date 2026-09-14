@@ -5,23 +5,41 @@
 import { prisma } from './infraestructura/persistencia/prisma'
 
 import { EquipoDAOPrisma } from './infraestructura/persistencia/EquipoDAOPrisma'
+
 import { MantenimientoDAOPrisma } from './infraestructura/persistencia/MantenimientoDAOPrisma'
+
 import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrisma'
+
+import { TicketDAOPrisma } from './infraestructura/persistencia/TicketDAOPrisma'
 
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
 import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
+
 import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
+
 import { ActualizarEquipo } from './aplicacion/casos-uso/ActualizarEquipo'
 
 import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
+
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
+
 import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
 
 import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
+
 import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
+
 import { ActualizarUsuario } from './aplicacion/casos-uso/ActualizarUsuario'
+
 import { IniciarSesion } from './aplicacion/casos-uso/iniciarSesion'
+
+import { RegistrarTicket } from './aplicacion/casos-uso/RegistrarTicket'
+
+import { ConsultarTickets } from './aplicacion/casos-uso/ConsultarTickets'
+
+import { ActualizarTicket } from './aplicacion/casos-uso/ActualizarTicket'
+
 import { crearServidor } from './infraestructura/http/servidor'
 
 
@@ -35,6 +53,9 @@ const mantenimientoDAO =
 
 const usuarioDAO =
   new UsuarioDAOPrisma(prisma)
+
+const ticketDAO =
+  new TicketDAOPrisma(prisma)
 
 
 // 2. Servicios de infraestructura
@@ -99,6 +120,18 @@ const iniciarSesion =
   )
 
 
+// Tickets
+
+const registrarTicket =
+  new RegistrarTicket(ticketDAO)
+
+const consultarTickets =
+  new ConsultarTickets(ticketDAO)
+
+const actualizarTicket =
+  new ActualizarTicket(ticketDAO)
+
+
 // 4. Servidor HTTP (Infraestructura)
 
 const app = crearServidor({
@@ -122,6 +155,12 @@ const app = crearServidor({
     iniciarSesion,
   },
 
+  tickets: {
+    registrarTicket,
+    consultarTickets,
+    actualizarTicket,
+  },
+
 })
 
 
@@ -142,4 +181,3 @@ app.listen(PORT, () => {
   )
 
 })
-
