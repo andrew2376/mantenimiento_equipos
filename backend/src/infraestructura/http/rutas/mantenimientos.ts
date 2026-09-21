@@ -29,9 +29,14 @@ function validarRegistroMantenimiento(cuerpo: unknown): RegistroMantenimientoDTO
     return 'El estado del mantenimiento no es válido (PENDIENTE, EN_PROCESO, FINALIZADO, CANCELADO)'
   }
 
+  const ticketId = d['ticketId'] !== undefined && d['ticketId'] !== null && d['ticketId'] !== ''
+    ? Number(d['ticketId'])
+    : null
+
   return {
     descripcion: d['descripcion'],
     equipoId,
+    ticketId: ticketId && !isNaN(ticketId) ? ticketId : null,
     tipo: d['tipo'] as any,
     estado: d['estado'] as any,
     diagnostico: typeof d['diagnostico'] === 'string' ? d['diagnostico'] : null,

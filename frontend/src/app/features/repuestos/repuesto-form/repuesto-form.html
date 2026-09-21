@@ -1,0 +1,107 @@
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Nuevo repuesto</h2>
+        <p>Registra un nuevo ítem o componente en el inventario de repuestos</p>
+      </div>
+      <button type="button" class="btn-cerrar modal-close" title="Cerrar" (click)="cancelar()">
+        ×
+      </button>
+    </div>
+
+    @if (error) {
+      <div class="mensaje error">
+        {{ error }}
+      </div>
+    }
+
+    <form (ngSubmit)="guardar()">
+      <!-- CÓDIGO -->
+      <div class="form-group">
+        <label for="codigo">
+          Código de referencia *
+        </label>
+        <input
+          id="codigo"
+          type="text"
+          name="codigo"
+          [(ngModel)]="codigo"
+          placeholder="Ej. RAM-DDR4-16GB, SSD-512GB, FUENTE-650W"
+          required
+        />
+      </div>
+
+      <!-- NOMBRE -->
+      <div class="form-group">
+        <label for="nombre">
+          Nombre del repuesto o pieza *
+        </label>
+        <input
+          id="nombre"
+          type="text"
+          name="nombre"
+          [(ngModel)]="nombre"
+          placeholder="Ej. Memoria RAM Kingston 16GB DDR4"
+          required
+        />
+      </div>
+
+      <!-- STOCK Y PRECIO UNITARIO -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="stock">
+            Stock disponible *
+          </label>
+          <input
+            id="stock"
+            type="number"
+            name="stock"
+            min="0"
+            [(ngModel)]="stock"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="precioUnitario">
+            Costo unitario ($) *
+          </label>
+          <input
+            id="precioUnitario"
+            type="number"
+            name="precioUnitario"
+            min="0"
+            step="0.01"
+            [(ngModel)]="precioUnitario"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- DESCRIPCIÓN -->
+      <div class="form-group">
+        <label for="descripcion">
+          Descripción o especificaciones técnicas
+        </label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          rows="3"
+          [(ngModel)]="descripcion"
+          placeholder="Compatibilidad, modelo exacto, observaciones..."
+        ></textarea>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="modal-footer">
+        <button type="button" class="btn-secundario" (click)="cancelar()" [disabled]="guardando">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primario" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Registrar repuesto' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

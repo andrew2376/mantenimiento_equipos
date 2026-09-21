@@ -14,6 +14,10 @@ export interface Mantenimiento {
   tecnico: string | null
   fecha: Date
   equipoId: number
+  ticketId?: number | null
+  equipoNombre?: string
+  equipoCodigo?: string
+  ticketTitulo?: string
 }
 
 /** Estructura para registrar un nuevo mantenimiento */
@@ -29,6 +33,10 @@ export interface MantenimientoDTO {
   tecnico: string | null
   fecha: string
   equipoId: number
+  ticketId: number | null
+  equipoNombre?: string
+  equipoCodigo?: string
+  ticketTitulo?: string
 }
 
 export function esTipoMantenimiento(valor: unknown): valor is TipoMantenimiento {
@@ -49,5 +57,10 @@ export function aMantenimientoDTO(m: Mantenimiento): MantenimientoDTO {
     tecnico: m.tecnico,
     fecha: m.fecha.toISOString(),
     equipoId: m.equipoId,
+    ticketId: m.ticketId ?? null,
+    equipoNombre: m.equipoNombre,
+    equipoCodigo: m.equipoCodigo,
+    ticketTitulo: m.ticketTitulo,
   }
 }
+

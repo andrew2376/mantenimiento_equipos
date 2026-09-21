@@ -54,7 +54,9 @@ export const ModelName = {
   Equipo: 'Equipo',
   Mantenimiento: 'Mantenimiento',
   Usuario: 'Usuario',
-  tickets: 'tickets'
+  tickets: 'tickets',
+  Repuesto: 'Repuesto',
+  RepuestoMantenimiento: 'RepuestoMantenimiento'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -98,7 +100,8 @@ export const MantenimientoScalarFieldEnum = {
   diagnostico: 'diagnostico',
   tecnico: 'tecnico',
   fecha: 'fecha',
-  equipoId: 'equipoId'
+  equipoId: 'equipoId',
+  ticketId: 'ticketId'
 } as const
 
 export type MantenimientoScalarFieldEnum = (typeof MantenimientoScalarFieldEnum)[keyof typeof MantenimientoScalarFieldEnum]
@@ -132,6 +135,31 @@ export const TicketsScalarFieldEnum = {
 } as const
 
 export type TicketsScalarFieldEnum = (typeof TicketsScalarFieldEnum)[keyof typeof TicketsScalarFieldEnum]
+
+
+export const RepuestoScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  nombre: 'nombre',
+  descripcion: 'descripcion',
+  stock: 'stock',
+  precioUnitario: 'precioUnitario',
+  creadoEn: 'creadoEn'
+} as const
+
+export type RepuestoScalarFieldEnum = (typeof RepuestoScalarFieldEnum)[keyof typeof RepuestoScalarFieldEnum]
+
+
+export const RepuestoMantenimientoScalarFieldEnum = {
+  id: 'id',
+  mantenimientoId: 'mantenimientoId',
+  repuestoId: 'repuestoId',
+  cantidad: 'cantidad',
+  costoUnitario: 'costoUnitario',
+  creadoEn: 'creadoEn'
+} as const
+
+export type RepuestoMantenimientoScalarFieldEnum = (typeof RepuestoMantenimientoScalarFieldEnum)[keyof typeof RepuestoMantenimientoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -191,4 +219,13 @@ export const ticketsOrderByRelevanceFieldEnum = {
 } as const
 
 export type ticketsOrderByRelevanceFieldEnum = (typeof ticketsOrderByRelevanceFieldEnum)[keyof typeof ticketsOrderByRelevanceFieldEnum]
+
+
+export const RepuestoOrderByRelevanceFieldEnum = {
+  codigo: 'codigo',
+  nombre: 'nombre',
+  descripcion: 'descripcion'
+} as const
+
+export type RepuestoOrderByRelevanceFieldEnum = (typeof RepuestoOrderByRelevanceFieldEnum)[keyof typeof RepuestoOrderByRelevanceFieldEnum]
 

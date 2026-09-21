@@ -17,7 +17,7 @@ import type {
 } from '../../dominio/puertos/index.js'
 
 const aDominio = (
-  fila: FilaMantenimiento
+  fila: any
 ): Mantenimiento => ({
   id: fila.id,
   descripcion: fila.descripcion,
@@ -26,7 +26,11 @@ const aDominio = (
   diagnostico: fila.diagnostico,
   tecnico: fila.tecnico,
   fecha: fila.fecha,
-  equipoId: fila.equipoId
+  equipoId: fila.equipoId,
+  ticketId: fila.ticketId ?? null,
+  equipoNombre: fila.equipo?.nombre,
+  equipoCodigo: fila.equipo?.codigoInventario,
+  ticketTitulo: fila.ticket?.titulo,
 })
 
 export class MantenimientoDAOPrisma
@@ -48,7 +52,12 @@ export class MantenimientoDAOPrisma
           estado: m.estado,
           diagnostico: m.diagnostico,
           tecnico: m.tecnico,
-          equipoId: m.equipoId
+          equipoId: m.equipoId,
+          ticketId: m.ticketId ?? null
+        },
+        include: {
+          equipo: true,
+          ticket: true
         }
       })
 
@@ -61,7 +70,11 @@ export class MantenimientoDAOPrisma
 
     const fila =
       await this.prisma.mantenimiento.findUnique({
-        where: { id }
+        where: { id },
+        include: {
+          equipo: true,
+          ticket: true
+        }
       })
 
     return fila
@@ -76,6 +89,10 @@ export class MantenimientoDAOPrisma
     const filas =
       await this.prisma.mantenimiento.findMany({
         where: { equipoId },
+        include: {
+          equipo: true,
+          ticket: true
+        },
         orderBy: {
           fecha: 'desc'
         }
@@ -88,6 +105,10 @@ export class MantenimientoDAOPrisma
 
     const filas =
       await this.prisma.mantenimiento.findMany({
+        include: {
+          equipo: true,
+          ticket: true
+        },
         orderBy: {
           fecha: 'desc'
         }
@@ -119,6 +140,10 @@ export class MantenimientoDAOPrisma
             ...(datos.tecnico !== undefined
               ? { tecnico: datos.tecnico }
               : {})
+          },
+          include: {
+            equipo: true,
+            ticket: true
           }
         })
 

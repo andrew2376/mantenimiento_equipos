@@ -1,0 +1,277 @@
+/* ===================================================
+   MÓDULO DE HISTORIAL - RESPONSIVE DESIGN (PC Y MÓVIL)
+   =================================================== */
+
+.historial-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 4px !important;
+  box-sizing: border-box;
+}
+
+/* Encabezado */
+.historial-header {
+  margin-bottom: 20px;
+}
+
+.historial-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #172033;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.4px;
+}
+
+.historial-header p {
+  color: #697386;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Selector de equipo */
+.selector-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.selector-label {
+  font-weight: 600;
+  color: #1e293b;
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.selector-dropdown {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+/* Ficha del equipo + Métricas */
+.equipo-resumen-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ficha-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  min-width: 0;
+}
+
+.ficha-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.ficha-top-row h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.ficha-datos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  font-size: 12.5px;
+  color: #334155;
+  margin-top: 12px;
+}
+
+/* Grid de métricas */
+.metricas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  min-width: 0;
+}
+
+.metrica-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metrica-label {
+  color: #64748b;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.metrica-val {
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 3px;
+}
+
+/* Toolbar de filtros de cronología */
+.timeline-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.timeline-toolbar h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.timeline-filter-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.timeline-filter-buttons button {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* Contenedor de línea de tiempo */
+.timeline-container {
+  position: relative;
+  padding-left: 28px;
+  border-left: 2px solid #e2e8f0;
+  margin-left: 10px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.timeline-node-icon {
+  position: absolute;
+  left: -41px;
+  top: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  background: #ffffff;
+  border: 2px solid;
+}
+
+.timeline-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 13px 15px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.timeline-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timeline-card-desc {
+  margin: 4px 0 8px 0;
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.timeline-card-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 11.5px;
+  color: #64748b;
+  border-top: 1px dashed #f1f5f9;
+  padding-top: 6px;
+  flex-wrap: wrap;
+}
+
+/* ===================================================
+   RESPONSIVE BREAKPOINTS (HISTORIAL)
+   =================================================== */
+
+@media (max-width: 860px) {
+  .equipo-resumen-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .historial-header h1 {
+    font-size: 19px;
+  }
+
+  .timeline-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline-filter-buttons {
+    width: 100%;
+  }
+
+  .timeline-filter-buttons button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .timeline-container {
+    padding-left: 22px;
+    margin-left: 6px;
+  }
+
+  .timeline-node-icon {
+    left: -33px;
+    width: 20px;
+    height: 20px;
+    font-size: 9.5px;
+  }
+}

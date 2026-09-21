@@ -6,6 +6,14 @@ import { UsuarioList } from './features/usuarios/usuario-list/usuario-list';
 
 import { TicketList } from './features/tickets/ticket-list/ticket-list';
 
+import { MantenimientoList } from './features/mantenimientos/mantenimiento-list/mantenimiento-list';
+
+import { RepuestoList } from './features/repuestos/repuesto-list/repuesto-list';
+
+import { Historial } from './features/historial/historial';
+
+import { Reportes } from './features/reportes/reportes';
+
 import { Login } from './features/usuarios/login/login';
 
 export const routes: Routes = [
@@ -23,6 +31,26 @@ export const routes: Routes = [
   {
     path: 'tickets',
     component: TicketList
+  },
+
+  {
+    path: 'mantenimientos',
+    component: MantenimientoList
+  },
+
+  {
+    path: 'repuestos',
+    component: RepuestoList
+  },
+
+  {
+    path: 'historial',
+    component: Historial
+  },
+
+  {
+    path: 'reportes',
+    component: Reportes
   },
 
   {

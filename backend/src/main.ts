@@ -12,6 +12,8 @@ import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrism
 
 import { TicketDAOPrisma } from './infraestructura/persistencia/TicketDAOPrisma'
 
+import { RepuestoDAOPrisma } from './infraestructura/persistencia/RepuestoDAOPrisma'
+
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
 import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
@@ -40,6 +42,16 @@ import { ConsultarTickets } from './aplicacion/casos-uso/ConsultarTickets'
 
 import { ActualizarTicket } from './aplicacion/casos-uso/ActualizarTicket'
 
+import { RegistrarRepuesto } from './aplicacion/casos-uso/RegistrarRepuesto'
+
+import { ConsultarRepuestos } from './aplicacion/casos-uso/ConsultarRepuestos'
+
+import { AsignarRepuestosAMantenimiento } from './aplicacion/casos-uso/AsignarRepuestosAMantenimiento'
+
+import { ConsultarHistorialEquipo } from './aplicacion/casos-uso/ConsultarHistorialEquipo'
+
+import { GenerarReportes } from './aplicacion/casos-uso/GenerarReportes'
+
 import { crearServidor } from './infraestructura/http/servidor'
 
 
@@ -56,6 +68,9 @@ const usuarioDAO =
 
 const ticketDAO =
   new TicketDAOPrisma(prisma)
+
+const repuestoDAO =
+  new RepuestoDAOPrisma(prisma)
 
 
 // 2. Servicios de infraestructura
@@ -95,7 +110,8 @@ const consultarMantenimientos =
 const actualizarEstadoMantenimiento =
   new ActualizarEstadoMantenimiento(
     mantenimientoDAO,
-    equipoDAO
+    equipoDAO,
+    ticketDAO
   )
 
 
@@ -132,6 +148,33 @@ const actualizarTicket =
   new ActualizarTicket(ticketDAO)
 
 
+// Repuestos
+
+const registrarRepuesto =
+  new RegistrarRepuesto(repuestoDAO)
+
+const consultarRepuestos =
+  new ConsultarRepuestos(repuestoDAO)
+
+const asignarRepuestosAMantenimiento =
+  new AsignarRepuestosAMantenimiento(
+    mantenimientoDAO,
+    repuestoDAO
+  )
+
+
+// Historial
+
+const consultarHistorialEquipo =
+  new ConsultarHistorialEquipo(prisma)
+
+
+// Reportes
+
+const generarReportes =
+  new GenerarReportes(prisma)
+
+
 // 4. Servidor HTTP (Infraestructura)
 
 const app = crearServidor({
@@ -159,6 +202,20 @@ const app = crearServidor({
     registrarTicket,
     consultarTickets,
     actualizarTicket,
+  },
+
+  repuestos: {
+    registrarRepuesto,
+    consultarRepuestos,
+    asignarRepuestosAMantenimiento,
+  },
+
+  historial: {
+    consultarHistorialEquipo,
+  },
+
+  reportes: {
+    generarReportes,
   },
 
 })

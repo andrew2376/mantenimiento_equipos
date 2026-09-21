@@ -279,6 +279,7 @@ export type ticketsWhereInput = {
   equipos?: Prisma.XOR<Prisma.EquipoScalarRelationFilter, Prisma.EquipoWhereInput>
   usuarios_tickets_solicitante_idTousuarios?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   usuarios_tickets_tecnico_idTousuarios?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
+  mantenimientos?: Prisma.MantenimientoListRelationFilter
 }
 
 export type ticketsOrderByWithRelationInput = {
@@ -296,6 +297,7 @@ export type ticketsOrderByWithRelationInput = {
   equipos?: Prisma.EquipoOrderByWithRelationInput
   usuarios_tickets_solicitante_idTousuarios?: Prisma.UsuarioOrderByWithRelationInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioOrderByWithRelationInput
+  mantenimientos?: Prisma.MantenimientoOrderByRelationAggregateInput
   _relevance?: Prisma.ticketsOrderByRelevanceInput
 }
 
@@ -317,6 +319,7 @@ export type ticketsWhereUniqueInput = Prisma.AtLeast<{
   equipos?: Prisma.XOR<Prisma.EquipoScalarRelationFilter, Prisma.EquipoWhereInput>
   usuarios_tickets_solicitante_idTousuarios?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   usuarios_tickets_tecnico_idTousuarios?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
+  mantenimientos?: Prisma.MantenimientoListRelationFilter
 }, "id">
 
 export type ticketsOrderByWithAggregationInput = {
@@ -366,6 +369,7 @@ export type ticketsCreateInput = {
   equipos: Prisma.EquipoCreateNestedOneWithoutTicketsInput
   usuarios_tickets_solicitante_idTousuarios: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_tecnico_idTousuariosInput
+  mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsUncheckedCreateInput = {
@@ -380,6 +384,7 @@ export type ticketsUncheckedCreateInput = {
   fecha_cierre?: Date | string | null
   creado_en?: Date | string
   actualizado_en?: Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsUpdateInput = {
@@ -393,6 +398,7 @@ export type ticketsUpdateInput = {
   equipos?: Prisma.EquipoUpdateOneRequiredWithoutTicketsNestedInput
   usuarios_tickets_solicitante_idTousuarios?: Prisma.UsuarioUpdateOneRequiredWithoutTickets_tickets_solicitante_idTousuariosNestedInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioUpdateOneWithoutTickets_tickets_tecnico_idTousuariosNestedInput
+  mantenimientos?: Prisma.MantenimientoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateInput = {
@@ -407,6 +413,7 @@ export type ticketsUncheckedUpdateInput = {
   fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsCreateManyInput = {
@@ -455,6 +462,11 @@ export type TicketsListRelationFilter = {
 
 export type ticketsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type TicketsNullableScalarRelationFilter = {
+  is?: Prisma.ticketsWhereInput | null
+  isNot?: Prisma.ticketsWhereInput | null
 }
 
 export type ticketsOrderByRelevanceInput = {
@@ -561,6 +573,22 @@ export type ticketsUncheckedUpdateManyWithoutEquiposNestedInput = {
   deleteMany?: Prisma.ticketsScalarWhereInput | Prisma.ticketsScalarWhereInput[]
 }
 
+export type ticketsCreateNestedOneWithoutMantenimientosInput = {
+  create?: Prisma.XOR<Prisma.ticketsCreateWithoutMantenimientosInput, Prisma.ticketsUncheckedCreateWithoutMantenimientosInput>
+  connectOrCreate?: Prisma.ticketsCreateOrConnectWithoutMantenimientosInput
+  connect?: Prisma.ticketsWhereUniqueInput
+}
+
+export type ticketsUpdateOneWithoutMantenimientosNestedInput = {
+  create?: Prisma.XOR<Prisma.ticketsCreateWithoutMantenimientosInput, Prisma.ticketsUncheckedCreateWithoutMantenimientosInput>
+  connectOrCreate?: Prisma.ticketsCreateOrConnectWithoutMantenimientosInput
+  upsert?: Prisma.ticketsUpsertWithoutMantenimientosInput
+  disconnect?: Prisma.ticketsWhereInput | boolean
+  delete?: Prisma.ticketsWhereInput | boolean
+  connect?: Prisma.ticketsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ticketsUpdateToOneWithWhereWithoutMantenimientosInput, Prisma.ticketsUpdateWithoutMantenimientosInput>, Prisma.ticketsUncheckedUpdateWithoutMantenimientosInput>
+}
+
 export type ticketsCreateNestedManyWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
   create?: Prisma.XOR<Prisma.ticketsCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput, Prisma.ticketsUncheckedCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput> | Prisma.ticketsCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput[] | Prisma.ticketsUncheckedCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput[]
   connectOrCreate?: Prisma.ticketsCreateOrConnectWithoutUsuarios_tickets_solicitante_idTousuariosInput | Prisma.ticketsCreateOrConnectWithoutUsuarios_tickets_solicitante_idTousuariosInput[]
@@ -649,14 +677,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ticketsCreateWithoutEquiposInput = {
   titulo: string
   descripcion: string
@@ -667,6 +687,7 @@ export type ticketsCreateWithoutEquiposInput = {
   actualizado_en?: Date | string
   usuarios_tickets_solicitante_idTousuarios: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_tecnico_idTousuariosInput
+  mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsUncheckedCreateWithoutEquiposInput = {
@@ -680,6 +701,7 @@ export type ticketsUncheckedCreateWithoutEquiposInput = {
   fecha_cierre?: Date | string | null
   creado_en?: Date | string
   actualizado_en?: Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsCreateOrConnectWithoutEquiposInput = {
@@ -725,6 +747,76 @@ export type ticketsScalarWhereInput = {
   actualizado_en?: Prisma.DateTimeFilter<"tickets"> | Date | string
 }
 
+export type ticketsCreateWithoutMantenimientosInput = {
+  titulo: string
+  descripcion: string
+  prioridad?: string
+  estado?: string
+  fecha_cierre?: Date | string | null
+  creado_en?: Date | string
+  actualizado_en?: Date | string
+  equipos: Prisma.EquipoCreateNestedOneWithoutTicketsInput
+  usuarios_tickets_solicitante_idTousuarios: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput
+  usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_tecnico_idTousuariosInput
+}
+
+export type ticketsUncheckedCreateWithoutMantenimientosInput = {
+  id?: number
+  titulo: string
+  descripcion: string
+  prioridad?: string
+  estado?: string
+  equipo_id: number
+  solicitante_id: number
+  tecnico_id?: number | null
+  fecha_cierre?: Date | string | null
+  creado_en?: Date | string
+  actualizado_en?: Date | string
+}
+
+export type ticketsCreateOrConnectWithoutMantenimientosInput = {
+  where: Prisma.ticketsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ticketsCreateWithoutMantenimientosInput, Prisma.ticketsUncheckedCreateWithoutMantenimientosInput>
+}
+
+export type ticketsUpsertWithoutMantenimientosInput = {
+  update: Prisma.XOR<Prisma.ticketsUpdateWithoutMantenimientosInput, Prisma.ticketsUncheckedUpdateWithoutMantenimientosInput>
+  create: Prisma.XOR<Prisma.ticketsCreateWithoutMantenimientosInput, Prisma.ticketsUncheckedCreateWithoutMantenimientosInput>
+  where?: Prisma.ticketsWhereInput
+}
+
+export type ticketsUpdateToOneWithWhereWithoutMantenimientosInput = {
+  where?: Prisma.ticketsWhereInput
+  data: Prisma.XOR<Prisma.ticketsUpdateWithoutMantenimientosInput, Prisma.ticketsUncheckedUpdateWithoutMantenimientosInput>
+}
+
+export type ticketsUpdateWithoutMantenimientosInput = {
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descripcion?: Prisma.StringFieldUpdateOperationsInput | string
+  prioridad?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipos?: Prisma.EquipoUpdateOneRequiredWithoutTicketsNestedInput
+  usuarios_tickets_solicitante_idTousuarios?: Prisma.UsuarioUpdateOneRequiredWithoutTickets_tickets_solicitante_idTousuariosNestedInput
+  usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioUpdateOneWithoutTickets_tickets_tecnico_idTousuariosNestedInput
+}
+
+export type ticketsUncheckedUpdateWithoutMantenimientosInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descripcion?: Prisma.StringFieldUpdateOperationsInput | string
+  prioridad?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  equipo_id?: Prisma.IntFieldUpdateOperationsInput | number
+  solicitante_id?: Prisma.IntFieldUpdateOperationsInput | number
+  tecnico_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type ticketsCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
   titulo: string
   descripcion: string
@@ -735,6 +827,7 @@ export type ticketsCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput =
   actualizado_en?: Date | string
   equipos: Prisma.EquipoCreateNestedOneWithoutTicketsInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_tecnico_idTousuariosInput
+  mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsUncheckedCreateWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
@@ -748,6 +841,7 @@ export type ticketsUncheckedCreateWithoutUsuarios_tickets_solicitante_idTousuari
   fecha_cierre?: Date | string | null
   creado_en?: Date | string
   actualizado_en?: Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsCreateOrConnectWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
@@ -770,6 +864,7 @@ export type ticketsCreateWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
   actualizado_en?: Date | string
   equipos: Prisma.EquipoCreateNestedOneWithoutTicketsInput
   usuarios_tickets_solicitante_idTousuarios: Prisma.UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput
+  mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsUncheckedCreateWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
@@ -783,6 +878,7 @@ export type ticketsUncheckedCreateWithoutUsuarios_tickets_tecnico_idTousuariosIn
   fecha_cierre?: Date | string | null
   creado_en?: Date | string
   actualizado_en?: Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutTicketInput
 }
 
 export type ticketsCreateOrConnectWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
@@ -850,6 +946,7 @@ export type ticketsUpdateWithoutEquiposInput = {
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarios_tickets_solicitante_idTousuarios?: Prisma.UsuarioUpdateOneRequiredWithoutTickets_tickets_solicitante_idTousuariosNestedInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioUpdateOneWithoutTickets_tickets_tecnico_idTousuariosNestedInput
+  mantenimientos?: Prisma.MantenimientoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateWithoutEquiposInput = {
@@ -863,6 +960,7 @@ export type ticketsUncheckedUpdateWithoutEquiposInput = {
   fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateManyWithoutEquiposInput = {
@@ -914,6 +1012,7 @@ export type ticketsUpdateWithoutUsuarios_tickets_solicitante_idTousuariosInput =
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   equipos?: Prisma.EquipoUpdateOneRequiredWithoutTicketsNestedInput
   usuarios_tickets_tecnico_idTousuarios?: Prisma.UsuarioUpdateOneWithoutTickets_tickets_tecnico_idTousuariosNestedInput
+  mantenimientos?: Prisma.MantenimientoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
@@ -927,6 +1026,7 @@ export type ticketsUncheckedUpdateWithoutUsuarios_tickets_solicitante_idTousuari
   fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateManyWithoutUsuarios_tickets_solicitante_idTousuariosInput = {
@@ -952,6 +1052,7 @@ export type ticketsUpdateWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   equipos?: Prisma.EquipoUpdateOneRequiredWithoutTicketsNestedInput
   usuarios_tickets_solicitante_idTousuarios?: Prisma.UsuarioUpdateOneRequiredWithoutTickets_tickets_solicitante_idTousuariosNestedInput
+  mantenimientos?: Prisma.MantenimientoUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
@@ -965,6 +1066,7 @@ export type ticketsUncheckedUpdateWithoutUsuarios_tickets_tecnico_idTousuariosIn
   fecha_cierre?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   creado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutTicketNestedInput
 }
 
 export type ticketsUncheckedUpdateManyWithoutUsuarios_tickets_tecnico_idTousuariosInput = {
@@ -980,6 +1082,35 @@ export type ticketsUncheckedUpdateManyWithoutUsuarios_tickets_tecnico_idTousuari
   actualizado_en?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type TicketsCountOutputType
+ */
+
+export type TicketsCountOutputType = {
+  mantenimientos: number
+}
+
+export type TicketsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  mantenimientos?: boolean | TicketsCountOutputTypeCountMantenimientosArgs
+}
+
+/**
+ * TicketsCountOutputType without action
+ */
+export type TicketsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TicketsCountOutputType
+   */
+  select?: Prisma.TicketsCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TicketsCountOutputType without action
+ */
+export type TicketsCountOutputTypeCountMantenimientosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MantenimientoWhereInput
+}
 
 
 export type ticketsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -997,6 +1128,8 @@ export type ticketsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   equipos?: boolean | Prisma.EquipoDefaultArgs<ExtArgs>
   usuarios_tickets_solicitante_idTousuarios?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   usuarios_tickets_tecnico_idTousuarios?: boolean | Prisma.tickets$usuarios_tickets_tecnico_idTousuariosArgs<ExtArgs>
+  mantenimientos?: boolean | Prisma.tickets$mantenimientosArgs<ExtArgs>
+  _count?: boolean | Prisma.TicketsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tickets"]>
 
 
@@ -1020,6 +1153,8 @@ export type ticketsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   equipos?: boolean | Prisma.EquipoDefaultArgs<ExtArgs>
   usuarios_tickets_solicitante_idTousuarios?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   usuarios_tickets_tecnico_idTousuarios?: boolean | Prisma.tickets$usuarios_tickets_tecnico_idTousuariosArgs<ExtArgs>
+  mantenimientos?: boolean | Prisma.tickets$mantenimientosArgs<ExtArgs>
+  _count?: boolean | Prisma.TicketsCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $ticketsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1028,6 +1163,7 @@ export type $ticketsPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     equipos: Prisma.$EquipoPayload<ExtArgs>
     usuarios_tickets_solicitante_idTousuarios: Prisma.$UsuarioPayload<ExtArgs>
     usuarios_tickets_tecnico_idTousuarios: Prisma.$UsuarioPayload<ExtArgs> | null
+    mantenimientos: Prisma.$MantenimientoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1384,6 +1520,7 @@ export interface Prisma__ticketsClient<T, Null = never, ExtArgs extends runtime.
   equipos<T extends Prisma.EquipoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EquipoDefaultArgs<ExtArgs>>): Prisma.Prisma__EquipoClient<runtime.Types.Result.GetResult<Prisma.$EquipoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   usuarios_tickets_solicitante_idTousuarios<T extends Prisma.UsuarioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioDefaultArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   usuarios_tickets_tecnico_idTousuarios<T extends Prisma.tickets$usuarios_tickets_tecnico_idTousuariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tickets$usuarios_tickets_tecnico_idTousuariosArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  mantenimientos<T extends Prisma.tickets$mantenimientosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.tickets$mantenimientosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MantenimientoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1788,6 +1925,30 @@ export type tickets$usuarios_tickets_tecnico_idTousuariosArgs<ExtArgs extends ru
    */
   include?: Prisma.UsuarioInclude<ExtArgs> | null
   where?: Prisma.UsuarioWhereInput
+}
+
+/**
+ * tickets.mantenimientos
+ */
+export type tickets$mantenimientosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Mantenimiento
+   */
+  select?: Prisma.MantenimientoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Mantenimiento
+   */
+  omit?: Prisma.MantenimientoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MantenimientoInclude<ExtArgs> | null
+  where?: Prisma.MantenimientoWhereInput
+  orderBy?: Prisma.MantenimientoOrderByWithRelationInput | Prisma.MantenimientoOrderByWithRelationInput[]
+  cursor?: Prisma.MantenimientoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MantenimientoScalarFieldEnum | Prisma.MantenimientoScalarFieldEnum[]
 }
 
 /**

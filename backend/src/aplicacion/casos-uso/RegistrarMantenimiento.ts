@@ -33,6 +33,8 @@ export interface RegistroMantenimientoDTO {
   tecnico?: string | null
 
   equipoId: number
+
+  ticketId?: number | null
 }
 
 export class RegistrarMantenimiento {
@@ -69,7 +71,9 @@ export class RegistrarMantenimiento {
           ? datos.tecnico.trim()
           : null,
 
-        equipoId: datos.equipoId
+        equipoId: datos.equipoId,
+
+        ticketId: datos.ticketId ?? null
       })
 
     // Si el mantenimiento está activo,

@@ -1,0 +1,234 @@
+<div class="equipos-container reportes-wrapper">
+  <!-- ENCABEZADO -->
+  <div class="reportes-header">
+    <div class="reportes-header-info">
+      <h1>Reporte Ejecutivo de Mantenimiento</h1>
+      <p>Métricas de confiabilidad, consumo de repuestos y atención de solicitudes</p>
+    </div>
+    <div class="reportes-header-actions">
+      <button type="button" class="btn-secundario" (click)="cargarResumen()">
+        ↻ Actualizar
+      </button>
+      <button type="button" class="btn-primario" (click)="imprimir()">
+        🖨 Imprimir / PDF
+      </button>
+    </div>
+  </div>
+
+  @if (cargando) {
+    <div class="mensaje">
+      Calculando indicadores y estadísticas del sistema...
+    </div>
+  }
+
+  @if (error) {
+    <div class="mensaje error">
+      {{ error }}
+    </div>
+  }
+
+  @if (!cargando && resumen) {
+    <!-- BARRA DE METADATOS -->
+    <div class="reportes-meta">
+      <span>Consolidado al: <strong>{{ fechaGeneracion | date:'dd/MM/yyyy HH:mm:ss' }}</strong></span>
+      <span>Sistema: <strong>ManteniSys — Mantenimiento de Equipos</strong></span>
+    </div>
+
+    <!-- TARJETAS PRINCIPALES (KPIS) -->
+    <div class="kpis-grid">
+      <!-- KPI 1: EQUIPOS -->
+      <div class="kpi-card">
+        <div class="kpi-title">Parque de Equipos</div>
+        <div class="kpi-main-row">
+          <span class="kpi-value" style="color: #0f172a;">{{ resumen.equipos.total }}</span>
+          <span class="kpi-badge success">
+            {{ resumen.equipos.total > 0 ? ((resumen.equipos.operativos / resumen.equipos.total) * 100 | number:'1.0-0') : 100 }}% Operativo
+          </span>
+        </div>
+        <div class="kpi-subtitle">
+          {{ resumen.equipos.operativos }} operativos · {{ resumen.equipos.enMantenimiento }} en taller
+        </div>
+      </div>
+
+      <!-- KPI 2: TICKETS -->
+      <div class="kpi-card">
+        <div class="kpi-title">Eficacia de Tickets</div>
+        <div class="kpi-main-row">
+          <span class="kpi-value" style="color: #0284c7;">{{ resumen.tickets.tasaResolucion }}%</span>
+          <span class="kpi-badge info">
+            {{ resumen.tickets.resueltos }} / {{ resumen.tickets.total }} resueltos
+          </span>
+        </div>
+        <div class="kpi-subtitle">
+          {{ resumen.tickets.abiertos }} pendientes de atención
+        </div>
+      </div>
+
+      <!-- KPI 3: MANTENIMIENTOS -->
+      <div class="kpi-card">
+        <div class="kpi-title">Mantenimientos Totales</div>
+        <div class="kpi-main-row">
+          <span class="kpi-value" style="color: #16a34a;">{{ resumen.mantenimientos.total }}</span>
+          <span class="kpi-badge success">
+            {{ resumen.mantenimientos.finalizados }} finalizados
+          </span>
+        </div>
+        <div class="kpi-subtitle">
+          {{ resumen.mantenimientos.preventivos }} preventivos · {{ resumen.mantenimientos.correctivos }} correctivos
+        </div>
+      </div>
+
+      <!-- KPI 4: REPUESTOS -->
+      <div class="kpi-card">
+        <div class="kpi-title">Inversión en Repuestos</div>
+        <div class="kpi-main-row">
+          <span class="kpi-value" style="color: #b45309;">
+            {{ resumen.repuestos.costoTotalInvertido | currency:'USD':'symbol':'1.0-0' }}
+          </span>
+          <span class="kpi-badge purple">
+            {{ resumen.repuestos.unidadesConsumidas }} piezas
+          </span>
+        </div>
+        <div class="kpi-subtitle">
+          {{ resumen.repuestos.unidadesEnStock }} unid. disponibles en stock
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTRIBUCIÓN Y DESGLOSE -->
+    <div class="section-grid-2col">
+      <!-- DISTRIBUCIÓN DE MANTENIMIENTO (PREVENTIVO VS CORRECTIVO) -->
+      <div class="report-panel">
+        <h3 class="panel-title">Estrategia: Preventivo vs Correctivo</h3>
+
+        @if (resumen.mantenimientos.total === 0) {
+          <p style="color: #94a3b8; font-size: 13px; margin: 0;">No hay datos de mantenimiento aún para graficar.</p>
+        } @else {
+          <!-- BARRA PROPORCIONAL -->
+          <div class="dist-bar-container">
+            <div
+              style="background: #16a34a; transition: width 0.3s;"
+              [style.width.%]="(resumen.mantenimientos.preventivos / resumen.mantenimientos.total) * 100"
+              title="Preventivos"
+            ></div>
+            <div
+              style="background: #dc2626; transition: width 0.3s;"
+              [style.width.%]="(resumen.mantenimientos.correctivos / resumen.mantenimientos.total) * 100"
+              title="Correctivos"
+            ></div>
+          </div>
+
+          <div class="dist-bar-legend">
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #16a34a;"></span>
+              <span>Preventivos: <strong>{{ resumen.mantenimientos.preventivos }}</strong> ({{ (resumen.mantenimientos.preventivos / resumen.mantenimientos.total) * 100 | number:'1.0-0' }}%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #dc2626;"></span>
+              <span>Correctivos: <strong>{{ resumen.mantenimientos.correctivos }}</strong> ({{ (resumen.mantenimientos.correctivos / resumen.mantenimientos.total) * 100 | number:'1.0-0' }}%)</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- ESTADO DE LA ATENCIÓN DE TICKETS -->
+      <div class="report-panel">
+        <h3 class="panel-title">Flujo de Solicitudes y Tickets</h3>
+
+        @if (resumen.tickets.total === 0) {
+          <p style="color: #94a3b8; font-size: 13px; margin: 0;">No hay tickets reportados en el sistema.</p>
+        } @else {
+          <div class="ticket-flow-list">
+            <div class="ticket-flow-row">
+              <span style="color: #475569;">✓ Resueltos / Cerrados:</span>
+              <strong style="color: #16a34a;">{{ resumen.tickets.resueltos }}</strong>
+            </div>
+            <div class="ticket-flow-row">
+              <span style="color: #475569;">⚙ En Proceso / Diagnóstico:</span>
+              <strong style="color: #0284c7;">{{ resumen.tickets.enProceso }}</strong>
+            </div>
+            <div class="ticket-flow-row">
+              <span style="color: #475569;">⏳ Abiertos / Pendientes:</span>
+              <strong style="color: #dc2626;">{{ resumen.tickets.abiertos }}</strong>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- TABLAS TOP: EQUIPOS CON MÁS FALLAS Y REPUESTOS MÁS USADOS -->
+    <div class="section-grid-2col">
+      <!-- TOP EQUIPOS -->
+      <div class="report-panel">
+        <h3 class="panel-title">Top Equipos con Más Mantenimientos</h3>
+
+        @if (resumen.topEquiposIntervenidos.length === 0) {
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">Sin intervenciones registradas.</p>
+        } @else {
+          <div class="table-card-wrapper">
+            <table class="table-compact">
+              <thead>
+                <tr>
+                  <th style="text-align: left;">Equipo</th>
+                  <th style="text-align: right;">Total Mantenimientos</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (eq of resumen.topEquiposIntervenidos; track eq.id) {
+                  <tr>
+                    <td>
+                      <strong>{{ eq.nombre }}</strong>
+                      <br><small style="color: #94a3b8;">{{ eq.codigo }}</small>
+                    </td>
+                    <td style="text-align: right;">
+                      <span class="estado activo" style="padding: 2px 8px; font-size: 11px;">
+                        {{ eq.totalMantenimientos }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+      <!-- TOP REPUESTOS -->
+      <div class="report-panel">
+        <h3 class="panel-title">Top Repuestos Más Utilizados</h3>
+
+        @if (resumen.topRepuestosUtilizados.length === 0) {
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">Sin repuestos consumidos aún.</p>
+        } @else {
+          <div class="table-card-wrapper">
+            <table class="table-compact">
+              <thead>
+                <tr>
+                  <th style="text-align: left;">Repuesto</th>
+                  <th style="text-align: center;">Cantidad</th>
+                  <th style="text-align: right;">Gasto Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (rep of resumen.topRepuestosUtilizados; track rep.id) {
+                  <tr>
+                    <td>
+                      <strong>{{ rep.nombre }}</strong>
+                      <br><small style="color: #94a3b8;">{{ rep.codigo }}</small>
+                    </td>
+                    <td style="text-align: center;">
+                      <strong>{{ rep.cantidadConsumida }} unid.</strong>
+                    </td>
+                    <td style="text-align: right; color: #b45309; font-weight: 600;">
+                      {{ rep.costoTotal | currency:'USD':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

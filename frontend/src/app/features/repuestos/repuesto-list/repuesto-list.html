@@ -1,0 +1,140 @@
+<div class="equipos-container">
+  <!-- ENCABEZADO -->
+  <div class="equipos-header">
+    <div>
+      <h1>Inventario de Repuestos</h1>
+      <p>Control de componentes, piezas de recambio y disponibilidad para mantenimientos</p>
+    </div>
+    <button type="button" class="btn-primario" (click)="abrirNuevo()">
+      + Nuevo repuesto
+    </button>
+  </div>
+
+  <!-- TARJETAS DE ESTADÍSTICAS RÁPIDAS -->
+  @if (!cargando && !error) {
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase;">Total Referencias</small>
+        <div style="font-size: 24px; font-weight: 700; color: #1e293b; margin-top: 4px;">{{ repuestos.length }}</div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase;">Unidades en Stock</small>
+        <div style="font-size: 24px; font-weight: 700; color: #2563eb; margin-top: 4px;">{{ totalUnidadesStock }}</div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <small style="color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase;">Alertas de Stock Bajo</small>
+        <div style="font-size: 24px; font-weight: 700; margin-top: 4px;" [style.color]="totalStockBajo > 0 ? '#dc2626' : '#16a34a'">
+          {{ totalStockBajo }}
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MENSAJES -->
+  @if (cargando) {
+    <div class="mensaje">
+      Cargando catálogo de repuestos...
+    </div>
+  }
+
+  @if (error) {
+    <div class="mensaje error">
+      {{ error }}
+    </div>
+  }
+
+  @if (!cargando && !error) {
+    <!-- TOOLBAR -->
+    <div class="tickets-toolbar">
+      <div class="busqueda-container">
+        <div class="busqueda">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+          <input
+            type="text"
+            placeholder="Buscar por código, nombre o descripción de repuesto..."
+            [(ngModel)]="textoBusqueda"
+            (input)="buscar()"
+          />
+          @if (textoBusqueda) {
+            <button type="button" class="btn-limpiar-busqueda" title="Limpiar" (click)="limpiarBusqueda()">
+              ×
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- SIN REGISTROS -->
+    @if (repuestos.length === 0) {
+      <div class="mensaje">
+        No hay repuestos registrados en el inventario. Haz clic en <strong>+ Nuevo repuesto</strong> para agregar piezas.
+      </div>
+    }
+
+    <!-- SIN RESULTADOS -->
+    @if (repuestos.length > 0 && repuestosFiltrados.length === 0) {
+      <div class="mensaje">
+        No se encontraron repuestos con la búsqueda "{{ textoBusqueda }}".
+      </div>
+    }
+
+    <!-- TABLA -->
+    @if (repuestosFiltrados.length > 0) {
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre del Repuesto</th>
+              <th>Descripción</th>
+              <th>Stock</th>
+              <th>Precio Unitario</th>
+              <th>Registrado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of repuestosFiltrados; track r.id) {
+              <tr>
+                <td>
+                  <strong>{{ r.codigo }}</strong>
+                </td>
+                <td>
+                  <strong>{{ r.nombre }}</strong>
+                </td>
+                <td>
+                  <span style="color: #64748b;">{{ r.descripcion || 'Sin descripción' }}</span>
+                </td>
+                <td>
+                  <span
+                    class="estado"
+                    [class.activo]="r.stock > 2"
+                    [class.inactivo]="r.stock <= 2"
+                  >
+                    {{ r.stock }} unid. {{ r.stock <= 2 ? '(Bajo)' : '' }}
+                  </span>
+                </td>
+                <td>
+                  <strong>{{ r.precioUnitario | currency:'USD':'symbol':'1.2-2' }}</strong>
+                </td>
+                <td>
+                  {{ r.creadoEn | date:'shortDate' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <!-- MODAL -->
+  @if (mostrarFormulario) {
+    <app-repuesto-form
+      (cerrar)="cerrarFormulario()"
+      (guardado)="alGuardar()"
+    ></app-repuesto-form>
+  }
+</div>

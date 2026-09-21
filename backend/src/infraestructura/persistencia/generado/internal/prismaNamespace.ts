@@ -400,7 +400,9 @@ export const ModelName = {
   Equipo: 'Equipo',
   Mantenimiento: 'Mantenimiento',
   Usuario: 'Usuario',
-  tickets: 'tickets'
+  tickets: 'tickets',
+  Repuesto: 'Repuesto',
+  RepuestoMantenimiento: 'RepuestoMantenimiento'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "equipo" | "mantenimiento" | "usuario" | "tickets"
+    modelProps: "equipo" | "mantenimiento" | "usuario" | "tickets" | "repuesto" | "repuestoMantenimiento"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -684,6 +686,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Repuesto: {
+      payload: Prisma.$RepuestoPayload<ExtArgs>
+      fields: Prisma.RepuestoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RepuestoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RepuestoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        findFirst: {
+          args: Prisma.RepuestoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RepuestoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        findMany: {
+          args: Prisma.RepuestoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>[]
+        }
+        create: {
+          args: Prisma.RepuestoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        createMany: {
+          args: Prisma.RepuestoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.RepuestoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        update: {
+          args: Prisma.RepuestoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        deleteMany: {
+          args: Prisma.RepuestoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RepuestoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.RepuestoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoPayload>
+        }
+        aggregate: {
+          args: Prisma.RepuestoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRepuesto>
+        }
+        groupBy: {
+          args: Prisma.RepuestoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RepuestoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RepuestoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RepuestoCountAggregateOutputType> | number
+        }
+      }
+    }
+    RepuestoMantenimiento: {
+      payload: Prisma.$RepuestoMantenimientoPayload<ExtArgs>
+      fields: Prisma.RepuestoMantenimientoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RepuestoMantenimientoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RepuestoMantenimientoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        findFirst: {
+          args: Prisma.RepuestoMantenimientoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RepuestoMantenimientoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        findMany: {
+          args: Prisma.RepuestoMantenimientoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>[]
+        }
+        create: {
+          args: Prisma.RepuestoMantenimientoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        createMany: {
+          args: Prisma.RepuestoMantenimientoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.RepuestoMantenimientoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        update: {
+          args: Prisma.RepuestoMantenimientoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        deleteMany: {
+          args: Prisma.RepuestoMantenimientoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RepuestoMantenimientoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.RepuestoMantenimientoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RepuestoMantenimientoPayload>
+        }
+        aggregate: {
+          args: Prisma.RepuestoMantenimientoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRepuestoMantenimiento>
+        }
+        groupBy: {
+          args: Prisma.RepuestoMantenimientoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RepuestoMantenimientoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RepuestoMantenimientoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RepuestoMantenimientoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -748,7 +882,8 @@ export const MantenimientoScalarFieldEnum = {
   diagnostico: 'diagnostico',
   tecnico: 'tecnico',
   fecha: 'fecha',
-  equipoId: 'equipoId'
+  equipoId: 'equipoId',
+  ticketId: 'ticketId'
 } as const
 
 export type MantenimientoScalarFieldEnum = (typeof MantenimientoScalarFieldEnum)[keyof typeof MantenimientoScalarFieldEnum]
@@ -782,6 +917,31 @@ export const TicketsScalarFieldEnum = {
 } as const
 
 export type TicketsScalarFieldEnum = (typeof TicketsScalarFieldEnum)[keyof typeof TicketsScalarFieldEnum]
+
+
+export const RepuestoScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  nombre: 'nombre',
+  descripcion: 'descripcion',
+  stock: 'stock',
+  precioUnitario: 'precioUnitario',
+  creadoEn: 'creadoEn'
+} as const
+
+export type RepuestoScalarFieldEnum = (typeof RepuestoScalarFieldEnum)[keyof typeof RepuestoScalarFieldEnum]
+
+
+export const RepuestoMantenimientoScalarFieldEnum = {
+  id: 'id',
+  mantenimientoId: 'mantenimientoId',
+  repuestoId: 'repuestoId',
+  cantidad: 'cantidad',
+  costoUnitario: 'costoUnitario',
+  creadoEn: 'creadoEn'
+} as const
+
+export type RepuestoMantenimientoScalarFieldEnum = (typeof RepuestoMantenimientoScalarFieldEnum)[keyof typeof RepuestoMantenimientoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -843,6 +1003,15 @@ export const ticketsOrderByRelevanceFieldEnum = {
 export type ticketsOrderByRelevanceFieldEnum = (typeof ticketsOrderByRelevanceFieldEnum)[keyof typeof ticketsOrderByRelevanceFieldEnum]
 
 
+export const RepuestoOrderByRelevanceFieldEnum = {
+  codigo: 'codigo',
+  nombre: 'nombre',
+  descripcion: 'descripcion'
+} as const
+
+export type RepuestoOrderByRelevanceFieldEnum = (typeof RepuestoOrderByRelevanceFieldEnum)[keyof typeof RepuestoOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -881,6 +1050,13 @@ export type Enumusuarios_rolFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
     
 
 
@@ -1045,6 +1221,8 @@ export type GlobalOmitConfig = {
   mantenimiento?: Prisma.MantenimientoOmit
   usuario?: Prisma.UsuarioOmit
   tickets?: Prisma.ticketsOmit
+  repuesto?: Prisma.RepuestoOmit
+  repuestoMantenimiento?: Prisma.RepuestoMantenimientoOmit
 }
 
 /* Types for Logging */

@@ -35,8 +35,12 @@ model Mantenimiento {
   fecha       DateTime @default(now()) @db.DateTime(0)
   equipoId    Int      @map("equipo_id") @db.UnsignedInt
   equipo      Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade, map: "fk_mantenimiento_equipo")
+  ticketId    Int?     @map("ticket_id") @db.UnsignedInt
+  ticket      tickets?                @relation(fields: [ticketId], references: [id], onDelete: SetNull, map: "fk_mantenimiento_ticket")
+  repuestos   RepuestoMantenimiento[]
 
   @@index([equipoId], map: "fk_mantenimiento_equipo")
+  @@index([ticketId], map: "fk_mantenimiento_ticket")
   @@map("mantenimientos")
 }
 
@@ -55,20 +59,21 @@ model Usuario {
 }
 
 model tickets {
-  id                                        Int       @id @default(autoincrement()) @db.UnsignedInt
-  titulo                                    String    @db.VarChar(150)
-  descripcion                               String    @db.Text
-  prioridad                                 String    @default("MEDIA") @db.VarChar(20)
-  estado                                    String    @default("ABIERTO") @db.VarChar(30)
-  equipo_id                                 Int       @db.UnsignedInt
-  solicitante_id                            Int       @db.UnsignedInt
-  tecnico_id                                Int?      @db.UnsignedInt
-  fecha_cierre                              DateTime? @db.DateTime(0)
-  creado_en                                 DateTime  @default(now()) @db.DateTime(0)
-  actualizado_en                            DateTime  @default(now()) @db.DateTime(0)
-  equipos                                   Equipo    @relation(fields: [equipo_id], references: [id], map: "fk_ticket_equipo")
-  usuarios_tickets_solicitante_idTousuarios Usuario   @relation("tickets_solicitante_idTousuarios", fields: [solicitante_id], references: [id], map: "fk_ticket_solicitante")
-  usuarios_tickets_tecnico_idTousuarios     Usuario?  @relation("tickets_tecnico_idTousuarios", fields: [tecnico_id], references: [id], map: "fk_ticket_tecnico")
+  id                                        Int             @id @default(autoincrement()) @db.UnsignedInt
+  titulo                                    String          @db.VarChar(150)
+  descripcion                               String          @db.Text
+  prioridad                                 String          @default("MEDIA") @db.VarChar(20)
+  estado                                    String          @default("ABIERTO") @db.VarChar(30)
+  equipo_id                                 Int             @db.UnsignedInt
+  solicitante_id                            Int             @db.UnsignedInt
+  tecnico_id                                Int?            @db.UnsignedInt
+  fecha_cierre                              DateTime?       @db.DateTime(0)
+  creado_en                                 DateTime        @default(now()) @db.DateTime(0)
+  actualizado_en                            DateTime        @default(now()) @db.DateTime(0)
+  equipos                                   Equipo          @relation(fields: [equipo_id], references: [id], map: "fk_ticket_equipo")
+  usuarios_tickets_solicitante_idTousuarios Usuario         @relation("tickets_solicitante_idTousuarios", fields: [solicitante_id], references: [id], map: "fk_ticket_solicitante")
+  usuarios_tickets_tecnico_idTousuarios     Usuario?        @relation("tickets_tecnico_idTousuarios", fields: [tecnico_id], references: [id], map: "fk_ticket_tecnico")
+  mantenimientos                            Mantenimiento[]
 
   @@index([equipo_id], map: "fk_ticket_equipo")
   @@index([solicitante_id], map: "fk_ticket_solicitante")
@@ -80,4 +85,32 @@ enum usuarios_rol {
   TECNICO
   ADMINISTRADOR
   SUPERVISOR
+}
+
+model Repuesto {
+  id             Int                    @id @default(autoincrement()) @db.UnsignedInt
+  codigo         String                 @unique(map: "codigo_repuesto") @db.VarChar(50)
+  nombre         String                 @db.VarChar(100)
+  descripcion    String?                @db.Text
+  stock          Int                    @default(0)
+  precioUnitario Decimal                @default(0.00) @map("precio_unitario") @db.Decimal(10, 2)
+  creadoEn       DateTime               @default(now()) @map("creado_en") @db.DateTime(0)
+  mantenimientos RepuestoMantenimiento[]
+
+  @@map("repuestos")
+}
+
+model RepuestoMantenimiento {
+  id              Int           @id @default(autoincrement()) @db.UnsignedInt
+  mantenimientoId Int           @map("mantenimiento_id")
+  repuestoId      Int           @map("repuesto_id") @db.UnsignedInt
+  cantidad        Int           @default(1)
+  costoUnitario   Decimal       @default(0.00) @map("costo_unitario") @db.Decimal(10, 2)
+  creadoEn        DateTime      @default(now()) @map("creado_en") @db.DateTime(0)
+  mantenimiento   Mantenimiento @relation(fields: [mantenimientoId], references: [id], onDelete: Cascade, map: "fk_repuesto_mantenimiento")
+  repuesto        Repuesto      @relation(fields: [repuestoId], references: [id], onDelete: Restrict, map: "fk_mantenimiento_repuesto")
+
+  @@index([mantenimientoId], map: "fk_repuesto_mantenimiento")
+  @@index([repuestoId], map: "fk_mantenimiento_repuesto")
+  @@map("repuestos_mantenimiento")
 }

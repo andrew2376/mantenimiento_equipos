@@ -1,0 +1,201 @@
+<div class="equipos-container historial-wrapper">
+  <!-- ENCABEZADO -->
+  <div class="historial-header">
+    <h1>Trazabilidad e Historial</h1>
+    <p>Línea de tiempo de solicitudes, intervenciones técnicas y repuestos por equipo</p>
+  </div>
+
+  <!-- SELECTOR DE EQUIPO -->
+  <div class="selector-card">
+    <label for="selectorEquipo" class="selector-label">
+      Seleccionar equipo a auditar:
+    </label>
+    @if (cargandoEquipos) {
+      <div class="mensaje" style="padding: 8px;">Cargando lista de equipos...</div>
+    } @else if (equipos.length === 0) {
+      <div class="mensaje" style="padding: 8px;">No hay equipos registrados en el sistema.</div>
+    } @else {
+      <select
+        id="selectorEquipo"
+        [ngModel]="equipoSeleccionadoId"
+        (ngModelChange)="seleccionarEquipo($event)"
+        class="selector-dropdown"
+      >
+        @for (eq of equipos; track eq.id) {
+          <option [value]="eq.id">
+            {{ eq.codigoInventario }} — {{ eq.nombre }} ({{ eq.tipo }})
+          </option>
+        }
+      </select>
+    }
+  </div>
+
+  @if (error) {
+    <div class="mensaje error">
+      {{ error }}
+    </div>
+  }
+
+  @if (cargandoHistorial) {
+    <div class="mensaje">
+      Generando línea de tiempo del equipo...
+    </div>
+  }
+
+  @if (!cargandoHistorial && historial) {
+    <!-- FICHA TÉCNICA Y ESTADÍSTICAS DEL EQUIPO -->
+    <div class="equipo-resumen-grid">
+      <!-- DETALLES DEL EQUIPO -->
+      <div class="ficha-card">
+        <div class="ficha-top-row">
+          <div>
+            <h2>{{ historial.equipo.nombre }}</h2>
+            <span style="color: #64748b; font-size: 12.5px;">Código: <strong>{{ historial.equipo.codigoInventario }}</strong></span>
+          </div>
+          <span
+            class="estado"
+            [class.activo]="historial.equipo.estado === 1"
+            [class.inactivo]="historial.equipo.estado !== 1"
+          >
+            {{ historial.equipo.estado === 1 ? 'OPERATIVO' : (historial.equipo.estado === 2 ? 'EN MANTENIMIENTO' : 'INACTIVO') }}
+          </span>
+        </div>
+
+        <div class="ficha-datos-grid">
+          <div><span style="color: #94a3b8;">Tipo:</span> <strong>{{ historial.equipo.tipo }}</strong></div>
+          <div><span style="color: #94a3b8;">Marca:</span> <strong>{{ historial.equipo.marca }}</strong></div>
+          <div><span style="color: #94a3b8;">Modelo:</span> <strong>{{ historial.equipo.modelo || '—' }}</strong></div>
+          <div><span style="color: #94a3b8;">Serie:</span> <strong>{{ historial.equipo.numeroSerie || '—' }}</strong></div>
+          <div><span style="color: #94a3b8;">Ubicación:</span> <strong>{{ historial.equipo.ubicacion }}</strong></div>
+          <div><span style="color: #94a3b8;">Alta:</span> <strong>{{ historial.equipo.creadoEn | date:'shortDate' }}</strong></div>
+        </div>
+      </div>
+
+      <!-- MÉTRICAS CLAVE -->
+      <div class="metricas-grid">
+        <div class="metrica-box">
+          <span class="metrica-label">Tickets</span>
+          <div class="metrica-val" style="color: #0284c7;">{{ historial.estadisticas.totalTickets }}</div>
+        </div>
+        <div class="metrica-box">
+          <span class="metrica-label">Mantenimientos</span>
+          <div class="metrica-val" style="color: #16a34a;">{{ historial.estadisticas.totalMantenimientos }}</div>
+        </div>
+        <div class="metrica-box">
+          <span class="metrica-label">Piezas</span>
+          <div class="metrica-val" style="color: #7c3aed;">{{ historial.estadisticas.totalRepuestosUsados }}</div>
+        </div>
+        <div class="metrica-box">
+          <span class="metrica-label">Inversión Rep.</span>
+          <div class="metrica-val" style="color: #b45309; font-size: 16px;">
+            {{ historial.estadisticas.costoTotalRepuestos | currency:'USD':'symbol':'1.0-0' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTROS DE LÍNEA DE TIEMPO -->
+    <div class="timeline-toolbar">
+      <h3>Cronología de Eventos e Intervenciones</h3>
+
+      <div class="timeline-filter-buttons">
+        <button
+          type="button"
+          class="btn-secundario"
+          [style.background]="filtroTipo === 'TODOS' ? '#6c5ce7' : ''"
+          [style.color]="filtroTipo === 'TODOS' ? '#ffffff' : ''"
+          (click)="cambiarFiltro('TODOS')"
+        >
+          Todos ({{ historial.lineaDeTiempo.length }})
+        </button>
+        <button
+          type="button"
+          class="btn-secundario"
+          [style.background]="filtroTipo === 'TICKET' ? '#0284c7' : ''"
+          [style.color]="filtroTipo === 'TICKET' ? '#ffffff' : ''"
+          (click)="cambiarFiltro('TICKET')"
+        >
+          Tickets
+        </button>
+        <button
+          type="button"
+          class="btn-secundario"
+          [style.background]="filtroTipo === 'MANTENIMIENTO' ? '#16a34a' : ''"
+          [style.color]="filtroTipo === 'MANTENIMIENTO' ? '#ffffff' : ''"
+          (click)="cambiarFiltro('MANTENIMIENTO')"
+        >
+          Mantenimientos
+        </button>
+        <button
+          type="button"
+          class="btn-secundario"
+          [style.background]="filtroTipo === 'REPUESTO' ? '#7c3aed' : ''"
+          [style.color]="filtroTipo === 'REPUESTO' ? '#ffffff' : ''"
+          (click)="cambiarFiltro('REPUESTO')"
+        >
+          Repuestos
+        </button>
+      </div>
+    </div>
+
+    <!-- LÍNEA DE TIEMPO VISUAL -->
+    @if (eventosFiltrados.length === 0) {
+      <div class="mensaje">
+        No hay eventos registrados en la cronología para este equipo.
+      </div>
+    } @else {
+      <div class="timeline-container">
+        @for (ev of eventosFiltrados; track ev.id) {
+          <div class="timeline-item">
+            <!-- NODO CIRCULAR CON ÍCONO -->
+            <div
+              class="timeline-node-icon"
+              [style.border-color]="ev.tipo === 'TICKET' ? '#0284c7' : (ev.tipo === 'MANTENIMIENTO' ? '#16a34a' : '#7c3aed')"
+            >
+              @if (ev.tipo === 'TICKET') { 🎫 }
+              @else if (ev.tipo === 'MANTENIMIENTO') { 🔧 }
+              @else { ⚙ }
+            </div>
+
+            <!-- TARJETA DEL EVENTO -->
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <div class="timeline-card-title-row">
+                  <strong style="font-size: 13.5px; color: #0f172a;">{{ ev.titulo }}</strong>
+                  @if (ev.estado) {
+                    <span
+                      class="estado"
+                      [class.activo]="ev.estado === 'FINALIZADO' || ev.estado === 'RESUELTO'"
+                      [class.inactivo]="ev.estado === 'PENDIENTE' || ev.estado === 'CANCELADO'"
+                      style="font-size: 11px; padding: 2px 6px;"
+                    >
+                      {{ ev.estado }}
+                    </span>
+                  }
+                </div>
+                <small style="color: #64748b; font-size: 11.5px;">
+                  {{ ev.fecha | date:'dd/MM/yyyy HH:mm' }}
+                </small>
+              </div>
+
+              <p class="timeline-card-desc">
+                {{ ev.descripcion }}
+              </p>
+
+              @if (ev.responsable || ev.costo) {
+                <div class="timeline-card-meta">
+                  @if (ev.responsable) {
+                    <span>👤 <strong>{{ ev.responsable }}</strong></span>
+                  }
+                  @if (ev.costo) {
+                    <span style="color: #b45309;">💰 Costo: <strong>{{ ev.costo | currency:'USD':'symbol':'1.2-2' }}</strong></span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
