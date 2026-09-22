@@ -5,8 +5,7 @@ import type {
 
 import type {
   EquipoDAO,
-  MantenimientoDAO,
-  TicketDAO
+  MantenimientoDAO
 } from '../../dominio/puertos/index.js'
 
 import { MantenimientoNoEncontrado } from './ConsultarMantenimientos.js'
@@ -26,8 +25,7 @@ export class ActualizarEstadoMantenimiento {
 
   constructor(
     private readonly mantenimientos: MantenimientoDAO,
-    private readonly equipos: EquipoDAO,
-    private readonly tickets?: TicketDAO
+    private readonly equipos: EquipoDAO
   ) {}
 
   async ejecutar(
@@ -87,26 +85,6 @@ export class ActualizarEstadoMantenimiento {
           })
 
         }
-      }
-
-      // Si tiene un ticket asociado y finaliza, actualizamos el ticket a RESUELTO
-      if (actual.ticketId && this.tickets && datos.estado === 'FINALIZADO') {
-        const ticket = await this.tickets.porId(actual.ticketId)
-        if (ticket) {
-          await this.tickets.actualizar({
-            ...ticket,
-            estado: 'RESUELTO',
-            fechaCierre: new Date()
-          })
-        }
-      }
-    } else if (datos.estado === 'EN_PROCESO' && actual.ticketId && this.tickets) {
-      const ticket = await this.tickets.porId(actual.ticketId)
-      if (ticket && ticket.estado !== 'EN_MANTENIMIENTO') {
-        await this.tickets.actualizar({
-          ...ticket,
-          estado: 'EN_MANTENIMIENTO'
-        })
       }
     }
 

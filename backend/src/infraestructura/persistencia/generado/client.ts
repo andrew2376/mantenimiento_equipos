@@ -59,13 +59,3 @@ export type Usuario = Prisma.UsuarioModel
  * 
  */
 export type tickets = Prisma.ticketsModel
-/**
- * Model Repuesto
- * 
- */
-export type Repuesto = Prisma.RepuestoModel
-/**
- * Model RepuestoMantenimiento
- * 
- */
-export type RepuestoMantenimiento = Prisma.RepuestoMantenimientoModel

@@ -16,21 +16,6 @@ import { rutasUsuarios, type DependenciasUsuarios } from "./rutas/usuarios";
 
 import { rutasTickets, type DependenciasTickets } from "./rutas/tickets";
 
-import {
-  rutasRepuestos,
-  type DependenciasRepuestos,
-} from "./rutas/repuestos";
-
-import {
-  rutasHistorial,
-  type DependenciasHistorial,
-} from "./rutas/historial";
-
-import {
-  rutasReportes,
-  type DependenciasReportes,
-} from "./rutas/reportes";
-
 export interface DependenciasServidor {
   equipos: DependenciasEquipos;
 
@@ -39,12 +24,6 @@ export interface DependenciasServidor {
   usuarios: DependenciasUsuarios;
 
   tickets: DependenciasTickets;
-
-  repuestos?: DependenciasRepuestos;
-
-  historial?: DependenciasHistorial;
-
-  reportes?: DependenciasReportes;
 }
 
 const swaggerDocument = {
@@ -466,18 +445,6 @@ export function crearServidor(deps: DependenciasServidor): Express {
 
     rutasTickets(deps.tickets),
   );
-
-  if (deps.repuestos) {
-    api.use("/repuestos", rutasRepuestos(deps.repuestos));
-  }
-
-  if (deps.historial) {
-    api.use("/historial", rutasHistorial(deps.historial));
-  }
-
-  if (deps.reportes) {
-    api.use("/reportes", rutasReportes(deps.reportes));
-  }
 
   app.use("/api", api);
 

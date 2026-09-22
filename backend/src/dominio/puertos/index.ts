@@ -19,12 +19,6 @@ import type {
   TicketNuevo
 } from '../modelo/Ticket.js'
 
-import type {
-  Repuesto,
-  RepuestoNuevo,
-  RepuestoUsado
-} from '../modelo/Repuesto.js'
-
 /**
  * Puertos de Dominio:
  * Contratos que deben satisfacer los adaptadores
@@ -131,45 +125,4 @@ export interface ServicioClaves {
     clave: string,
     hash: string
   ): Promise<boolean>
-}
-
-export interface RepuestoDAO {
-
-  guardar(
-    repuesto: RepuestoNuevo
-  ): Promise<Repuesto>
-
-  porId(
-    id: number
-  ): Promise<Repuesto | null>
-
-  porCodigo(
-    codigo: string
-  ): Promise<Repuesto | null>
-
-  todos(): Promise<Repuesto[]>
-
-  actualizar(
-    repuesto: Repuesto
-  ): Promise<Repuesto>
-
-  descontarStock(
-    id: number,
-    cantidad: number
-  ): Promise<Repuesto>
-
-  asociarAMantenimiento(
-    mantenimientoId: number,
-    repuestoId: number,
-    cantidad: number,
-    costoUnitario: number
-  ): Promise<RepuestoUsado>
-
-  listarPorMantenimiento(
-    mantenimientoId: number
-  ): Promise<RepuestoUsado[]>
-
-  eliminarAsociacion(
-    id: number
-  ): Promise<void>
 }

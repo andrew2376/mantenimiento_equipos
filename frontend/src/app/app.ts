@@ -42,8 +42,6 @@ export class App {
 
       mantenimientos: 'Mantenimiento',
 
-      repuestos: 'Inventario de Repuestos',
-
       historial: 'Historial',
 
       usuarios: 'Usuarios',
