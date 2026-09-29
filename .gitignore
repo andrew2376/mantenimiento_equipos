@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+
 .pnp
 .pnp.js
 
@@ -8,6 +9,9 @@ dist/
 tmp/
 out-tsc/
 bazel-out/
+
+# Angular
+.angular/
 
 # Environment files
 .env
@@ -37,4 +41,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 coverage/
-.angular/cache
