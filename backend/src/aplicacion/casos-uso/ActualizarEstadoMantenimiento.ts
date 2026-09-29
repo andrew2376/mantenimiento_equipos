@@ -1,5 +1,6 @@
 import type {
   EstadoMantenimiento,
+  TipoMantenimiento,
   Mantenimiento
 } from '../../dominio/modelo/Mantenimiento.js'
 
@@ -16,9 +17,17 @@ export interface ActualizarMantenimientoDTO {
 
   estado?: EstadoMantenimiento
 
-  diagnostico?: string
+  diagnostico?: string | null
 
-  tecnico?: string
+  tecnico?: string | null
+
+  descripcion?: string
+
+  tipo?: TipoMantenimiento
+
+  equipoId?: number
+
+  ticketId?: number | null
 }
 
 export class ActualizarEstadoMantenimiento {
@@ -43,7 +52,11 @@ export class ActualizarEstadoMantenimiento {
       {
         estado: datos.estado,
         diagnostico: datos.diagnostico,
-        tecnico: datos.tecnico
+        tecnico: datos.tecnico,
+        descripcion: datos.descripcion,
+        tipo: datos.tipo,
+        equipoId: datos.equipoId,
+        ticketId: datos.ticketId
       }
     )
 

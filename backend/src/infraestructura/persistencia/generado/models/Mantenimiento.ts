@@ -29,11 +29,13 @@ export type AggregateMantenimiento = {
 export type MantenimientoAvgAggregateOutputType = {
   id: number | null
   equipoId: number | null
+  ticketId: number | null
 }
 
 export type MantenimientoSumAggregateOutputType = {
   id: number | null
   equipoId: number | null
+  ticketId: number | null
 }
 
 export type MantenimientoMinAggregateOutputType = {
@@ -45,6 +47,7 @@ export type MantenimientoMinAggregateOutputType = {
   tecnico: string | null
   fecha: Date | null
   equipoId: number | null
+  ticketId: number | null
 }
 
 export type MantenimientoMaxAggregateOutputType = {
@@ -56,6 +59,7 @@ export type MantenimientoMaxAggregateOutputType = {
   tecnico: string | null
   fecha: Date | null
   equipoId: number | null
+  ticketId: number | null
 }
 
 export type MantenimientoCountAggregateOutputType = {
@@ -67,6 +71,7 @@ export type MantenimientoCountAggregateOutputType = {
   tecnico: number
   fecha: number
   equipoId: number
+  ticketId: number
   _all: number
 }
 
@@ -74,11 +79,13 @@ export type MantenimientoCountAggregateOutputType = {
 export type MantenimientoAvgAggregateInputType = {
   id?: true
   equipoId?: true
+  ticketId?: true
 }
 
 export type MantenimientoSumAggregateInputType = {
   id?: true
   equipoId?: true
+  ticketId?: true
 }
 
 export type MantenimientoMinAggregateInputType = {
@@ -90,6 +97,7 @@ export type MantenimientoMinAggregateInputType = {
   tecnico?: true
   fecha?: true
   equipoId?: true
+  ticketId?: true
 }
 
 export type MantenimientoMaxAggregateInputType = {
@@ -101,6 +109,7 @@ export type MantenimientoMaxAggregateInputType = {
   tecnico?: true
   fecha?: true
   equipoId?: true
+  ticketId?: true
 }
 
 export type MantenimientoCountAggregateInputType = {
@@ -112,6 +121,7 @@ export type MantenimientoCountAggregateInputType = {
   tecnico?: true
   fecha?: true
   equipoId?: true
+  ticketId?: true
   _all?: true
 }
 
@@ -210,6 +220,7 @@ export type MantenimientoGroupByOutputType = {
   tecnico: string | null
   fecha: Date
   equipoId: number
+  ticketId: number | null
   _count: MantenimientoCountAggregateOutputType | null
   _avg: MantenimientoAvgAggregateOutputType | null
   _sum: MantenimientoSumAggregateOutputType | null
@@ -244,7 +255,9 @@ export type MantenimientoWhereInput = {
   tecnico?: Prisma.StringNullableFilter<"Mantenimiento"> | string | null
   fecha?: Prisma.DateTimeFilter<"Mantenimiento"> | Date | string
   equipoId?: Prisma.IntFilter<"Mantenimiento"> | number
+  ticketId?: Prisma.IntNullableFilter<"Mantenimiento"> | number | null
   equipo?: Prisma.XOR<Prisma.EquipoScalarRelationFilter, Prisma.EquipoWhereInput>
+  ticket?: Prisma.XOR<Prisma.TicketsNullableScalarRelationFilter, Prisma.ticketsWhereInput> | null
 }
 
 export type MantenimientoOrderByWithRelationInput = {
@@ -256,7 +269,9 @@ export type MantenimientoOrderByWithRelationInput = {
   tecnico?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
   equipo?: Prisma.EquipoOrderByWithRelationInput
+  ticket?: Prisma.ticketsOrderByWithRelationInput
   _relevance?: Prisma.MantenimientoOrderByRelevanceInput
 }
 
@@ -272,7 +287,9 @@ export type MantenimientoWhereUniqueInput = Prisma.AtLeast<{
   tecnico?: Prisma.StringNullableFilter<"Mantenimiento"> | string | null
   fecha?: Prisma.DateTimeFilter<"Mantenimiento"> | Date | string
   equipoId?: Prisma.IntFilter<"Mantenimiento"> | number
+  ticketId?: Prisma.IntNullableFilter<"Mantenimiento"> | number | null
   equipo?: Prisma.XOR<Prisma.EquipoScalarRelationFilter, Prisma.EquipoWhereInput>
+  ticket?: Prisma.XOR<Prisma.TicketsNullableScalarRelationFilter, Prisma.ticketsWhereInput> | null
 }, "id">
 
 export type MantenimientoOrderByWithAggregationInput = {
@@ -284,6 +301,7 @@ export type MantenimientoOrderByWithAggregationInput = {
   tecnico?: Prisma.SortOrderInput | Prisma.SortOrder
   fecha?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.MantenimientoCountOrderByAggregateInput
   _avg?: Prisma.MantenimientoAvgOrderByAggregateInput
   _max?: Prisma.MantenimientoMaxOrderByAggregateInput
@@ -303,6 +321,7 @@ export type MantenimientoScalarWhereWithAggregatesInput = {
   tecnico?: Prisma.StringNullableWithAggregatesFilter<"Mantenimiento"> | string | null
   fecha?: Prisma.DateTimeWithAggregatesFilter<"Mantenimiento"> | Date | string
   equipoId?: Prisma.IntWithAggregatesFilter<"Mantenimiento"> | number
+  ticketId?: Prisma.IntNullableWithAggregatesFilter<"Mantenimiento"> | number | null
 }
 
 export type MantenimientoCreateInput = {
@@ -313,6 +332,7 @@ export type MantenimientoCreateInput = {
   tecnico?: string | null
   fecha?: Date | string
   equipo: Prisma.EquipoCreateNestedOneWithoutMantenimientosInput
+  ticket?: Prisma.ticketsCreateNestedOneWithoutMantenimientosInput
 }
 
 export type MantenimientoUncheckedCreateInput = {
@@ -324,6 +344,7 @@ export type MantenimientoUncheckedCreateInput = {
   tecnico?: string | null
   fecha?: Date | string
   equipoId: number
+  ticketId?: number | null
 }
 
 export type MantenimientoUpdateInput = {
@@ -334,6 +355,7 @@ export type MantenimientoUpdateInput = {
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   equipo?: Prisma.EquipoUpdateOneRequiredWithoutMantenimientosNestedInput
+  ticket?: Prisma.ticketsUpdateOneWithoutMantenimientosNestedInput
 }
 
 export type MantenimientoUncheckedUpdateInput = {
@@ -345,6 +367,7 @@ export type MantenimientoUncheckedUpdateInput = {
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   equipoId?: Prisma.IntFieldUpdateOperationsInput | number
+  ticketId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type MantenimientoCreateManyInput = {
@@ -356,6 +379,7 @@ export type MantenimientoCreateManyInput = {
   tecnico?: string | null
   fecha?: Date | string
   equipoId: number
+  ticketId?: number | null
 }
 
 export type MantenimientoUpdateManyMutationInput = {
@@ -376,6 +400,7 @@ export type MantenimientoUncheckedUpdateManyInput = {
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   equipoId?: Prisma.IntFieldUpdateOperationsInput | number
+  ticketId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type MantenimientoListRelationFilter = {
@@ -403,11 +428,13 @@ export type MantenimientoCountOrderByAggregateInput = {
   tecnico?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrder
 }
 
 export type MantenimientoAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrder
 }
 
 export type MantenimientoMaxOrderByAggregateInput = {
@@ -419,6 +446,7 @@ export type MantenimientoMaxOrderByAggregateInput = {
   tecnico?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrder
 }
 
 export type MantenimientoMinOrderByAggregateInput = {
@@ -430,11 +458,13 @@ export type MantenimientoMinOrderByAggregateInput = {
   tecnico?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrder
 }
 
 export type MantenimientoSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   equipoId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrder
 }
 
 export type MantenimientoCreateNestedManyWithoutEquipoInput = {
@@ -479,6 +509,56 @@ export type MantenimientoUncheckedUpdateManyWithoutEquipoNestedInput = {
   deleteMany?: Prisma.MantenimientoScalarWhereInput | Prisma.MantenimientoScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type MantenimientoCreateNestedManyWithoutTicketInput = {
+  create?: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput> | Prisma.MantenimientoCreateWithoutTicketInput[] | Prisma.MantenimientoUncheckedCreateWithoutTicketInput[]
+  connectOrCreate?: Prisma.MantenimientoCreateOrConnectWithoutTicketInput | Prisma.MantenimientoCreateOrConnectWithoutTicketInput[]
+  createMany?: Prisma.MantenimientoCreateManyTicketInputEnvelope
+  connect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+}
+
+export type MantenimientoUncheckedCreateNestedManyWithoutTicketInput = {
+  create?: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput> | Prisma.MantenimientoCreateWithoutTicketInput[] | Prisma.MantenimientoUncheckedCreateWithoutTicketInput[]
+  connectOrCreate?: Prisma.MantenimientoCreateOrConnectWithoutTicketInput | Prisma.MantenimientoCreateOrConnectWithoutTicketInput[]
+  createMany?: Prisma.MantenimientoCreateManyTicketInputEnvelope
+  connect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+}
+
+export type MantenimientoUpdateManyWithoutTicketNestedInput = {
+  create?: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput> | Prisma.MantenimientoCreateWithoutTicketInput[] | Prisma.MantenimientoUncheckedCreateWithoutTicketInput[]
+  connectOrCreate?: Prisma.MantenimientoCreateOrConnectWithoutTicketInput | Prisma.MantenimientoCreateOrConnectWithoutTicketInput[]
+  upsert?: Prisma.MantenimientoUpsertWithWhereUniqueWithoutTicketInput | Prisma.MantenimientoUpsertWithWhereUniqueWithoutTicketInput[]
+  createMany?: Prisma.MantenimientoCreateManyTicketInputEnvelope
+  set?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  disconnect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  delete?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  connect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  update?: Prisma.MantenimientoUpdateWithWhereUniqueWithoutTicketInput | Prisma.MantenimientoUpdateWithWhereUniqueWithoutTicketInput[]
+  updateMany?: Prisma.MantenimientoUpdateManyWithWhereWithoutTicketInput | Prisma.MantenimientoUpdateManyWithWhereWithoutTicketInput[]
+  deleteMany?: Prisma.MantenimientoScalarWhereInput | Prisma.MantenimientoScalarWhereInput[]
+}
+
+export type MantenimientoUncheckedUpdateManyWithoutTicketNestedInput = {
+  create?: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput> | Prisma.MantenimientoCreateWithoutTicketInput[] | Prisma.MantenimientoUncheckedCreateWithoutTicketInput[]
+  connectOrCreate?: Prisma.MantenimientoCreateOrConnectWithoutTicketInput | Prisma.MantenimientoCreateOrConnectWithoutTicketInput[]
+  upsert?: Prisma.MantenimientoUpsertWithWhereUniqueWithoutTicketInput | Prisma.MantenimientoUpsertWithWhereUniqueWithoutTicketInput[]
+  createMany?: Prisma.MantenimientoCreateManyTicketInputEnvelope
+  set?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  disconnect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  delete?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  connect?: Prisma.MantenimientoWhereUniqueInput | Prisma.MantenimientoWhereUniqueInput[]
+  update?: Prisma.MantenimientoUpdateWithWhereUniqueWithoutTicketInput | Prisma.MantenimientoUpdateWithWhereUniqueWithoutTicketInput[]
+  updateMany?: Prisma.MantenimientoUpdateManyWithWhereWithoutTicketInput | Prisma.MantenimientoUpdateManyWithWhereWithoutTicketInput[]
+  deleteMany?: Prisma.MantenimientoScalarWhereInput | Prisma.MantenimientoScalarWhereInput[]
+}
+
 export type MantenimientoCreateWithoutEquipoInput = {
   descripcion: string
   tipo?: string
@@ -486,6 +566,7 @@ export type MantenimientoCreateWithoutEquipoInput = {
   diagnostico?: string | null
   tecnico?: string | null
   fecha?: Date | string
+  ticket?: Prisma.ticketsCreateNestedOneWithoutMantenimientosInput
 }
 
 export type MantenimientoUncheckedCreateWithoutEquipoInput = {
@@ -496,6 +577,7 @@ export type MantenimientoUncheckedCreateWithoutEquipoInput = {
   diagnostico?: string | null
   tecnico?: string | null
   fecha?: Date | string
+  ticketId?: number | null
 }
 
 export type MantenimientoCreateOrConnectWithoutEquipoInput = {
@@ -536,6 +618,54 @@ export type MantenimientoScalarWhereInput = {
   tecnico?: Prisma.StringNullableFilter<"Mantenimiento"> | string | null
   fecha?: Prisma.DateTimeFilter<"Mantenimiento"> | Date | string
   equipoId?: Prisma.IntFilter<"Mantenimiento"> | number
+  ticketId?: Prisma.IntNullableFilter<"Mantenimiento"> | number | null
+}
+
+export type MantenimientoCreateWithoutTicketInput = {
+  descripcion: string
+  tipo?: string
+  estado?: string
+  diagnostico?: string | null
+  tecnico?: string | null
+  fecha?: Date | string
+  equipo: Prisma.EquipoCreateNestedOneWithoutMantenimientosInput
+}
+
+export type MantenimientoUncheckedCreateWithoutTicketInput = {
+  id?: number
+  descripcion: string
+  tipo?: string
+  estado?: string
+  diagnostico?: string | null
+  tecnico?: string | null
+  fecha?: Date | string
+  equipoId: number
+}
+
+export type MantenimientoCreateOrConnectWithoutTicketInput = {
+  where: Prisma.MantenimientoWhereUniqueInput
+  create: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput>
+}
+
+export type MantenimientoCreateManyTicketInputEnvelope = {
+  data: Prisma.MantenimientoCreateManyTicketInput | Prisma.MantenimientoCreateManyTicketInput[]
+  skipDuplicates?: boolean
+}
+
+export type MantenimientoUpsertWithWhereUniqueWithoutTicketInput = {
+  where: Prisma.MantenimientoWhereUniqueInput
+  update: Prisma.XOR<Prisma.MantenimientoUpdateWithoutTicketInput, Prisma.MantenimientoUncheckedUpdateWithoutTicketInput>
+  create: Prisma.XOR<Prisma.MantenimientoCreateWithoutTicketInput, Prisma.MantenimientoUncheckedCreateWithoutTicketInput>
+}
+
+export type MantenimientoUpdateWithWhereUniqueWithoutTicketInput = {
+  where: Prisma.MantenimientoWhereUniqueInput
+  data: Prisma.XOR<Prisma.MantenimientoUpdateWithoutTicketInput, Prisma.MantenimientoUncheckedUpdateWithoutTicketInput>
+}
+
+export type MantenimientoUpdateManyWithWhereWithoutTicketInput = {
+  where: Prisma.MantenimientoScalarWhereInput
+  data: Prisma.XOR<Prisma.MantenimientoUpdateManyMutationInput, Prisma.MantenimientoUncheckedUpdateManyWithoutTicketInput>
 }
 
 export type MantenimientoCreateManyEquipoInput = {
@@ -546,6 +676,7 @@ export type MantenimientoCreateManyEquipoInput = {
   diagnostico?: string | null
   tecnico?: string | null
   fecha?: Date | string
+  ticketId?: number | null
 }
 
 export type MantenimientoUpdateWithoutEquipoInput = {
@@ -555,6 +686,7 @@ export type MantenimientoUpdateWithoutEquipoInput = {
   diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.ticketsUpdateOneWithoutMantenimientosNestedInput
 }
 
 export type MantenimientoUncheckedUpdateWithoutEquipoInput = {
@@ -565,6 +697,7 @@ export type MantenimientoUncheckedUpdateWithoutEquipoInput = {
   diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticketId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type MantenimientoUncheckedUpdateManyWithoutEquipoInput = {
@@ -575,6 +708,50 @@ export type MantenimientoUncheckedUpdateManyWithoutEquipoInput = {
   diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticketId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type MantenimientoCreateManyTicketInput = {
+  id?: number
+  descripcion: string
+  tipo?: string
+  estado?: string
+  diagnostico?: string | null
+  tecnico?: string | null
+  fecha?: Date | string
+  equipoId: number
+}
+
+export type MantenimientoUpdateWithoutTicketInput = {
+  descripcion?: Prisma.StringFieldUpdateOperationsInput | string
+  tipo?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipo?: Prisma.EquipoUpdateOneRequiredWithoutMantenimientosNestedInput
+}
+
+export type MantenimientoUncheckedUpdateWithoutTicketInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  descripcion?: Prisma.StringFieldUpdateOperationsInput | string
+  tipo?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipoId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type MantenimientoUncheckedUpdateManyWithoutTicketInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  descripcion?: Prisma.StringFieldUpdateOperationsInput | string
+  tipo?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  diagnostico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tecnico?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipoId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -588,7 +765,9 @@ export type MantenimientoSelect<ExtArgs extends runtime.Types.Extensions.Interna
   tecnico?: boolean
   fecha?: boolean
   equipoId?: boolean
+  ticketId?: boolean
   equipo?: boolean | Prisma.EquipoDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Mantenimiento$ticketArgs<ExtArgs>
 }, ExtArgs["result"]["mantenimiento"]>
 
 
@@ -602,17 +781,20 @@ export type MantenimientoSelectScalar = {
   tecnico?: boolean
   fecha?: boolean
   equipoId?: boolean
+  ticketId?: boolean
 }
 
-export type MantenimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "descripcion" | "tipo" | "estado" | "diagnostico" | "tecnico" | "fecha" | "equipoId", ExtArgs["result"]["mantenimiento"]>
+export type MantenimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "descripcion" | "tipo" | "estado" | "diagnostico" | "tecnico" | "fecha" | "equipoId" | "ticketId", ExtArgs["result"]["mantenimiento"]>
 export type MantenimientoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   equipo?: boolean | Prisma.EquipoDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Mantenimiento$ticketArgs<ExtArgs>
 }
 
 export type $MantenimientoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Mantenimiento"
   objects: {
     equipo: Prisma.$EquipoPayload<ExtArgs>
+    ticket: Prisma.$ticketsPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -623,6 +805,7 @@ export type $MantenimientoPayload<ExtArgs extends runtime.Types.Extensions.Inter
     tecnico: string | null
     fecha: Date
     equipoId: number
+    ticketId: number | null
   }, ExtArgs["result"]["mantenimiento"]>
   composites: {}
 }
@@ -964,6 +1147,7 @@ readonly fields: MantenimientoFieldRefs;
 export interface Prisma__MantenimientoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   equipo<T extends Prisma.EquipoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EquipoDefaultArgs<ExtArgs>>): Prisma.Prisma__EquipoClient<runtime.Types.Result.GetResult<Prisma.$EquipoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ticket<T extends Prisma.Mantenimiento$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Mantenimiento$ticketArgs<ExtArgs>>): Prisma.Prisma__ticketsClient<runtime.Types.Result.GetResult<Prisma.$ticketsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1001,6 +1185,7 @@ export interface MantenimientoFieldRefs {
   readonly tecnico: Prisma.FieldRef<"Mantenimiento", 'String'>
   readonly fecha: Prisma.FieldRef<"Mantenimiento", 'DateTime'>
   readonly equipoId: Prisma.FieldRef<"Mantenimiento", 'Int'>
+  readonly ticketId: Prisma.FieldRef<"Mantenimiento", 'Int'>
 }
     
 
@@ -1346,6 +1531,25 @@ export type MantenimientoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Mantenimientos to delete.
    */
   limit?: number
+}
+
+/**
+ * Mantenimiento.ticket
+ */
+export type Mantenimiento$ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tickets
+   */
+  select?: Prisma.ticketsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tickets
+   */
+  omit?: Prisma.ticketsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ticketsInclude<ExtArgs> | null
+  where?: Prisma.ticketsWhereInput
 }
 
 /**

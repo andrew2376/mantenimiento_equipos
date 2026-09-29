@@ -748,7 +748,8 @@ export const MantenimientoScalarFieldEnum = {
   diagnostico: 'diagnostico',
   tecnico: 'tecnico',
   fecha: 'fecha',
-  equipoId: 'equipoId'
+  equipoId: 'equipoId',
+  ticketId: 'ticketId'
 } as const
 
 export type MantenimientoScalarFieldEnum = (typeof MantenimientoScalarFieldEnum)[keyof typeof MantenimientoScalarFieldEnum]

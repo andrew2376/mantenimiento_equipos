@@ -26,7 +26,8 @@ const aDominio = (
   diagnostico: fila.diagnostico,
   tecnico: fila.tecnico,
   fecha: fila.fecha,
-  equipoId: fila.equipoId
+  equipoId: fila.equipoId,
+  ticketId: fila.ticketId ?? null
 })
 
 export class MantenimientoDAOPrisma
@@ -48,7 +49,8 @@ export class MantenimientoDAOPrisma
           estado: m.estado,
           diagnostico: m.diagnostico,
           tecnico: m.tecnico,
-          equipoId: m.equipoId
+          equipoId: m.equipoId,
+          ticketId: m.ticketId ?? null
         }
       })
 
@@ -118,6 +120,22 @@ export class MantenimientoDAOPrisma
 
             ...(datos.tecnico !== undefined
               ? { tecnico: datos.tecnico }
+              : {}),
+
+            ...(datos.descripcion !== undefined
+              ? { descripcion: datos.descripcion }
+              : {}),
+
+            ...(datos.tipo !== undefined
+              ? { tipo: datos.tipo }
+              : {}),
+
+            ...(datos.equipoId !== undefined
+              ? { equipoId: datos.equipoId }
+              : {}),
+
+            ...(datos.ticketId !== undefined
+              ? { ticketId: datos.ticketId }
               : {})
           }
         })

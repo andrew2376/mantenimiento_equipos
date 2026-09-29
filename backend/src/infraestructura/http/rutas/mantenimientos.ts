@@ -29,9 +29,15 @@ function validarRegistroMantenimiento(cuerpo: unknown): RegistroMantenimientoDTO
     return 'El estado del mantenimiento no es válido (PENDIENTE, EN_PROCESO, FINALIZADO, CANCELADO)'
   }
 
+  const ticketId = d['ticketId'] !== undefined && d['ticketId'] !== null && d['ticketId'] !== '' ? Number(d['ticketId']) : null
+  if (ticketId !== null && (isNaN(ticketId) || ticketId <= 0)) {
+    return 'El campo ticketId debe ser un número entero positivo'
+  }
+
   return {
     descripcion: d['descripcion'],
     equipoId,
+    ticketId,
     tipo: d['tipo'] as any,
     estado: d['estado'] as any,
     diagnostico: typeof d['diagnostico'] === 'string' ? d['diagnostico'] : null,
@@ -121,8 +127,12 @@ export function rutasMantenimientos(deps: DependenciasMantenimientos): Router {
     const payload: ActualizarMantenimientoDTO = {
       id,
       estado: d['estado'] as any,
-      diagnostico: typeof d['diagnostico'] === 'string' ? d['diagnostico'] : undefined,
-      tecnico: typeof d['tecnico'] === 'string' ? d['tecnico'] : undefined,
+      diagnostico: typeof d['diagnostico'] === 'string' ? d['diagnostico'] : (d['diagnostico'] === null ? null : undefined),
+      tecnico: typeof d['tecnico'] === 'string' ? d['tecnico'] : (d['tecnico'] === null ? null : undefined),
+      descripcion: typeof d['descripcion'] === 'string' ? d['descripcion'] : undefined,
+      tipo: d['tipo'] !== undefined && esTipoMantenimiento(d['tipo']) ? (d['tipo'] as any) : undefined,
+      equipoId: d['equipoId'] !== undefined && !isNaN(Number(d['equipoId'])) ? Number(d['equipoId']) : undefined,
+      ticketId: d['ticketId'] !== undefined ? (d['ticketId'] ? Number(d['ticketId']) : null) : undefined,
     }
 
     try {

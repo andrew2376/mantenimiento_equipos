@@ -6,7 +6,8 @@ import type {
 import type {
   Mantenimiento,
   MantenimientoNuevo,
-  EstadoMantenimiento
+  EstadoMantenimiento,
+  TipoMantenimiento
 } from '../modelo/Mantenimiento.js'
 
 import type {
@@ -71,9 +72,17 @@ export interface ActualizarMantenimientoDatos {
 
   estado?: EstadoMantenimiento
 
-  diagnostico?: string
+  diagnostico?: string | null
 
-  tecnico?: string
+  tecnico?: string | null
+
+  descripcion?: string
+
+  tipo?: TipoMantenimiento
+
+  equipoId?: number
+
+  ticketId?: number | null
 }
 
 export interface MantenimientoDAO {
