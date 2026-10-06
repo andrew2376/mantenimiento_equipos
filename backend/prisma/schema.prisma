@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infraestructura/persistencia/generado"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Equipo {
+  id               Int             @id @default(autoincrement()) @db.UnsignedInt
+  codigoInventario String          @unique(map: "codigo_inventario") @map("codigo_inventario") @db.VarChar(30)
+  nombre           String          @db.VarChar(100)
+  tipo             String          @db.VarChar(50)
+  marca            String          @db.VarChar(50)
+  modelo           String?         @db.VarChar(100)
+  numeroSerie      String?         @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
+  ubicacion        String          @db.VarChar(100)
+  estado           Int             @default(1) @db.TinyInt
+  createdAt        DateTime        @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt        DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
+  mantenimientos   Mantenimiento[]
+  tickets          tickets[]
+
+  @@map("equipos")
+}
+
+model Mantenimiento {
+  id          Int      @id @default(autoincrement())
+  descripcion String   @db.Text
+  tipo        String   @default("CORRECTIVO") @db.VarChar(20)
+  estado      String   @default("PENDIENTE") @db.VarChar(20)
+  diagnostico String?  @db.Text
+  tecnico     String?  @db.VarChar(255)
+  fecha       DateTime @default(now()) @db.DateTime(0)
+  equipoId    Int      @map("equipo_id") @db.UnsignedInt
+  equipo      Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade, map: "fk_mantenimiento_equipo")
+  ticketId    Int?     @map("ticket_id") @db.UnsignedInt
+  ticket      tickets? @relation(fields: [ticketId], references: [id], onDelete: SetNull, map: "fk_mantenimiento_ticket")
+
+  @@index([equipoId], map: "fk_mantenimiento_equipo")
+  @@index([ticketId], map: "fk_mantenimiento_ticket")
+  @@map("mantenimientos")
+}
+
+model Usuario {
+  id                                       Int          @id @default(autoincrement()) @db.UnsignedInt
+  nombre                                   String       @db.VarChar(100)
+  correo                                   String       @unique(map: "correo") @db.VarChar(150)
+  claveHash                                String       @map("clave_hash") @db.VarChar(255)
+  rol                                      usuarios_rol @default(SOLICITANTE)
+  activo                                   Boolean      @default(true)
+  creadoEn                                 DateTime     @default(now()) @map("creado_en") @db.DateTime(0)
+  tickets_tickets_solicitante_idTousuarios tickets[]    @relation("tickets_solicitante_idTousuarios")
+  tickets_tickets_tecnico_idTousuarios     tickets[]    @relation("tickets_tecnico_idTousuarios")
+
+  @@map("usuarios")
+}
+
+model tickets {
+  id                                        Int             @id @default(autoincrement()) @db.UnsignedInt
+  titulo                                    String          @db.VarChar(150)
+  descripcion                               String          @db.Text
+  prioridad                                 String          @default("MEDIA") @db.VarChar(20)
+  estado                                    String          @default("ABIERTO") @db.VarChar(30)
+  equipo_id                                 Int             @db.UnsignedInt
+  solicitante_id                            Int             @db.UnsignedInt
+  tecnico_id                                Int?            @db.UnsignedInt
+  fecha_cierre                              DateTime?       @db.DateTime(0)
+  creado_en                                 DateTime        @default(now()) @db.DateTime(0)
+  actualizado_en                            DateTime        @default(now()) @db.DateTime(0)
+  equipos                                   Equipo          @relation(fields: [equipo_id], references: [id], map: "fk_ticket_equipo")
+  usuarios_tickets_solicitante_idTousuarios Usuario         @relation("tickets_solicitante_idTousuarios", fields: [solicitante_id], references: [id], map: "fk_ticket_solicitante")
+  usuarios_tickets_tecnico_idTousuarios     Usuario?        @relation("tickets_tecnico_idTousuarios", fields: [tecnico_id], references: [id], map: "fk_ticket_tecnico")
+  mantenimientos                            Mantenimiento[]
+
+  @@index([equipo_id], map: "fk_ticket_equipo")
+  @@index([solicitante_id], map: "fk_ticket_solicitante")
+  @@index([tecnico_id], map: "fk_ticket_tecnico")
+}
+
+enum usuarios_rol {
+  SOLICITANTE
+  TECNICO
+  ADMINISTRADOR
+  SUPERVISOR
+}

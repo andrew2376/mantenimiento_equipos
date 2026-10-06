@@ -1,0 +1,416 @@
+<div class="equipos-container">
+
+
+
+    <!-- ==========================================
+         CARGANDO
+         ========================================== -->
+
+    @if (cargando) {
+
+    <div class="mensaje">
+
+        Cargando tickets...
+
+    </div>
+
+    }
+
+
+    <!-- ==========================================
+         ERROR
+         ========================================== -->
+
+    @if (error) {
+
+    <div class="mensaje error">
+
+        {{ error }}
+
+    </div>
+
+    }
+
+
+    <!-- ==========================================
+         CONTENIDO
+         ========================================== -->
+
+    @if (!cargando && !error) {
+
+
+    <!-- ========================================
+         BARRA DE BÚSQUEDA + NUEVO TICKET
+         ======================================== -->
+
+    @if (tickets.length > 0) {
+
+    <div class="tickets-toolbar">
+
+        <div class="busqueda-container">
+
+            <div class="busqueda">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <path
+                        d="m20 20-4-4"
+                    ></path>
+
+                </svg>
+
+
+                <input
+                    type="text"
+                    placeholder="Buscar ticket por título, estado, prioridad..."
+                    [(ngModel)]="textoBusqueda"
+                    (input)="buscarTickets()"
+                />
+
+
+                @if (textoBusqueda) {
+
+                <button
+                    type="button"
+                    class="btn-limpiar-busqueda"
+                    title="Limpiar búsqueda"
+                    (click)="limpiarBusqueda()"
+                >
+
+                    ×
+
+                </button>
+
+                }
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-nuevo-ticket"
+            (click)="abrirFormulario()"
+        >
+
+            + Nuevo ticket
+
+        </button>
+
+    </div>
+
+    }
+
+
+    <!-- ========================================
+         SIN TICKETS REGISTRADOS
+         ======================================== -->
+
+    @if (tickets.length === 0) {
+
+    <div class="mensaje">
+
+        No hay tickets registrados.
+
+    </div>
+
+    }
+
+
+    <!-- ========================================
+         SIN RESULTADOS DE BÚSQUEDA
+         ======================================== -->
+
+    @if (
+        tickets.length > 0 &&
+        ticketsFiltrados.length === 0
+    ) {
+
+    <div class="mensaje">
+
+        No se encontraron tickets que coincidan
+        con "{{ textoBusqueda }}".
+
+    </div>
+
+    }
+
+
+    <!-- ========================================
+         TICKETS REGISTRADOS
+         ======================================== -->
+
+    @if (ticketsFiltrados.length > 0) {
+
+    <div class="tabla-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Título
+                    </th>
+
+                    <th>
+                        Prioridad
+                    </th>
+
+                    <th>
+                        Estado
+                    </th>
+
+                    <th>
+                        Equipo
+                    </th>
+
+                    <th>
+                        Solicitante
+                    </th>
+
+                    <th>
+                        Técnico
+                    </th>
+
+                    <th>
+                        Fecha
+                    </th>
+
+                    <th>
+                        Acciones
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @for (
+                    ticket of ticketsFiltrados;
+                    track ticket.id
+                ) {
+
+                <tr>
+
+
+                    <!-- ==================================
+                         TÍTULO
+                         ================================== -->
+
+                    <td class="titulo-ticket">
+
+                        <strong>
+
+                            {{ ticket.titulo }}
+
+                        </strong>
+
+                        <br>
+
+                        <small>
+
+                            {{ ticket.descripcion }}
+
+                        </small>
+
+                    </td>
+
+
+                    <!-- ==================================
+                         PRIORIDAD
+                         ================================== -->
+
+                    <td>
+
+                        <span
+                            class="estado"
+                            [class.activo]="
+                                ticket.prioridad === 'ALTA' ||
+                                ticket.prioridad === 'CRITICA'
+                            "
+                            [class.inactivo]="
+                                ticket.prioridad === 'BAJA' ||
+                                ticket.prioridad === 'MEDIA'
+                            "
+                        >
+
+                            {{ ticket.prioridad }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ==================================
+                         ESTADO
+                         ================================== -->
+
+                    <td>
+
+                        <span class="estado activo">
+
+                            {{ ticket.estado }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- ==================================
+                         EQUIPO
+                         ================================== -->
+
+                    <td>
+
+                        @if (ticket.equipo) {
+
+                        <strong>
+
+                            {{ ticket.equipo.codigoInventario }}
+
+                        </strong>
+
+                        <br>
+
+                        <small>
+
+                            {{ ticket.equipo.nombre }}
+
+                        </small>
+
+                        } @else {
+
+                        #{{ ticket.equipoId }}
+
+                        }
+
+                    </td>
+
+
+                    <!-- ==================================
+                         SOLICITANTE
+                         ================================== -->
+
+                    <td>
+
+                        @if (ticket.solicitante) {
+
+                        {{ ticket.solicitante.nombre }}
+
+                        } @else {
+
+                        #{{ ticket.solicitanteId }}
+
+                        }
+
+                    </td>
+
+
+                    <!-- ==================================
+                         TÉCNICO
+                         ================================== -->
+
+                    <td>
+
+                        @if (ticket.tecnico) {
+
+                        {{ ticket.tecnico.nombre }}
+
+                        } @else {
+
+                        —
+
+                        }
+
+                    </td>
+
+
+                    <!-- ==================================
+                         FECHA
+                         ================================== -->
+
+                    <td>
+
+                        {{ ticket.creadoEn | date:'dd/MM/yyyy HH:mm' }}
+
+                    </td>
+
+
+                    <!-- ==================================
+                         ACCIONES
+                         ================================== -->
+
+                    <td class="acciones">
+
+                        <button
+                            type="button"
+                            class="btn-icono"
+                            title="Editar ticket"
+                            (click)="abrirFormulario(ticket)"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+
+                                <path
+                                    d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+                                ></path>
+
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                ></circle>
+
+                            </svg>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    }
+
+    }
+
+
+    <!-- ==========================================
+         FORMULARIO TICKET
+         ========================================== -->
+
+    @if (mostrarFormulario) {
+
+    <app-ticket-form
+        [ticketEditar]="ticketSeleccionado"
+        (cerrar)="cerrarFormulario()"
+        (guardado)="ticketGuardado()"
+    />
+
+    }
+
+</div>

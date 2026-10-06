@@ -1,0 +1,233 @@
+<div class="equipos-container">
+  <!-- Encabezado de la página -->
+  <div class="equipos-header">
+    <div>
+      <h1>Mantenimiento de Equipos</h1>
+      <p>Control, ejecución y trazabilidad de los servicios técnicos</p>
+    </div>
+
+    <button type="button" (click)="abrirFormulario()">
+      + Registrar Mantenimiento
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="mensaje">
+      Cargando mantenimientos...
+    </div>
+  }
+
+  @if (error) {
+    <div class="mensaje error">
+      {{ error }}
+    </div>
+  }
+
+  @if (!cargando && !error) {
+    <!-- Barra de búsqueda y filtros -->
+    <div class="tickets-toolbar" style="margin-bottom: 20px;">
+      <div class="busqueda-container">
+        <div class="busqueda">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+
+          <input
+            type="text"
+            placeholder="Buscar por equipo, técnico, descripción o #ticket..."
+            [(ngModel)]="textoBusqueda"
+            (input)="aplicarFiltros()"
+          />
+
+          @if (textoBusqueda) {
+            <button
+              type="button"
+              class="btn-limpiar-busqueda"
+              title="Limpiar búsqueda"
+              (click)="limpiarBusqueda()"
+            >
+              ×
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Filtros rápidos de estado -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <button
+          type="button"
+          [style.background]="filtroEstado === 'TODOS' ? '#6c5ce7' : '#ffffff'"
+          [style.color]="filtroEstado === 'TODOS' ? '#ffffff' : '#667085'"
+          style="padding: 8px 14px; border: 1px solid #e5e7f0; border-radius: 8px; font-weight: 600; font-size: 13px;"
+          (click)="cambiarFiltroEstado('TODOS')"
+        >
+          Todos ({{ mantenimientos.length }})
+        </button>
+
+        <button
+          type="button"
+          [style.background]="filtroEstado === 'PENDIENTE' ? '#f59e0b' : '#ffffff'"
+          [style.color]="filtroEstado === 'PENDIENTE' ? '#ffffff' : '#667085'"
+          style="padding: 8px 14px; border: 1px solid #e5e7f0; border-radius: 8px; font-weight: 600; font-size: 13px;"
+          (click)="cambiarFiltroEstado('PENDIENTE')"
+        >
+          Pendientes
+        </button>
+
+        <button
+          type="button"
+          [style.background]="filtroEstado === 'EN_PROCESO' ? '#3b82f6' : '#ffffff'"
+          [style.color]="filtroEstado === 'EN_PROCESO' ? '#ffffff' : '#667085'"
+          style="padding: 8px 14px; border: 1px solid #e5e7f0; border-radius: 8px; font-weight: 600; font-size: 13px;"
+          (click)="cambiarFiltroEstado('EN_PROCESO')"
+        >
+          En Proceso
+        </button>
+
+        <button
+          type="button"
+          [style.background]="filtroEstado === 'FINALIZADO' ? '#10b981' : '#ffffff'"
+          [style.color]="filtroEstado === 'FINALIZADO' ? '#ffffff' : '#667085'"
+          style="padding: 8px 14px; border: 1px solid #e5e7f0; border-radius: 8px; font-weight: 600; font-size: 13px;"
+          (click)="cambiarFiltroEstado('FINALIZADO')"
+        >
+          Finalizados
+        </button>
+      </div>
+    </div>
+
+    <!-- Si no hay mantenimientos en la base de datos -->
+    @if (mantenimientos.length === 0) {
+      <div class="mensaje">
+        No hay mantenimientos registrados aún. Haz clic en <strong>+ Registrar Mantenimiento</strong> para comenzar.
+      </div>
+    }
+
+    <!-- Si no hay resultados de búsqueda -->
+    @if (mantenimientos.length > 0 && mantenimientosFiltrados.length === 0) {
+      <div class="mensaje">
+        No se encontraron mantenimientos con el filtro actual.
+      </div>
+    }
+
+    <!-- Tabla de Mantenimientos -->
+    @if (mantenimientosFiltrados.length > 0) {
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Equipo</th>
+              <th>Ticket</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Técnico</th>
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th style="text-align: center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of mantenimientosFiltrados; track m.id) {
+              <tr>
+                <td>#{{ m.id }}</td>
+                <td>
+                  <strong>{{ obtenerNombreEquipo(m.equipoId) }}</strong>
+                </td>
+                <td>
+                  @if (m.ticketId) {
+                    <span style="display: inline-block; padding: 4px 8px; background: #eef2ff; color: #4338ca; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                      Ticket #{{ m.ticketId }}
+                    </span>
+                  } @else {
+                    <span style="color: #94a3b8; font-size: 13px;">Directo</span>
+                  }
+                </td>
+                <td>
+                  <span
+                    [style.background]="m.tipo === 'PREVENTIVO' ? '#ecfdf5' : '#fef2f2'"
+                    [style.color]="m.tipo === 'PREVENTIVO' ? '#065f46' : '#991b1b'"
+                    style="display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;"
+                  >
+                    {{ m.tipo }}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    class="estado"
+                    [class.activo]="m.estado === 'FINALIZADO'"
+                    [class.inactivo]="m.estado === 'CANCELADO'"
+                    [style.background]="m.estado === 'PENDIENTE' ? '#fef3c7' : (m.estado === 'EN_PROCESO' ? '#e0f2fe' : null)"
+                    [style.color]="m.estado === 'PENDIENTE' ? '#92400e' : (m.estado === 'EN_PROCESO' ? '#0369a1' : null)"
+                  >
+                    {{ m.estado }}
+                  </span>
+                </td>
+                <td>{{ m.tecnico || 'Sin asignar' }}</td>
+                <td>{{ m.fecha | date:'mediumDate' }}</td>
+                <td style="max-width: 260px; white-space: normal; line-height: 1.4;">
+                  <span>{{ m.descripcion }}</span>
+                  @if (m.diagnostico) {
+                    <br />
+                    <small style="color: #059669; font-weight: 500;">
+                      ✓ {{ m.diagnostico }}
+                    </small>
+                  }
+                </td>
+                <td style="text-align: center;">
+                  <div style="display: flex; gap: 6px; justify-content: center;">
+                    <!-- Botón para pasar a EN_PROCESO -->
+                    @if (m.estado === 'PENDIENTE') {
+                      <button
+                        type="button"
+                        title="Iniciar mantenimiento"
+                        style="padding: 6px 10px; background: #3b82f6; color: #ffffff; border-radius: 6px; font-size: 12px; font-weight: 600;"
+                        (click)="cambiarEstadoRapido(m, 'EN_PROCESO')"
+                      >
+                        Iniciar
+                      </button>
+                    }
+
+                    <!-- Botón para finalizar -->
+                    @if (m.estado === 'EN_PROCESO') {
+                      <button
+                        type="button"
+                        title="Finalizar mantenimiento"
+                        style="padding: 6px 10px; background: #10b981; color: #ffffff; border-radius: 6px; font-size: 12px; font-weight: 600;"
+                        (click)="cambiarEstadoRapido(m, 'FINALIZADO')"
+                      >
+                        Finalizar
+                      </button>
+                    }
+
+                    <!-- Botón editar / diagnóstico completo -->
+                    <button
+                      type="button"
+                      title="Editar o añadir diagnóstico"
+                      style="padding: 6px 10px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 600;"
+                      (click)="abrirEditar(m)"
+                    >
+                      Detalle
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <!-- Modal del Formulario -->
+  @if (mostrarFormulario) {
+    <app-mantenimiento-form
+      [mantenimientoEditar]="mantenimientoSeleccionado"
+      [equipos]="equipos"
+      [tickets]="tickets"
+      (cerrar)="cerrarFormulario()"
+      (guardado)="onGuardado()"
+    />
+  }
+</div>

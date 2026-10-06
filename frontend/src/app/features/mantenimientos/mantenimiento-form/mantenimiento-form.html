@@ -1,0 +1,166 @@
+<div class="modal-overlay">
+  <div class="modal">
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <div>
+        <h2>{{ mantenimientoEditar ? 'Actualizar Mantenimiento' : 'Nuevo Mantenimiento' }}</h2>
+        <p>{{ mantenimientoEditar ? 'Modifica el estado o diagnóstico del mantenimiento' : 'Registra un servicio de mantenimiento para un equipo' }}</p>
+      </div>
+      <button
+        type="button"
+        class="modal-close"
+        aria-label="Cerrar"
+        (click)="cerrarFormulario()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="guardarMantenimiento()">
+      @if (error) {
+        <div class="mensaje error" style="margin: 20px 28px 0;">
+          {{ error }}
+        </div>
+      }
+
+      <div class="form-grid">
+        <!-- Equipo -->
+        <div class="form-group">
+          <label for="equipoId">
+            Equipo a intervenir <span>*</span>
+          </label>
+          <select
+            id="equipoId"
+            name="equipoId"
+            [(ngModel)]="equipoId"
+            required
+          >
+            <option [ngValue]="null" disabled>Selecciona un equipo...</option>
+            @for (eq of equipos; track eq.id) {
+              <option [ngValue]="eq.id">
+                [{{ eq.codigoInventario }}] {{ eq.nombre }} - {{ eq.marca }} ({{ eq.ubicacion }})
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- Ticket Asignado (Opcional) -->
+        <div class="form-group">
+          <label for="ticketId">
+            Ticket asociado (Opcional)
+          </label>
+          <select
+            id="ticketId"
+            name="ticketId"
+            [(ngModel)]="ticketId"
+          >
+            <option [ngValue]="null">Sin ticket (Mantenimiento directo)</option>
+            @for (tk of tickets; track tk.id) {
+              <option [ngValue]="tk.id">
+                #{{ tk.id }} - {{ tk.titulo }} [{{ tk.prioridad }}]
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- Tipo de Mantenimiento -->
+        <div class="form-group">
+          <label for="tipo">
+            Tipo de Mantenimiento <span>*</span>
+          </label>
+          <select
+            id="tipo"
+            name="tipo"
+            [(ngModel)]="tipo"
+            required
+          >
+            <option value="PREVENTIVO">Preventivo (Programado / Limpieza)</option>
+            <option value="CORRECTIVO">Correctivo (Reparación de falla)</option>
+          </select>
+        </div>
+
+        <!-- Estado -->
+        <div class="form-group">
+          <label for="estado">
+            Estado del Mantenimiento <span>*</span>
+          </label>
+          <select
+            id="estado"
+            name="estado"
+            [(ngModel)]="estado"
+            required
+          >
+            <option value="PENDIENTE">PENDIENTE</option>
+            <option value="EN_PROCESO">EN PROCESO</option>
+            <option value="FINALIZADO">FINALIZADO</option>
+            <option value="CANCELADO">CANCELADO</option>
+          </select>
+        </div>
+
+        <!-- Técnico responsable -->
+        <div class="form-group full-width">
+          <label for="tecnico">
+            Técnico responsable
+          </label>
+          <input
+            id="tecnico"
+            name="tecnico"
+            type="text"
+            [(ngModel)]="tecnico"
+            placeholder="Ej. Antonia Gallego"
+          />
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group full-width">
+          <label for="descripcion">
+            Descripción de la intervención <span>*</span>
+          </label>
+          <textarea
+            id="descripcion"
+            name="descripcion"
+            rows="3"
+            [(ngModel)]="descripcion"
+            placeholder="Describe la falla reportada o las tareas preventivas a realizar..."
+            required
+          ></textarea>
+        </div>
+
+        <!-- Diagnóstico / Observaciones -->
+        <div class="form-group full-width">
+          <label for="diagnostico">
+            Diagnóstico / Trabajo realizado
+          </label>
+          <textarea
+            id="diagnostico"
+            name="diagnostico"
+            rows="3"
+            [(ngModel)]="diagnostico"
+            placeholder="Observaciones técnicas, hallazgos o solución implementada..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Botones con los mismos estilos de Tickets (Imagen 2) -->
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cerrarFormulario()"
+          [disabled]="guardando"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="guardando"
+        >
+          {{ guardando ? 'Guardando...' : (mantenimientoEditar ? 'Actualizar mantenimiento' : 'Guardar mantenimiento') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
