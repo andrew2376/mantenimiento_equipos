@@ -53,8 +53,8 @@
 - [x] **ACT-012** Frontend: Formulario y tabla de mantenimientos (4h) • *Antonia G.* • `feature/ACT-012-mantenimientos-ui`
 - [x] **ACT-013** Frontend: Diseño de navegación común y navbar (3h) • *Antonia G.* • `feature/ACT-013-navbar-layout`
 - [ ] **ACT-024** Backend: Registro de diagnóstico detallado del equipo • *Andrew B.* • `feature/ACT-024-diagnostico-mantenimiento`
-- [ ] **ACT-025** Backend: Modelo Prisma y DAO para repuestos utilizados • *Andrew B.* • `feature/ACT-025-repuestos-prisma`
-- [ ] **ACT-026** Frontend: Formulario para asociar repuestos al mantenimiento • *Antonia G.* • `feature/ACT-026-repuestos-ui`
+- [x] **ACT-025** Backend: Modelo Prisma y DAO para repuestos utilizados (4h) • *Antonia G.* • `feature/ACT-025-repuestos-prisma`
+- [x] **ACT-026** Frontend: Formulario para asociar repuestos al mantenimiento (4h) • *Antonia G.* • `feature/ACT-026-repuestos-ui`
 - [ ] **ACT-027** Backend: Cierre de mantenimiento con sincronización de ticket • *Andrew B.* • `feature/ACT-027-cierre-mantenimiento`
 
 ### E6 • Trazabilidad y Calidad del Software
@@ -92,8 +92,8 @@
 | **ACT-022** | Backend: Validar transiciones de estado en tickets | Andrew B. | Por hacer | `feature/ACT-022-estados-ticket` | - | - |
 | **ACT-023** | Frontend: Vista para asignar técnico responsable | Yulian O. | Por hacer | `feature/ACT-023-asignar-tecnico` | - | - |
 | **ACT-024** | Backend: Registro y actualización de diagnóstico detallado | Andrew B. | Por hacer | `feature/ACT-024-diagnostico-mantenimiento` | - | - |
-| **ACT-025** | Backend: Modelo Prisma y DAO para repuestos utilizados | Andrew B. | Por hacer | `feature/ACT-025-repuestos-prisma` | - | - |
-| **ACT-026** | Frontend: Formulario para asociar repuestos al mantenimiento | Antonia G. | Por hacer | `feature/ACT-026-repuestos-ui` | - | - |
+| **ACT-025** | Backend: Modelo Prisma y DAO para repuestos utilizados | Antonia G. | Terminado | `feature/ACT-025-repuestos-prisma` | `a8b0f5a` | 4h |
+| **ACT-026** | Frontend: Formulario para asociar repuestos al mantenimiento | Antonia G. | Terminado | `feature/ACT-026-repuestos-ui` | `42fd853` | 4h |
 | **ACT-027** | Backend: Cierre de mantenimiento con sincronización de ticket | Andrew B. | Por hacer | `feature/ACT-027-cierre-mantenimiento` | - | - |
 | **ACT-028** | Frontend: Vista de historial de mantenimientos por equipo | Yulian O. | Por hacer | `feature/ACT-028-hoja-vida-equipo` | - | - |
 | **ACT-029** | Pruebas: Pruebas unitarias de casos de uso con Vitest | Andrew B. | Por hacer | `feature/ACT-029-pruebas-unitarias` | - | - |
