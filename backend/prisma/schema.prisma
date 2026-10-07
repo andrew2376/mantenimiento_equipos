@@ -39,9 +39,41 @@ model Mantenimiento {
   ticketId    Int?     @map("ticket_id") @db.UnsignedInt
   ticket      tickets? @relation(fields: [ticketId], references: [id], onDelete: SetNull, map: "fk_mantenimiento_ticket")
 
+  repuestosUtilizados MantenimientoRepuesto[]
+
   @@index([equipoId], map: "fk_mantenimiento_equipo")
   @@index([ticketId], map: "fk_mantenimiento_ticket")
   @@map("mantenimientos")
+}
+
+model Repuesto {
+  id             Int                     @id @default(autoincrement())
+  nombre         String                  @db.VarChar(100)
+  codigo         String                  @unique(map: "codigo_repuesto") @db.VarChar(50)
+  descripcion    String?                 @db.Text
+  costoUnitario  Decimal                 @map("costo_unitario") @db.Decimal(10, 2)
+  stock          Int                     @default(0)
+  activo         Boolean                 @default(true)
+  creadoEn       DateTime                @default(now()) @map("creado_en") @db.DateTime(0)
+  mantenimientos MantenimientoRepuesto[]
+
+  @@map("repuestos")
+}
+
+model MantenimientoRepuesto {
+  id              Int           @id @default(autoincrement())
+  mantenimientoId Int           @map("mantenimiento_id")
+  repuestoId      Int           @map("repuesto_id")
+  cantidad        Int           @default(1)
+  costoUnitario   Decimal       @map("costo_unitario") @db.Decimal(10, 2)
+  creadoEn        DateTime      @default(now()) @map("creado_en") @db.DateTime(0)
+
+  mantenimiento   Mantenimiento @relation(fields: [mantenimientoId], references: [id], onDelete: Cascade, map: "fk_mantenimiento_repuesto_mantenimiento")
+  repuesto        Repuesto      @relation(fields: [repuestoId], references: [id], onDelete: Restrict, map: "fk_mantenimiento_repuesto_repuesto")
+
+  @@index([mantenimientoId], map: "fk_mant_rep_mantenimiento")
+  @@index([repuestoId], map: "fk_mant_rep_repuesto")
+  @@map("mantenimiento_repuestos")
 }
 
 model Usuario {

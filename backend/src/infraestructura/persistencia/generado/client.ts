@@ -50,6 +50,16 @@ export type Equipo = Prisma.EquipoModel
  */
 export type Mantenimiento = Prisma.MantenimientoModel
 /**
+ * Model Repuesto
+ * 
+ */
+export type Repuesto = Prisma.RepuestoModel
+/**
+ * Model MantenimientoRepuesto
+ * 
+ */
+export type MantenimientoRepuesto = Prisma.MantenimientoRepuestoModel
+/**
  * Model Usuario
  * 
  */

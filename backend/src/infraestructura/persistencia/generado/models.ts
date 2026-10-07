@@ -10,6 +10,8 @@
  */
 export type * from './models/Equipo'
 export type * from './models/Mantenimiento'
+export type * from './models/Repuesto'
+export type * from './models/MantenimientoRepuesto'
 export type * from './models/Usuario'
 export type * from './models/tickets'
 export type * from './commonInputTypes'

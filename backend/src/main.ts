@@ -11,6 +11,7 @@ import { MantenimientoDAOPrisma } from './infraestructura/persistencia/Mantenimi
 import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrisma'
 
 import { TicketDAOPrisma } from './infraestructura/persistencia/TicketDAOPrisma'
+import { RepuestoDAOPrisma } from './infraestructura/persistencia/RepuestoDAOPrisma'
 
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
@@ -43,6 +44,8 @@ import { RegistrarTicket } from './aplicacion/casos-uso/RegistrarTicket'
 import { ConsultarTickets } from './aplicacion/casos-uso/ConsultarTickets'
 
 import { ActualizarTicket } from './aplicacion/casos-uso/ActualizarTicket'
+import { GestionarRepuestos } from './aplicacion/casos-uso/GestionarRepuestos'
+import { AsociarRepuestoMantenimiento } from './aplicacion/casos-uso/AsociarRepuestoMantenimiento'
 
 import { crearServidor } from './infraestructura/http/servidor'
 
@@ -60,6 +63,9 @@ const usuarioDAO =
 
 const ticketDAO =
   new TicketDAOPrisma(prisma)
+
+const repuestoDAO =
+  new RepuestoDAOPrisma(prisma)
 
 
 // 2. Servicios de infraestructura
@@ -142,6 +148,18 @@ const actualizarTicket =
   new ActualizarTicket(ticketDAO)
 
 
+// Repuestos
+
+const gestionarRepuestos =
+  new GestionarRepuestos(repuestoDAO)
+
+const asociarRepuestoMantenimiento =
+  new AsociarRepuestoMantenimiento(
+    mantenimientoDAO,
+    repuestoDAO
+  )
+
+
 // 4. Servidor HTTP (Infraestructura)
 
 const app = crearServidor({
@@ -173,6 +191,10 @@ const app = crearServidor({
     actualizarTicket,
   },
 
+  repuestos: {
+    gestionarRepuestos,
+    asociarRepuestoMantenimiento,
+  },
 })
 
 

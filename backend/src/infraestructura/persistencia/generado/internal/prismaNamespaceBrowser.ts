@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Equipo: 'Equipo',
   Mantenimiento: 'Mantenimiento',
+  Repuesto: 'Repuesto',
+  MantenimientoRepuesto: 'MantenimientoRepuesto',
   Usuario: 'Usuario',
   tickets: 'tickets'
 } as const
@@ -104,6 +106,32 @@ export const MantenimientoScalarFieldEnum = {
 } as const
 
 export type MantenimientoScalarFieldEnum = (typeof MantenimientoScalarFieldEnum)[keyof typeof MantenimientoScalarFieldEnum]
+
+
+export const RepuestoScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  codigo: 'codigo',
+  descripcion: 'descripcion',
+  costoUnitario: 'costoUnitario',
+  stock: 'stock',
+  activo: 'activo',
+  creadoEn: 'creadoEn'
+} as const
+
+export type RepuestoScalarFieldEnum = (typeof RepuestoScalarFieldEnum)[keyof typeof RepuestoScalarFieldEnum]
+
+
+export const MantenimientoRepuestoScalarFieldEnum = {
+  id: 'id',
+  mantenimientoId: 'mantenimientoId',
+  repuestoId: 'repuestoId',
+  cantidad: 'cantidad',
+  costoUnitario: 'costoUnitario',
+  creadoEn: 'creadoEn'
+} as const
+
+export type MantenimientoRepuestoScalarFieldEnum = (typeof MantenimientoRepuestoScalarFieldEnum)[keyof typeof MantenimientoRepuestoScalarFieldEnum]
 
 
 export const UsuarioScalarFieldEnum = {
@@ -174,6 +202,15 @@ export const MantenimientoOrderByRelevanceFieldEnum = {
 } as const
 
 export type MantenimientoOrderByRelevanceFieldEnum = (typeof MantenimientoOrderByRelevanceFieldEnum)[keyof typeof MantenimientoOrderByRelevanceFieldEnum]
+
+
+export const RepuestoOrderByRelevanceFieldEnum = {
+  nombre: 'nombre',
+  codigo: 'codigo',
+  descripcion: 'descripcion'
+} as const
+
+export type RepuestoOrderByRelevanceFieldEnum = (typeof RepuestoOrderByRelevanceFieldEnum)[keyof typeof RepuestoOrderByRelevanceFieldEnum]
 
 
 export const UsuarioOrderByRelevanceFieldEnum = {
