@@ -36,7 +36,12 @@
       </p>
 
 
-      <a routerLink="/equipos" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/equipos"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/equipos')"
+      >
 
         <span class="nav-icon">
           ▣
@@ -49,7 +54,12 @@
       </a>
 
 
-      <a routerLink="/tickets" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/tickets"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/tickets')"
+      >
 
         <span class="nav-icon">
           ▤
@@ -62,7 +72,12 @@
       </a>
 
 
-      <a routerLink="/mantenimientos" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/mantenimientos"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/mantenimientos')"
+      >
 
         <span class="nav-icon">
           🔧
@@ -75,7 +90,12 @@
       </a>
 
 
-      <a routerLink="/historial" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/historial"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/historial')"
+      >
 
         <span class="nav-icon">
           ◷
@@ -93,7 +113,12 @@
       </p>
 
 
-      <a routerLink="/usuarios" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/usuarios"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/usuarios')"
+      >
 
         <span class="nav-icon">
           ◉
@@ -106,7 +131,12 @@
       </a>
 
 
-      <a routerLink="/reportes" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/reportes"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/reportes')"
+      >
 
         <span class="nav-icon">
           ▥
@@ -123,7 +153,12 @@
 
     <div class="sidebar-bottom">
 
-      <a routerLink="/configuracion" routerLinkActive="active" class="nav-item">
+      <a
+        routerLink="/configuracion"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="permitirRuta('/configuracion')"
+      >
 
         <span class="nav-icon">
           ⚙
@@ -176,7 +211,11 @@
 
       <div class="navbar-left">
 
-        <button type="button" class="navbar-menu-button" aria-label="Abrir menú">
+        <button
+          type="button"
+          class="navbar-menu-button"
+          aria-label="Abrir menú"
+        >
           ☰
         </button>
 
@@ -194,7 +233,11 @@
 
       <div class="navbar-right">
 
-        <button type="button" class="navbar-notification" title="Notificaciones">
+        <button
+          type="button"
+          class="navbar-notification"
+          title="Notificaciones"
+        >
           🔔
         </button>
 
