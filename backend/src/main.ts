@@ -20,6 +20,8 @@ import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
 
 import { ActualizarEquipo } from './aplicacion/casos-uso/ActualizarEquipo'
 
+import { DesactivarEquipo } from './aplicacion/casos-uso/DesactivarEquipo'
+
 import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
 
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
@@ -76,6 +78,9 @@ const consultarEquipos =
 
 const actualizarEquipo =
   new ActualizarEquipo(equipoDAO)
+
+const desactivarEquipo =
+  new DesactivarEquipo(equipoDAO)
 
 
 // Mantenimientos
@@ -140,6 +145,7 @@ const app = crearServidor({
     registrarEquipo,
     consultarEquipos,
     actualizarEquipo,
+    desactivarEquipo,
   },
 
   mantenimientos: {

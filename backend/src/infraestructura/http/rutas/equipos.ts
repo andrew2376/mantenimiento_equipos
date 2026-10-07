@@ -27,6 +27,10 @@ import type {
   ActualizarEquipoDTO
 } from '../../../aplicacion/casos-uso/ActualizarEquipo.js'
 
+import type {
+  DesactivarEquipo
+} from '../../../aplicacion/casos-uso/DesactivarEquipo.js'
+
 
 export interface DependenciasEquipos {
 
@@ -35,6 +39,8 @@ export interface DependenciasEquipos {
   consultarEquipos: ConsultarEquipos
 
   actualizarEquipo: ActualizarEquipo
+
+  desactivarEquipo: DesactivarEquipo
 
 }
 
@@ -401,6 +407,54 @@ export function rutasEquipos(
     }
   )
 
+  // ========================================
+// PATCH /api/equipos/:id/desactivar
+// Desactivar equipo (baja lógica)
+// ========================================
+
+rutas.patch(
+  '/:id/desactivar',
+  async (req, res, next) => {
+
+    const id =
+      Number(req.params.id)
+
+    if (!Number.isInteger(id)) {
+
+      return void res
+        .status(400)
+        .json({
+          error:
+            'El ID del equipo debe ser un número entero'
+        })
+    }
+
+    try {
+
+      const equipo =
+        await deps.desactivarEquipo.ejecutar(id)
+
+      res.json(
+        aEquipoDTO(equipo)
+      )
+
+    } catch (error) {
+
+      if (
+        error instanceof EquipoNoEncontrado
+      ) {
+
+        return void res
+          .status(404)
+          .json({
+            error: error.message
+          })
+      }
+
+      next(error)
+    }
+  }
+)
 
   // ========================================
   // GET /api/equipos
