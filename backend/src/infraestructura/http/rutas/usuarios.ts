@@ -1,4 +1,3 @@
-
 import { Router } from 'express'
 
 import type { RegistrarUsuario } from '../../../aplicacion/casos-uso/RegistrarUsuario'
@@ -8,6 +7,7 @@ import type { ConsultarUsuarios } from '../../../aplicacion/casos-uso/ConsultarU
 import type { ActualizarUsuario } from '../../../aplicacion/casos-uso/ActualizarUsuario'
 
 import type { IniciarSesion } from '../../../aplicacion/casos-uso/iniciarSesion'
+
 
 export interface DependenciasUsuarios {
 
@@ -35,9 +35,10 @@ export function rutasUsuarios(
     try {
 
       const {
-  correo,
-  clave
-} = req.body ?? {}
+        correo,
+        clave
+      } = req.body ?? {}
+
       if (
         typeof correo !== 'string' ||
         typeof clave !== 'string'
@@ -116,12 +117,19 @@ export function rutasUsuarios(
         })
 
       res.status(201).json({
+
         id: usuario.id,
+
         nombre: usuario.nombre,
+
         correo: usuario.correo,
+
         rol: usuario.rol,
+
         activo: usuario.activo,
+
         creadoEn: usuario.creadoEn.toISOString()
+
       })
 
     } catch (error) {
@@ -142,6 +150,7 @@ export function rutasUsuarios(
         await deps.consultarUsuarios.listarTodos()
 
       res.json(
+
         usuarios.map(usuario => ({
 
           id: usuario.id,
@@ -157,6 +166,7 @@ export function rutasUsuarios(
           creadoEn: usuario.creadoEn.toISOString()
 
         }))
+
       )
 
     } catch (error) {
@@ -212,7 +222,186 @@ export function rutasUsuarios(
   })
 
 
+  // PUT /api/usuarios/:id
+  router.put('/:id', async (req, res, next) => {
+
+    try {
+
+      // ==============================
+      // VALIDAR ID
+      // ==============================
+
+      const id = Number(req.params.id)
+
+      if (!Number.isInteger(id) || id <= 0) {
+
+        res.status(400).json({
+          error: 'ID inválido'
+        })
+
+        return
+      }
+
+
+      // ==============================
+      // DATOS RECIBIDOS
+      // ==============================
+
+      const {
+        nombre,
+        correo,
+        rol,
+        activo
+      } = req.body ?? {}
+
+
+      // ==============================
+      // VALIDAR DATOS
+      // ==============================
+
+      if (
+        nombre !== undefined &&
+        typeof nombre !== 'string'
+      ) {
+
+        res.status(400).json({
+          error: 'El nombre debe ser un texto'
+        })
+
+        return
+      }
+
+
+      if (
+        correo !== undefined &&
+        typeof correo !== 'string'
+      ) {
+
+        res.status(400).json({
+          error: 'El correo debe ser un texto'
+        })
+
+        return
+      }
+
+
+      if (
+        rol !== undefined &&
+        typeof rol !== 'string'
+      ) {
+
+        res.status(400).json({
+          error: 'El rol debe ser un texto'
+        })
+
+        return
+      }
+
+
+      if (
+        activo !== undefined &&
+        typeof activo !== 'boolean'
+      ) {
+
+        res.status(400).json({
+          error: 'El campo activo debe ser booleano'
+        })
+
+        return
+      }
+
+
+      // ==============================
+      // VALIDAR CAMPOS VACÍOS
+      // ==============================
+
+      if (
+        nombre !== undefined &&
+        nombre.trim().length === 0
+      ) {
+
+        res.status(400).json({
+          error: 'El nombre no puede estar vacío'
+        })
+
+        return
+      }
+
+
+      if (
+        correo !== undefined &&
+        correo.trim().length === 0
+      ) {
+
+        res.status(400).json({
+          error: 'El correo no puede estar vacío'
+        })
+
+        return
+      }
+
+
+      // ==============================
+      // ACTUALIZAR USUARIO
+      // ==============================
+
+      const usuario =
+        await deps.actualizarUsuario.ejecutar(
+          id,
+          {
+            nombre,
+            correo,
+            rol,
+            activo
+          }
+        )
+
+
+      // ==============================
+      // RESPUESTA
+      // ==============================
+
+      res.status(200).json({
+
+        id: usuario.id,
+
+        nombre: usuario.nombre,
+
+        correo: usuario.correo,
+
+        rol: usuario.rol,
+
+        activo: usuario.activo,
+
+        creadoEn: usuario.creadoEn.toISOString()
+
+      })
+
+    } catch (error) {
+
+      // Usuario no encontrado
+      if (
+        error instanceof Error &&
+        error.message.startsWith(
+          'Usuario no encontrado'
+        )
+      ) {
+
+        res.status(404).json({
+          error: error.message
+        })
+
+        return
+      }
+
+
+      next(error)
+
+    }
+
+  })
+
+
   return router
 
 }
-

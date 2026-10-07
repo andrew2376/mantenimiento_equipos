@@ -23,6 +23,18 @@ export interface UsuarioNuevo {
   activo: boolean;
 }
 
+// ==========================================
+// AGREGADO PARA ACT-014
+// Datos que se pueden actualizar
+// ==========================================
+
+export interface UsuarioActualizar {
+  nombre?: string;
+  correo?: string;
+  rol?: Usuario['rol'];
+  activo?: boolean;
+}
+
 export interface LoginDatos {
   correo: string;
   clave: string;
@@ -58,6 +70,22 @@ export class UsuarioService {
   crear(usuario: UsuarioNuevo): Observable<Usuario> {
     return this.http.post<Usuario>(
       this.apiUrl,
+      usuario
+    );
+  }
+
+  // ==========================================
+  // AGREGADO PARA ACT-014
+  // Actualizar usuario existente
+  // ==========================================
+
+  actualizar(
+    id: number,
+    usuario: UsuarioActualizar
+  ): Observable<Usuario> {
+
+    return this.http.put<Usuario>(
+      `${this.apiUrl}/${id}`,
       usuario
     );
   }
