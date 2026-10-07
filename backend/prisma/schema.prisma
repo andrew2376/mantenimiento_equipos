@@ -17,6 +17,7 @@ model Equipo {
   numeroSerie      String?         @unique(map: "numero_serie") @map("numero_serie") @db.VarChar(100)
   ubicacion        String          @db.VarChar(100)
   estado           Int             @default(1) @db.TinyInt
+  activo           Boolean         @default(true)
   createdAt        DateTime        @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt        DateTime        @default(now()) @map("updated_at") @db.DateTime(0)
   mantenimientos   Mantenimiento[]
@@ -67,8 +68,8 @@ model tickets {
   solicitante_id                            Int             @db.UnsignedInt
   tecnico_id                                Int?            @db.UnsignedInt
   fecha_cierre                              DateTime?       @db.DateTime(0)
-  creado_en                                 DateTime        @default(now()) @db.DateTime(0)
-  actualizado_en                            DateTime        @default(now()) @db.DateTime(0)
+  creado_en                                 DateTime        @default(now()) @map("creado_en") @db.DateTime(0)
+  actualizado_en                            DateTime        @default(now()) @map("actualizado_en") @db.DateTime(0)
   equipos                                   Equipo          @relation(fields: [equipo_id], references: [id], map: "fk_ticket_equipo")
   usuarios_tickets_solicitante_idTousuarios Usuario         @relation("tickets_solicitante_idTousuarios", fields: [solicitante_id], references: [id], map: "fk_ticket_solicitante")
   usuarios_tickets_tecnico_idTousuarios     Usuario?        @relation("tickets_tecnico_idTousuarios", fields: [tecnico_id], references: [id], map: "fk_ticket_tecnico")

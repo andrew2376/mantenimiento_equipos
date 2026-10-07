@@ -733,6 +733,7 @@ export const EquipoScalarFieldEnum = {
   numeroSerie: 'numeroSerie',
   ubicacion: 'ubicacion',
   estado: 'estado',
+  activo: 'activo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -865,6 +866,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -875,13 +883,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'usuarios_rol'
  */
 export type Enumusuarios_rolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'usuarios_rol'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -23,6 +23,7 @@ const aDominio = (
   numeroSerie: fila.numeroSerie ?? undefined,
   ubicacion: fila.ubicacion,
   estado: fila.estado,
+  activo: fila.activo,
   createdAt: fila.createdAt,
   updatedAt: fila.updatedAt
 })
@@ -62,7 +63,10 @@ export class EquipoDAOPrisma implements EquipoDAO {
             equipo.ubicacion,
 
           estado:
-            equipo.estado
+            equipo.estado,
+
+          activo:
+            equipo.activo
         }
       })
 
@@ -128,7 +132,10 @@ export class EquipoDAOPrisma implements EquipoDAO {
             equipo.ubicacion,
 
           estado:
-            equipo.estado
+            equipo.estado,
+
+          activo:
+            equipo.activo
         }
       })
 

@@ -10,7 +10,7 @@ import {
   EquipoNoEncontrado
 } from './ConsultarEquipos.js'
 
-export class DesactivarEquipo {
+export class ActivarEquipo {
 
   constructor(
     private readonly equipos: EquipoDAO
@@ -29,7 +29,7 @@ export class DesactivarEquipo {
 
     const actualizado: Equipo = {
       ...equipo,
-      activo: false,
+      activo: true,
       updatedAt: new Date()
     }
 

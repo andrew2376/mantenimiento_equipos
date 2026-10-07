@@ -35,18 +35,13 @@ export class EquipoList implements OnInit {
     inject(ChangeDetectorRef);
 
 
-  // ==========================================
-  // DATOS
-  // ==========================================
 
   equipos: Equipo[] = [];
 
   equiposFiltrados: Equipo[] = [];
 
 
-  // ==========================================
-  // ESTADO
-  // ==========================================
+
 
   cargando = true;
 
@@ -56,17 +51,14 @@ export class EquipoList implements OnInit {
 
   equipoSeleccionado?: Equipo;
 
+  procesandoEstado = false;
 
-  // ==========================================
-  // BÚSQUEDA
-  // ==========================================
+
 
   textoBusqueda = '';
 
 
-  // ==========================================
-  // INICIO
-  // ==========================================
+
 
   ngOnInit(): void {
 
@@ -74,10 +66,6 @@ export class EquipoList implements OnInit {
 
   }
 
-
-  // ==========================================
-  // CARGAR EQUIPOS
-  // ==========================================
 
   cargarEquipos(): void {
 
@@ -88,23 +76,24 @@ export class EquipoList implements OnInit {
         next: (equipos) => {
 
           console.log(
-            '✅ EQUIPOS RECIBIDOS:',
+            ' EQUIPOS RECIBIDOS:',
             equipos
           );
 
           this.equipos = equipos;
 
-          this.equiposFiltrados = equipos;
+          this.equiposFiltrados =
+            this.filtrarEquipos(equipos);
 
           this.cargando = false;
 
           console.log(
-            '✅ cargando:',
+            ' cargando:',
             this.cargando
           );
 
           console.log(
-            '✅ cantidad de equipos:',
+            ' cantidad de equipos:',
             this.equipos.length
           );
 
@@ -136,11 +125,9 @@ export class EquipoList implements OnInit {
   }
 
 
-  // ==========================================
-  // BUSCAR EQUIPOS
-  // ==========================================
-
-  buscarEquipos(): void {
+  private filtrarEquipos(
+    equipos: Equipo[]
+  ): Equipo[] {
 
     const texto =
       this.textoBusqueda
@@ -148,77 +135,71 @@ export class EquipoList implements OnInit {
         .toLowerCase();
 
 
-    // Si no hay búsqueda,
-    // mostramos todos los equipos.
-
     if (!texto) {
 
-      this.equiposFiltrados =
-        this.equipos;
-
-      return;
+      return equipos;
 
     }
 
 
-    // Buscar en diferentes campos
-    // del equipo.
+    return equipos.filter((equipo) => {
 
-    this.equiposFiltrados =
-      this.equipos.filter((equipo) => {
+      return (
 
-        return (
+        equipo.codigoInventario
+          .toLowerCase()
+          .includes(texto)
 
-          equipo.codigoInventario
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        equipo.nombre
+          .toLowerCase()
+          .includes(texto)
 
-          equipo.nombre
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        equipo.tipo
+          .toLowerCase()
+          .includes(texto)
 
-          equipo.tipo
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        equipo.marca
+          .toLowerCase()
+          .includes(texto)
 
-          equipo.marca
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        (equipo.modelo ?? '')
+          .toLowerCase()
+          .includes(texto)
 
-          (equipo.modelo ?? '')
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        (equipo.numeroSerie ?? '')
+          .toLowerCase()
+          .includes(texto)
 
-          (equipo.numeroSerie ?? '')
-            .toLowerCase()
-            .includes(texto)
+        ||
 
-          ||
+        equipo.ubicacion
+          .toLowerCase()
+          .includes(texto)
 
-          equipo.ubicacion
-            .toLowerCase()
-            .includes(texto)
+      );
 
-        );
-
-      });
+    });
 
   }
 
 
-  // ==========================================
-  // LIMPIAR BÚSQUEDA
-  // ==========================================
+  buscarEquipos(): void {
+
+    this.equiposFiltrados =
+      this.filtrarEquipos(this.equipos);
+
+  }
+
 
   limpiarBusqueda(): void {
 
@@ -230,9 +211,159 @@ export class EquipoList implements OnInit {
   }
 
 
-  // ==========================================
-  // ABRIR FORMULARIO
-  // ==========================================
+
+  desactivarEquipo(
+    equipo: Equipo
+  ): void {
+
+    const confirmar =
+      window.confirm(
+        `¿Deseas desactivar el equipo "${equipo.nombre}"?\n\n` +
+        'El equipo no será eliminado. ' +
+        'Simplemente quedará inactivo en el sistema.'
+      );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    this.procesandoEstado = true;
+
+    this.error = '';
+
+
+    this.equipoService
+      .desactivar(equipo.id)
+      .subscribe({
+
+        next: (equipoActualizado) => {
+
+          console.log(
+            ' EQUIPO DESACTIVADO:',
+            equipoActualizado
+          );
+
+          this.actualizarEquipoEnLista(
+            equipoActualizado
+          );
+
+          this.procesandoEstado = false;
+
+          this.changeDetectorRef
+            .detectChanges();
+
+        },
+
+
+        error: (error) => {
+
+          console.error(
+            ' ERROR AL DESACTIVAR EQUIPO:',
+            error
+          );
+
+          this.error =
+            'No se pudo desactivar el equipo.';
+
+          this.procesandoEstado = false;
+
+          this.changeDetectorRef
+            .detectChanges();
+
+        }
+
+      });
+
+  }
+
+
+  activarEquipo(
+    equipo: Equipo
+  ): void {
+
+    const confirmar =
+      window.confirm(
+        `¿Deseas activar nuevamente el equipo "${equipo.nombre}"?\n\n` +
+        'El equipo volverá a estar activo en el sistema.'
+      );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    this.procesandoEstado = true;
+
+    this.error = '';
+
+
+    this.equipoService
+      .activar(equipo.id)
+      .subscribe({
+
+        next: (equipoActualizado) => {
+
+          console.log(
+            ' EQUIPO ACTIVADO:',
+            equipoActualizado
+          );
+
+          this.actualizarEquipoEnLista(
+            equipoActualizado
+          );
+
+          this.procesandoEstado = false;
+
+          this.changeDetectorRef
+            .detectChanges();
+
+        },
+
+
+        error: (error) => {
+
+          console.error(
+            ' ERROR AL ACTIVAR EQUIPO:',
+            error
+          );
+
+          this.error =
+            'No se pudo activar el equipo.';
+
+          this.procesandoEstado = false;
+
+          this.changeDetectorRef
+            .detectChanges();
+
+        }
+
+      });
+
+  }
+
+
+  private actualizarEquipoEnLista(
+    equipoActualizado: Equipo
+  ): void {
+
+    this.equipos =
+      this.equipos.map((equipo) =>
+        equipo.id === equipoActualizado.id
+          ? equipoActualizado
+          : equipo
+      );
+
+    this.equiposFiltrados =
+      this.filtrarEquipos(this.equipos);
+
+  }
 
   abrirFormulario(
     equipo?: Equipo
@@ -246,10 +377,6 @@ export class EquipoList implements OnInit {
 
   }
 
-
-  // ==========================================
-  // CERRAR FORMULARIO
-  // ==========================================
 
   cerrarFormulario(): void {
 
