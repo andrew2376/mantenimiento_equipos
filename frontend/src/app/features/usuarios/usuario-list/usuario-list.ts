@@ -29,6 +29,13 @@ export class UsuarioList implements OnInit {
   guardando = signal(false);
   errorFormulario = signal('');
 
+  // ==========================================
+  // AGREGADO PARA ACT-014
+  // Usuario que se está editando
+  // ==========================================
+
+  usuarioEditandoId: number | null = null;
+
   // Formulario
   nombre = '';
   correo = '';
@@ -67,6 +74,32 @@ export class UsuarioList implements OnInit {
     this.rol = 'SOLICITANTE';
     this.activo = true;
 
+    // ==========================================
+    // AGREGADO PARA ACT-014
+    // null = estamos creando
+    // ==========================================
+
+    this.usuarioEditandoId = null;
+
+    this.errorFormulario.set('');
+    this.modalAbierto.set(true);
+  }
+
+  // ==========================================
+  // AGREGADO PARA ACT-014
+  // Abrir modal para editar
+  // ==========================================
+
+  abrirModalEdicion(usuario: Usuario): void {
+
+    this.usuarioEditandoId = usuario.id;
+
+    this.nombre = usuario.nombre;
+    this.correo = usuario.correo;
+    this.clave = '';
+    this.rol = usuario.rol;
+    this.activo = usuario.activo;
+
     this.errorFormulario.set('');
     this.modalAbierto.set(true);
   }
@@ -78,6 +111,13 @@ export class UsuarioList implements OnInit {
 
     this.modalAbierto.set(false);
     this.errorFormulario.set('');
+
+    // ==========================================
+    // AGREGADO PARA ACT-014
+    // Limpiar usuario en edición
+    // ==========================================
+
+    this.usuarioEditandoId = null;
   }
 
   guardarUsuario(): void {
@@ -97,7 +137,16 @@ export class UsuarioList implements OnInit {
       return;
     }
 
-    if (!this.clave.trim()) {
+    // ==========================================
+    // AGREGADO PARA ACT-014
+    // La contraseña solamente es obligatoria
+    // cuando estamos CREANDO un usuario.
+    // ==========================================
+
+    if (
+      this.usuarioEditandoId === null &&
+      !this.clave.trim()
+    ) {
       this.errorFormulario.set(
         'La contraseña es obligatoria.'
       );
@@ -105,6 +154,52 @@ export class UsuarioList implements OnInit {
     }
 
     this.guardando.set(true);
+
+    // ==========================================
+    // ACT-014
+    // EDITAR USUARIO
+    // ==========================================
+
+    if (this.usuarioEditandoId !== null) {
+
+      this.usuarioService.actualizar(
+        this.usuarioEditandoId,
+        {
+          nombre: this.nombre.trim(),
+          correo: this.correo.trim(),
+          rol: this.rol,
+          activo: this.activo
+        }
+      ).subscribe({
+
+        next: () => {
+
+          this.guardando.set(false);
+          this.modalAbierto.set(false);
+          this.usuarioEditandoId = null;
+
+          this.cargarUsuarios();
+        },
+
+        error: (error: any) => {
+
+          this.guardando.set(false);
+
+          this.errorFormulario.set(
+            error?.error?.error ??
+            error?.error?.mensaje ??
+            'No se pudo actualizar el usuario.'
+          );
+        }
+
+      });
+
+      return;
+    }
+
+    // ==========================================
+    // CREAR USUARIO
+    // ==========================================
 
     this.usuarioService.crear({
       nombre: this.nombre.trim(),
