@@ -1,10 +1,10 @@
 <div class="modal-overlay">
-  <div class="modal">
+  <div class="modal" style="width: min(880px, 95vw); max-width: 880px;">
     <!-- Encabezado -->
     <div class="modal-header">
       <div>
         <h2>{{ mantenimientoEditar ? 'Actualizar Mantenimiento' : 'Nuevo Mantenimiento' }}</h2>
-        <p>{{ mantenimientoEditar ? 'Modifica el estado o diagnóstico del mantenimiento' : 'Registra un servicio de mantenimiento para un equipo' }}</p>
+        <p>{{ mantenimientoEditar ? 'Modifica el estado, diagnóstico o repuestos del mantenimiento' : 'Registra un servicio de mantenimiento para un equipo' }}</p>
       </div>
       <button
         type="button"
@@ -19,7 +19,7 @@
     <!-- Formulario -->
     <form (ngSubmit)="guardarMantenimiento()">
       @if (error) {
-        <div class="mensaje error" style="margin: 20px 28px 0;">
+        <div class="mensaje error" style="margin: 0 0 20px;">
           {{ error }}
         </div>
       }
@@ -99,7 +99,7 @@
         </div>
 
         <!-- Técnico responsable -->
-        <div class="form-group full-width">
+        <div class="form-group form-group-full">
           <label for="tecnico">
             Técnico responsable
           </label>
@@ -113,7 +113,7 @@
         </div>
 
         <!-- Descripción -->
-        <div class="form-group full-width">
+        <div class="form-group form-group-full">
           <label for="descripcion">
             Descripción de la intervención <span>*</span>
           </label>
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Diagnóstico / Observaciones -->
-        <div class="form-group full-width">
+        <div class="form-group form-group-full">
           <label for="diagnostico">
             Diagnóstico / Trabajo realizado
           </label>
@@ -142,7 +142,257 @@
         </div>
       </div>
 
-      <!-- Botones con los mismos estilos de Tickets (Imagen 2) -->
+      <!-- SECCIÓN DEDICADA DE REPUESTOS (Ocupa todo el ancho al final) -->
+      <div class="seccion-repuestos-contenedor">
+        <div class="repuestos-header-bar">
+          <div class="repuestos-header-titulo">
+            <h3>Repuestos y materiales utilizados</h3>
+            <p>Asocia piezas del inventario institucional a la orden de mantenimiento</p>
+          </div>
+          <button
+            type="button"
+            class="btn-nuevo-modulo"
+            style="padding: 7px 16px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;"
+            (click)="agregarRepuestoFila()"
+          >
+            <span>+</span> Agregar repuesto
+          </button>
+        </div>
+
+        <!-- Repuestos ya guardados previamente (si estamos editando) -->
+        @if (repuestosGuardados.length > 0) {
+          <div style="margin-bottom: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+            <span style="font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.4px;">
+              Repuestos previamente registrados:
+            </span>
+            <div style="overflow-x: auto; margin-top: 8px;">
+              <table style="width: 100%; font-size: 13px; border-collapse: collapse; min-width: 500px;">
+                <thead>
+                  <tr style="text-align: left; color: #64748b; border-bottom: 1px solid #e2e8f0;">
+                    <th style="padding: 8px 10px;">Repuesto</th>
+                    <th style="padding: 8px 10px; text-align: center;">Cantidad</th>
+                    <th style="padding: 8px 10px; text-align: right;">Costo unitario</th>
+                    <th style="padding: 8px 10px; text-align: right;">Subtotal</th>
+                    <th style="padding: 8px 10px; text-align: center;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (rg of repuestosGuardados; track rg.id) {
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                      @if (repuestoEnEdicionId === rg.id) {
+                        <!-- Modo edición inline -->
+                        <td style="padding: 8px;">
+                          <select
+                            [(ngModel)]="repuestoIdEdicion"
+                            name="repuestoIdEdicion"
+                            style="padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; width: 100%; max-width: 250px;"
+                          >
+                            @for (rep of repuestosCatalogo; track rep.id) {
+                              <option [ngValue]="rep.id">
+                                {{ rep.nombre }} (Stock: {{ rep.stock }})
+                              </option>
+                            }
+                          </select>
+                        </td>
+                        <td style="padding: 8px; text-align: center;">
+                          <input
+                            type="number"
+                            min="1"
+                            [(ngModel)]="cantidadEdicion"
+                            name="cantidadEdicion"
+                            (keydown)="prevenirTeclasNegativas($event)"
+                            (input)="validarCantidadEdicion()"
+                            (change)="validarCantidadEdicion()"
+                            style="width: 70px; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; font-size: 13px;"
+                          />
+                        </td>
+                        <td style="padding: 8px; text-align: right; color: #475569;">
+                          ${{ obtenerCostoUnitarioEdicion() | number:'1.0-0' }}
+                        </td>
+                        <td style="padding: 8px; text-align: right; font-weight: 700; color: #0f172a;">
+                          ${{ (cantidadEdicion * obtenerCostoUnitarioEdicion()) | number:'1.0-0' }}
+                        </td>
+                        <td style="padding: 8px; text-align: center; white-space: nowrap;">
+                          <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button
+                              type="button"
+                              style="background: #10b981; border: none; color: white; cursor: pointer; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px;"
+                              (click)="guardarEdicionRepuesto(rg)"
+                              [disabled]="guardandoEdicion"
+                              title="Guardar cambios"
+                            >
+                              {{ guardandoEdicion ? '...' : '✓ Guardar' }}
+                            </button>
+                            <button
+                              type="button"
+                              style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; cursor: pointer; font-size: 12px; font-weight: 600; padding: 5px 8px; border-radius: 6px;"
+                              (click)="cancelarEdicionRepuesto()"
+                              [disabled]="guardandoEdicion"
+                              title="Cancelar edición"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </td>
+                      } @else {
+                        <!-- Modo visualización normal con botones Editar y Eliminar -->
+                        <td style="padding: 10px; font-weight: 500; color: #1e293b;">
+                          {{ rg.repuesto?.nombre ?? ('Repuesto #' + rg.repuestoId) }}
+                        </td>
+                        <td style="padding: 10px; text-align: center; font-weight: 600;">
+                          {{ rg.cantidad }}
+                        </td>
+                        <td style="padding: 10px; text-align: right; color: #475569;">
+                          ${{ rg.costoUnitario | number:'1.0-0' }}
+                        </td>
+                        <td style="padding: 10px; text-align: right; font-weight: 700; color: #0f172a;">
+                          ${{ rg.subtotal | number:'1.0-0' }}
+                        </td>
+                        <td style="padding: 10px; text-align: center; white-space: nowrap;">
+                          <div style="display: flex; gap: 6px; justify-content: center;">
+                            <button
+                              type="button"
+                              style="background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; cursor: pointer; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"
+                              (click)="iniciarEdicionRepuesto(rg)"
+                              title="Editar este repuesto"
+                            >
+                              ✏️ Editar
+                            </button>
+                            <button
+                              type="button"
+                              style="background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; cursor: pointer; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px;"
+                              (click)="eliminarRepuestoGuardado(rg.id)"
+                              title="Eliminar este repuesto"
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </td>
+                      }
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        <!-- Lista de nuevos repuestos agregados en este formulario -->
+        @if (repuestosSeleccionados.length > 0) {
+          <div class="repuestos-box">
+            @for (fila of repuestosSeleccionados; track $index) {
+              <div class="repuesto-fila-card" [class.stock-error]="esCantidadExcedida(fila) || fila.cantidad < 1">
+                <!-- Campo: Selección de Repuesto -->
+                <div class="repuesto-campo col-repuesto">
+                  <label>
+                    <span>Repuesto</span>
+                    @if (fila.repuestoId) {
+                      <span
+                        class="stock-badge"
+                        [ngClass]="obtenerStockDisponible(fila.repuestoId) > 0 ? (obtenerStockDisponible(fila.repuestoId) < 5 ? 'low' : 'ok') : 'empty'"
+                      >
+                        Stock: {{ obtenerStockDisponible(fila.repuestoId) }} disp.
+                      </span>
+                    }
+                  </label>
+                  <select
+                    [(ngModel)]="fila.repuestoId"
+                    [name]="'repuestoId_' + $index"
+                    (change)="alSeleccionarRepuesto($index)"
+                    required
+                  >
+                    <option [ngValue]="null" disabled>Selecciona un repuesto del catálogo...</option>
+                    @for (rep of repuestosCatalogo; track rep.id) {
+                      <option [ngValue]="rep.id">
+                        {{ rep.nombre }} ({{ rep.codigo }}) — Stock: {{ rep.stock }} — ${{ rep.costoUnitario | number:'1.0-0' }}
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <!-- Campo: Cantidad con validación de stock y enteros positivos -->
+                <div class="repuesto-campo col-cantidad">
+                  <label>
+                    <span>Cantidad</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    [max]="obtenerStockDisponible(fila.repuestoId)"
+                    [(ngModel)]="fila.cantidad"
+                    [name]="'cantidad_' + $index"
+                    (keydown)="prevenirTeclasNegativas($event)"
+                    (input)="validarCantidadFila(fila)"
+                    (change)="validarCantidadFila(fila)"
+                    [class.input-error]="esCantidadExcedida(fila) || fila.cantidad < 1"
+                    required
+                  />
+                </div>
+
+                <!-- Campo: Precio Unitario (Readonly de Catálogo) -->
+                <div class="repuesto-campo col-precio">
+                  <label>
+                    <span>Precio Catálogo</span>
+                  </label>
+                  <input
+                    type="text"
+                    readonly
+                    [value]="'$' + (fila.costoUnitario | number:'1.0-0')"
+                    title="Precio unitario fijado por catálogo institucional"
+                  />
+                </div>
+
+                <!-- Campo: Subtotal calculado -->
+                <div class="repuesto-campo col-subtotal">
+                  <label>
+                    <span>Subtotal</span>
+                  </label>
+                  <div class="repuesto-subtotal-box">
+                    ${{ (fila.cantidad * fila.costoUnitario) | number:'1.0-0' }}
+                  </div>
+                </div>
+
+                <!-- Campo: Acción Eliminar -->
+                <div class="repuesto-campo col-accion">
+                  <button
+                    type="button"
+                    class="btn-eliminar-fila"
+                    (click)="eliminarRepuestoFila($index)"
+                    title="Quitar repuesto"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <!-- Banner de error si supera el stock -->
+                @if (esCantidadExcedida(fila)) {
+                  <div class="stock-warning-banner">
+                    <span>⚠️</span>
+                    <span>
+                      <strong>Stock insuficiente:</strong> Solicitas {{ fila.cantidad }} unidades pero solo hay
+                      <strong>{{ obtenerStockDisponible(fila.repuestoId) }}</strong> disponibles en catálogo.
+                    </span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else if (repuestosGuardados.length === 0) {
+          <div style="font-size: 13px; color: #64748b; font-style: italic; padding: 14px 16px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
+            No se han asociado repuestos a este mantenimiento. Si se utilizó alguna pieza o insumo, haz clic en <strong>"+ Agregar repuesto"</strong>.
+          </div>
+        }
+
+        <!-- Total acumulado -->
+        @if (calcularTotalRepuestos() > 0) {
+          <div style="display: flex; justify-content: flex-end; gap: 12px; align-items: center; padding: 10px 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; margin-top: 12px;">
+            <span style="font-size: 13px; font-weight: 600; color: #166534;">Costo total repuestos:</span>
+            <span style="font-size: 17px; font-weight: 700; color: #15803d;">${{ calcularTotalRepuestos() | number:'1.0-0' }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Botones de acción -->
       <div class="modal-actions">
         <button
           type="button"
