@@ -25,6 +25,8 @@ export interface Equipo {
 
   estado: number;
 
+  activo: boolean;
+
   createdAt: string;
 
   updatedAt: string;
@@ -118,6 +120,30 @@ export class EquipoService {
     return this.http.put<Equipo>(
       `${this.apiUrl}/${id}`,
       equipo
+    );
+
+  }
+
+
+  desactivar(
+    id: number
+  ): Observable<Equipo> {
+
+    return this.http.patch<Equipo>(
+      `${this.apiUrl}/${id}/desactivar`,
+      {}
+    );
+
+  }
+
+
+  activar(
+    id: number
+  ): Observable<Equipo> {
+
+    return this.http.patch<Equipo>(
+      `${this.apiUrl}/${id}/activar`,
+      {}
     );
 
   }

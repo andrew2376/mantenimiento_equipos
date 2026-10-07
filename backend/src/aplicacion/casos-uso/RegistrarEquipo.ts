@@ -82,7 +82,9 @@ export class RegistrarEquipo {
 
       ubicacion: datos.ubicacion.trim(),
 
-      estado: datos.estado ?? 1
+      estado: datos.estado ?? 1,
+
+      activo: true
     }
 
     return this.equipos.guardar(nuevoEquipo)

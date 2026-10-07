@@ -425,10 +425,6 @@ export type Enumusuarios_rolFieldUpdateOperationsInput = {
   set?: $Enums.usuarios_rol
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type UsuarioCreateNestedOneWithoutTickets_tickets_solicitante_idTousuariosInput = {
   create?: Prisma.XOR<Prisma.UsuarioCreateWithoutTickets_tickets_solicitante_idTousuariosInput, Prisma.UsuarioUncheckedCreateWithoutTickets_tickets_solicitante_idTousuariosInput>
   connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutTickets_tickets_solicitante_idTousuariosInput

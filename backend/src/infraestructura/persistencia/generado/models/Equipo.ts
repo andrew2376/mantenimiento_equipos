@@ -46,6 +46,7 @@ export type EquipoMinAggregateOutputType = {
   numeroSerie: string | null
   ubicacion: string | null
   estado: number | null
+  activo: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +61,7 @@ export type EquipoMaxAggregateOutputType = {
   numeroSerie: string | null
   ubicacion: string | null
   estado: number | null
+  activo: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,6 +76,7 @@ export type EquipoCountAggregateOutputType = {
   numeroSerie: number
   ubicacion: number
   estado: number
+  activo: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -100,6 +103,7 @@ export type EquipoMinAggregateInputType = {
   numeroSerie?: true
   ubicacion?: true
   estado?: true
+  activo?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -114,6 +118,7 @@ export type EquipoMaxAggregateInputType = {
   numeroSerie?: true
   ubicacion?: true
   estado?: true
+  activo?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -128,6 +133,7 @@ export type EquipoCountAggregateInputType = {
   numeroSerie?: true
   ubicacion?: true
   estado?: true
+  activo?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -229,6 +235,7 @@ export type EquipoGroupByOutputType = {
   numeroSerie: string | null
   ubicacion: string
   estado: number
+  activo: boolean
   createdAt: Date
   updatedAt: Date
   _count: EquipoCountAggregateOutputType | null
@@ -266,6 +273,7 @@ export type EquipoWhereInput = {
   numeroSerie?: Prisma.StringNullableFilter<"Equipo"> | string | null
   ubicacion?: Prisma.StringFilter<"Equipo"> | string
   estado?: Prisma.IntFilter<"Equipo"> | number
+  activo?: Prisma.BoolFilter<"Equipo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Equipo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipo"> | Date | string
   mantenimientos?: Prisma.MantenimientoListRelationFilter
@@ -282,6 +290,7 @@ export type EquipoOrderByWithRelationInput = {
   numeroSerie?: Prisma.SortOrderInput | Prisma.SortOrder
   ubicacion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   mantenimientos?: Prisma.MantenimientoOrderByRelationAggregateInput
@@ -302,6 +311,7 @@ export type EquipoWhereUniqueInput = Prisma.AtLeast<{
   modelo?: Prisma.StringNullableFilter<"Equipo"> | string | null
   ubicacion?: Prisma.StringFilter<"Equipo"> | string
   estado?: Prisma.IntFilter<"Equipo"> | number
+  activo?: Prisma.BoolFilter<"Equipo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Equipo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipo"> | Date | string
   mantenimientos?: Prisma.MantenimientoListRelationFilter
@@ -318,6 +328,7 @@ export type EquipoOrderByWithAggregationInput = {
   numeroSerie?: Prisma.SortOrderInput | Prisma.SortOrder
   ubicacion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EquipoCountOrderByAggregateInput
@@ -340,6 +351,7 @@ export type EquipoScalarWhereWithAggregatesInput = {
   numeroSerie?: Prisma.StringNullableWithAggregatesFilter<"Equipo"> | string | null
   ubicacion?: Prisma.StringWithAggregatesFilter<"Equipo"> | string
   estado?: Prisma.IntWithAggregatesFilter<"Equipo"> | number
+  activo?: Prisma.BoolWithAggregatesFilter<"Equipo"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Equipo"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Equipo"> | Date | string
 }
@@ -353,6 +365,7 @@ export type EquipoCreateInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutEquipoInput
@@ -369,6 +382,7 @@ export type EquipoUncheckedCreateInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutEquipoInput
@@ -384,6 +398,7 @@ export type EquipoUpdateInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mantenimientos?: Prisma.MantenimientoUpdateManyWithoutEquipoNestedInput
@@ -400,6 +415,7 @@ export type EquipoUncheckedUpdateInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutEquipoNestedInput
@@ -416,6 +432,7 @@ export type EquipoCreateManyInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -429,6 +446,7 @@ export type EquipoUpdateManyMutationInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -443,6 +461,7 @@ export type EquipoUncheckedUpdateManyInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -463,6 +482,7 @@ export type EquipoCountOrderByAggregateInput = {
   numeroSerie?: Prisma.SortOrder
   ubicacion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -482,6 +502,7 @@ export type EquipoMaxOrderByAggregateInput = {
   numeroSerie?: Prisma.SortOrder
   ubicacion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -496,6 +517,7 @@ export type EquipoMinOrderByAggregateInput = {
   numeroSerie?: Prisma.SortOrder
   ubicacion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
+  activo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -524,6 +546,10 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -567,6 +593,7 @@ export type EquipoCreateWithoutMantenimientosInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.ticketsCreateNestedManyWithoutEquiposInput
@@ -582,6 +609,7 @@ export type EquipoUncheckedCreateWithoutMantenimientosInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tickets?: Prisma.ticketsUncheckedCreateNestedManyWithoutEquiposInput
@@ -612,6 +640,7 @@ export type EquipoUpdateWithoutMantenimientosInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.ticketsUpdateManyWithoutEquiposNestedInput
@@ -627,6 +656,7 @@ export type EquipoUncheckedUpdateWithoutMantenimientosInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tickets?: Prisma.ticketsUncheckedUpdateManyWithoutEquiposNestedInput
@@ -641,6 +671,7 @@ export type EquipoCreateWithoutTicketsInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   mantenimientos?: Prisma.MantenimientoCreateNestedManyWithoutEquipoInput
@@ -656,6 +687,7 @@ export type EquipoUncheckedCreateWithoutTicketsInput = {
   numeroSerie?: string | null
   ubicacion: string
   estado?: number
+  activo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   mantenimientos?: Prisma.MantenimientoUncheckedCreateNestedManyWithoutEquipoInput
@@ -686,6 +718,7 @@ export type EquipoUpdateWithoutTicketsInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mantenimientos?: Prisma.MantenimientoUpdateManyWithoutEquipoNestedInput
@@ -701,6 +734,7 @@ export type EquipoUncheckedUpdateWithoutTicketsInput = {
   numeroSerie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ubicacion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.IntFieldUpdateOperationsInput | number
+  activo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mantenimientos?: Prisma.MantenimientoUncheckedUpdateManyWithoutEquipoNestedInput
@@ -756,6 +790,7 @@ export type EquipoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   numeroSerie?: boolean
   ubicacion?: boolean
   estado?: boolean
+  activo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   mantenimientos?: boolean | Prisma.Equipo$mantenimientosArgs<ExtArgs>
@@ -775,11 +810,12 @@ export type EquipoSelectScalar = {
   numeroSerie?: boolean
   ubicacion?: boolean
   estado?: boolean
+  activo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EquipoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "codigoInventario" | "nombre" | "tipo" | "marca" | "modelo" | "numeroSerie" | "ubicacion" | "estado" | "createdAt" | "updatedAt", ExtArgs["result"]["equipo"]>
+export type EquipoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "codigoInventario" | "nombre" | "tipo" | "marca" | "modelo" | "numeroSerie" | "ubicacion" | "estado" | "activo" | "createdAt" | "updatedAt", ExtArgs["result"]["equipo"]>
 export type EquipoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mantenimientos?: boolean | Prisma.Equipo$mantenimientosArgs<ExtArgs>
   tickets?: boolean | Prisma.Equipo$ticketsArgs<ExtArgs>
@@ -802,6 +838,7 @@ export type $EquipoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     numeroSerie: string | null
     ubicacion: string
     estado: number
+    activo: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["equipo"]>
@@ -1184,6 +1221,7 @@ export interface EquipoFieldRefs {
   readonly numeroSerie: Prisma.FieldRef<"Equipo", 'String'>
   readonly ubicacion: Prisma.FieldRef<"Equipo", 'String'>
   readonly estado: Prisma.FieldRef<"Equipo", 'Int'>
+  readonly activo: Prisma.FieldRef<"Equipo", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Equipo", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Equipo", 'DateTime'>
 }

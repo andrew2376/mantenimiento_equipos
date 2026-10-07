@@ -27,6 +27,14 @@ import type {
   ActualizarEquipoDTO
 } from '../../../aplicacion/casos-uso/ActualizarEquipo.js'
 
+import type {
+  DesactivarEquipo
+} from '../../../aplicacion/casos-uso/DesactivarEquipo.js'
+
+import type {
+  ActivarEquipo
+} from '../../../aplicacion/casos-uso/ActivarEquipo.js'
+
 
 export interface DependenciasEquipos {
 
@@ -35,6 +43,10 @@ export interface DependenciasEquipos {
   consultarEquipos: ConsultarEquipos
 
   actualizarEquipo: ActualizarEquipo
+
+  desactivarEquipo: DesactivarEquipo
+
+  activarEquipo: ActivarEquipo
 
 }
 
@@ -50,59 +62,43 @@ function validarRegistroEquipo(
   const d =
     (cuerpo ?? {}) as Record<string, unknown>
 
-
   if (
     typeof d['codigoInventario'] !== 'string' ||
     d['codigoInventario'].trim().length < 2
   ) {
-
     return 'El código de inventario es obligatorio'
-
   }
-
 
   if (
     typeof d['nombre'] !== 'string' ||
     d['nombre'].trim().length < 2
   ) {
-
     return 'El nombre del equipo es obligatorio'
-
   }
-
 
   if (
     typeof d['marca'] !== 'string' ||
     d['marca'].trim().length < 2
   ) {
-
     return 'La marca del equipo es obligatoria'
-
   }
-
 
   if (
     typeof d['ubicacion'] !== 'string' ||
     d['ubicacion'].trim().length < 2
   ) {
-
     return 'La ubicación del equipo es obligatoria'
-
   }
-
 
   if (
     d['tipo'] !== undefined &&
     !esTipoEquipo(d['tipo'])
   ) {
-
     return (
       'El tipo de equipo no es válido ' +
       '(PORTATIL, ESCRITORIO, SERVIDOR, TODO_EN_UNO, OTRO)'
     )
-
   }
-
 
   if (
     d['estado'] !== undefined &&
@@ -111,22 +107,16 @@ function validarRegistroEquipo(
       !Number.isInteger(d['estado'])
     )
   ) {
-
     return 'El estado del equipo debe ser un número entero'
-
   }
-
 
   if (
     d['numeroSerie'] !== undefined &&
     d['numeroSerie'] !== null &&
     typeof d['numeroSerie'] !== 'string'
   ) {
-
     return 'El número de serie debe ser un texto'
-
   }
-
 
   return {
 
@@ -161,7 +151,6 @@ function validarRegistroEquipo(
         : undefined
 
   }
-
 }
 
 
@@ -177,7 +166,6 @@ function validarActualizarEquipo(
   const d =
     (cuerpo ?? {}) as Record<string, unknown>
 
-
   if (
     typeof d['codigoInventario'] !== 'undefined' &&
     (
@@ -185,11 +173,8 @@ function validarActualizarEquipo(
       d['codigoInventario'].trim().length < 2
     )
   ) {
-
     return 'El código de inventario no es válido'
-
   }
-
 
   if (
     typeof d['nombre'] !== 'undefined' &&
@@ -198,24 +183,18 @@ function validarActualizarEquipo(
       d['nombre'].trim().length < 2
     )
   ) {
-
     return 'El nombre del equipo no es válido'
-
   }
-
 
   if (
     typeof d['tipo'] !== 'undefined' &&
     !esTipoEquipo(d['tipo'])
   ) {
-
     return (
       'El tipo de equipo no es válido ' +
       '(PORTATIL, ESCRITORIO, SERVIDOR, TODO_EN_UNO, OTRO)'
     )
-
   }
-
 
   if (
     typeof d['marca'] !== 'undefined' &&
@@ -224,33 +203,24 @@ function validarActualizarEquipo(
       d['marca'].trim().length < 2
     )
   ) {
-
     return 'La marca del equipo no es válida'
-
   }
-
 
   if (
     typeof d['modelo'] !== 'undefined' &&
     d['modelo'] !== null &&
     typeof d['modelo'] !== 'string'
   ) {
-
     return 'El modelo debe ser un texto'
-
   }
-
 
   if (
     typeof d['numeroSerie'] !== 'undefined' &&
     d['numeroSerie'] !== null &&
     typeof d['numeroSerie'] !== 'string'
   ) {
-
     return 'El número de serie debe ser un texto'
-
   }
-
 
   if (
     typeof d['ubicacion'] !== 'undefined' &&
@@ -259,11 +229,8 @@ function validarActualizarEquipo(
       d['ubicacion'].trim().length < 2
     )
   ) {
-
     return 'La ubicación del equipo no es válida'
-
   }
-
 
   if (
     typeof d['estado'] !== 'undefined' &&
@@ -272,11 +239,8 @@ function validarActualizarEquipo(
       !Number.isInteger(d['estado'])
     )
   ) {
-
     return 'El estado del equipo debe ser un número entero'
-
   }
-
 
   return {
 
@@ -327,7 +291,6 @@ function validarActualizarEquipo(
         : undefined
 
   }
-
 }
 
 
@@ -354,17 +317,13 @@ export function rutasEquipos(
       const validacion =
         validarRegistroEquipo(req.body)
 
-
       if (typeof validacion === 'string') {
-
         return void res
           .status(400)
           .json({
             error: validacion
           })
-
       }
-
 
       try {
 
@@ -373,31 +332,114 @@ export function rutasEquipos(
             validacion
           )
 
-
         res
           .status(201)
           .json(aEquipoDTO(equipo))
-
 
       } catch (error) {
 
         if (
           error instanceof NumeroSerieYaRegistrado
         ) {
-
           return void res
             .status(409)
             .json({
               error: error.message
             })
-
         }
 
-
         next(error)
+      }
+    }
+  )
 
+
+  // ========================================
+  // PATCH /api/equipos/:id/desactivar
+  // Desactivar equipo (baja lógica)
+  // ========================================
+
+  rutas.patch(
+    '/:id/desactivar',
+    async (req, res, next) => {
+
+      const id = Number(req.params.id)
+
+      if (!Number.isInteger(id) || id <= 0) {
+        return void res
+          .status(400)
+          .json({
+            error:
+              'El ID del equipo debe ser un número entero positivo'
+          })
       }
 
+      try {
+
+        const equipo =
+          await deps.desactivarEquipo.ejecutar(id)
+
+        res.json(aEquipoDTO(equipo))
+
+      } catch (error) {
+
+        if (
+          error instanceof EquipoNoEncontrado
+        ) {
+          return void res
+            .status(404)
+            .json({
+              error: error.message
+            })
+        }
+
+        next(error)
+      }
+    }
+  )
+
+
+  // ========================================
+  // PATCH /api/equipos/:id/activar
+  // Reactivar equipo
+  // ========================================
+
+  rutas.patch(
+    '/:id/activar',
+    async (req, res, next) => {
+
+      const id = Number(req.params.id)
+
+      if (!Number.isInteger(id) || id <= 0) {
+        return void res
+          .status(400)
+          .json({
+            error:
+              'El ID del equipo debe ser un número entero positivo'
+          })
+      }
+
+      try {
+
+        const equipo =
+          await deps.activarEquipo.ejecutar(id)
+
+        res.json(aEquipoDTO(equipo))
+
+      } catch (error) {
+
+        if (
+          error instanceof EquipoNoEncontrado
+        ) {
+          return void res
+            .status(404)
+            .json({
+              error: error.message
+            })
+        }
+
+        next(error)
+      }
     }
   )
 
@@ -416,18 +458,14 @@ export function rutasEquipos(
         const equipos =
           await deps.consultarEquipos.listarTodos()
 
-
         res.json(
           equipos.map(aEquipoDTO)
         )
 
-
       } catch (error) {
 
         next(error)
-
       }
-
     }
   )
 
@@ -448,31 +486,22 @@ export function rutasEquipos(
             req.params.serial
           )
 
-
-        res.json(
-          aEquipoDTO(equipo)
-        )
-
+        res.json(aEquipoDTO(equipo))
 
       } catch (error) {
 
         if (
           error instanceof EquipoNoEncontrado
         ) {
-
           return void res
             .status(404)
             .json({
               error: error.message
             })
-
         }
 
-
         next(error)
-
       }
-
     }
   )
 
@@ -486,52 +515,38 @@ export function rutasEquipos(
     '/:id',
     async (req, res, next) => {
 
-      const id =
-        Number(req.params.id)
+      const id = Number(req.params.id)
 
-
-      if (!Number.isInteger(id)) {
-
+      if (!Number.isInteger(id) || id <= 0) {
         return void res
           .status(400)
           .json({
             error:
-              'El ID del equipo debe ser un número entero'
+              'El ID del equipo debe ser un número entero positivo'
           })
-
       }
-
 
       try {
 
         const equipo =
           await deps.consultarEquipos.porId(id)
 
-
-        res.json(
-          aEquipoDTO(equipo)
-        )
-
+        res.json(aEquipoDTO(equipo))
 
       } catch (error) {
 
         if (
           error instanceof EquipoNoEncontrado
         ) {
-
           return void res
             .status(404)
             .json({
               error: error.message
             })
-
         }
 
-
         next(error)
-
       }
-
     }
   )
 
@@ -545,21 +560,16 @@ export function rutasEquipos(
     '/:id',
     async (req, res, next) => {
 
-      const id =
-        Number(req.params.id)
+      const id = Number(req.params.id)
 
-
-      if (!Number.isInteger(id)) {
-
+      if (!Number.isInteger(id) || id <= 0) {
         return void res
           .status(400)
           .json({
             error:
-              'El ID del equipo debe ser un número entero'
+              'El ID del equipo debe ser un número entero positivo'
           })
-
       }
-
 
       const validacion =
         validarActualizarEquipo(
@@ -567,17 +577,13 @@ export function rutasEquipos(
           req.body
         )
 
-
       if (typeof validacion === 'string') {
-
         return void res
           .status(400)
           .json({
             error: validacion
           })
-
       }
-
 
       try {
 
@@ -586,35 +592,25 @@ export function rutasEquipos(
             validacion
           )
 
-
-        res.json(
-          aEquipoDTO(equipo)
-        )
-
+        res.json(aEquipoDTO(equipo))
 
       } catch (error) {
 
         if (
           error instanceof EquipoNoEncontrado
         ) {
-
           return void res
             .status(404)
             .json({
               error: error.message
             })
-
         }
 
-
         next(error)
-
       }
-
     }
   )
 
 
   return rutas
-
 }

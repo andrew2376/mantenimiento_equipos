@@ -21,6 +21,7 @@ export interface Equipo {
   numeroSerie?: string
   ubicacion: string
   estado: number
+  activo: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -47,6 +48,7 @@ export interface EquipoDTO {
   numeroSerie?: string
   ubicacion: string
   estado: number
+  activo: boolean
   createdAt: string
   updatedAt: string
 }
@@ -70,6 +72,7 @@ export function aEquipoDTO(
     numeroSerie: equipo.numeroSerie,
     ubicacion: equipo.ubicacion,
     estado: equipo.estado,
+    activo: equipo.activo,
     createdAt: equipo.createdAt.toISOString(),
     updatedAt: equipo.updatedAt.toISOString()
   }

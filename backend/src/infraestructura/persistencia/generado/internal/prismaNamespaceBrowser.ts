@@ -83,6 +83,7 @@ export const EquipoScalarFieldEnum = {
   numeroSerie: 'numeroSerie',
   ubicacion: 'ubicacion',
   estado: 'estado',
+  activo: 'activo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
