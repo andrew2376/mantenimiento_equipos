@@ -106,6 +106,16 @@ export class RepuestoDAOPrisma implements RepuestoDAO {
     return aDominioMR(fila)
   }
 
+  async asociacionPorId(id: number): Promise<MantenimientoRepuesto | null> {
+    const fila = await this.prisma.mantenimientoRepuesto.findUnique({
+      where: { id },
+      include: {
+        repuesto: true
+      }
+    })
+    return fila ? aDominioMR(fila) : null
+  }
+
   async listarPorMantenimiento(mantenimientoId: number): Promise<MantenimientoRepuesto[]> {
     const filas = await this.prisma.mantenimientoRepuesto.findMany({
       where: { mantenimientoId },

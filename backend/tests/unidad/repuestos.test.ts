@@ -6,7 +6,10 @@ import {
   RepuestoCodigoDuplicado,
   RepuestoNoEncontrado
 } from '../../src/aplicacion/casos-uso/GestionarRepuestos'
-import { AsociarRepuestoMantenimiento } from '../../src/aplicacion/casos-uso/AsociarRepuestoMantenimiento'
+import {
+  AsociarRepuestoMantenimiento,
+  StockInsuficiente
+} from '../../src/aplicacion/casos-uso/AsociarRepuestoMantenimiento'
 
 describe('Módulo de Repuestos - Pruebas Unitarias', () => {
   let repuestosDAO: RepuestoDAOEnMemoria
@@ -67,7 +70,7 @@ describe('Módulo de Repuestos - Pruebas Unitarias', () => {
     await expect(gestionarRepuestos.porId(999)).rejects.toThrow(RepuestoNoEncontrado)
   })
 
-  it('debe asociar un repuesto a un mantenimiento existente', async () => {
+  it('debe asociar un repuesto a un mantenimiento y descontar el stock del catálogo', async () => {
     const m = await mantenimientosDAO.guardar({
       descripcion: 'Mantenimiento de prueba',
       tipo: 'CORRECTIVO',
@@ -81,22 +84,87 @@ describe('Módulo de Repuestos - Pruebas Unitarias', () => {
     const repuesto = await gestionarRepuestos.registrar({
       nombre: 'Fuente de poder 650W',
       codigo: 'REP-PSU-650',
-      costoUnitario: 220000
+      costoUnitario: 220000,
+      stock: 8
     })
 
     const asociacion = await asociarRepuesto.ejecutar({
       mantenimientoId: m.id,
       repuestoId: repuesto.id,
-      cantidad: 2
+      cantidad: 5
     })
 
     expect(asociacion.mantenimientoId).toBe(m.id)
     expect(asociacion.repuestoId).toBe(repuesto.id)
-    expect(asociacion.cantidad).toBe(2)
+    expect(asociacion.cantidad).toBe(5)
     expect(asociacion.costoUnitario).toBe(220000)
+
+    // Verificar que el stock bajó de 8 a 3
+    const repuestoActualizado = await gestionarRepuestos.porId(repuesto.id)
+    expect(repuestoActualizado.stock).toBe(3)
 
     const lista = await asociarRepuesto.listarPorMantenimiento(m.id)
     expect(lista.length).toBe(1)
     expect(lista[0]?.repuesto?.nombre).toBe('Fuente de poder 650W')
+  })
+
+  it('debe lanzar error StockInsuficiente si la cantidad solicitada supera el stock', async () => {
+    const m = await mantenimientosDAO.guardar({
+      descripcion: 'Mantenimiento de prueba',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE',
+      diagnostico: null,
+      tecnico: null,
+      equipoId: 1,
+      ticketId: null
+    })
+
+    const repuesto = await gestionarRepuestos.registrar({
+      nombre: 'Tarjeta de video GTX 1660',
+      codigo: 'REP-GPU-1660',
+      costoUnitario: 950000,
+      stock: 2
+    })
+
+    await expect(
+      asociarRepuesto.ejecutar({
+        mantenimientoId: m.id,
+        repuestoId: repuesto.id,
+        cantidad: 5
+      })
+    ).rejects.toThrow(StockInsuficiente)
+  })
+
+  it('debe restaurar el stock al almacén cuando se elimina la asociación', async () => {
+    const m = await mantenimientosDAO.guardar({
+      descripcion: 'Mantenimiento de prueba',
+      tipo: 'CORRECTIVO',
+      estado: 'PENDIENTE',
+      diagnostico: null,
+      tecnico: null,
+      equipoId: 1,
+      ticketId: null
+    })
+
+    const repuesto = await gestionarRepuestos.registrar({
+      nombre: 'Ventilador Cooler 120mm',
+      codigo: 'REP-FAN-120',
+      costoUnitario: 45000,
+      stock: 10
+    })
+
+    const asociacion = await asociarRepuesto.ejecutar({
+      mantenimientoId: m.id,
+      repuestoId: repuesto.id,
+      cantidad: 4
+    })
+
+    let repActualizado = await gestionarRepuestos.porId(repuesto.id)
+    expect(repActualizado.stock).toBe(6)
+
+    // Eliminar asociación y comprobar restauración
+    await asociarRepuesto.eliminar(asociacion.id)
+    repActualizado = await gestionarRepuestos.porId(repuesto.id)
+    expect(repActualizado.stock).toBe(10)
   })
 })
