@@ -70,6 +70,10 @@ export class RepuestoDAOEnMemoria implements RepuestoDAO {
     return nuevo
   }
 
+  async asociacionPorId(id: number): Promise<MantenimientoRepuesto | null> {
+    return this.asignaciones.get(id) ?? null
+  }
+
   async listarPorMantenimiento(mantenimientoId: number): Promise<MantenimientoRepuesto[]> {
     return Array.from(this.asignaciones.values()).filter(
       (a) => a.mantenimientoId === mantenimientoId

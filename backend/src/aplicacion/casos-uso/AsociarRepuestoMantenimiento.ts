@@ -3,6 +3,13 @@ import type { MantenimientoDAO, RepuestoDAO } from '../../dominio/puertos/index.
 import { MantenimientoNoEncontrado } from './ConsultarMantenimientos.js'
 import { RepuestoNoEncontrado } from './GestionarRepuestos.js'
 
+export class StockInsuficiente extends Error {
+  constructor(nombre: string, stock: number, cantidad: number) {
+    super(`Stock insuficiente para "${nombre}". Disponible: ${stock}, solicitado: ${cantidad}`)
+    this.name = 'StockInsuficiente'
+  }
+}
+
 export interface AsociarRepuestoDTO {
   mantenimientoId: number
   repuestoId: number
@@ -27,14 +34,27 @@ export class AsociarRepuestoMantenimiento {
       throw new RepuestoNoEncontrado(dto.repuestoId)
     }
 
+    const cantidad = dto.cantidad > 0 ? dto.cantidad : 1
+
+    if (repuesto.stock < cantidad) {
+      throw new StockInsuficiente(repuesto.nombre, repuesto.stock, cantidad)
+    }
+
     const costoFinal = dto.costoUnitario ?? repuesto.costoUnitario
 
-    return this.repuestos.asociarAMantenimiento({
+    const asociacion = await this.repuestos.asociarAMantenimiento({
       mantenimientoId: dto.mantenimientoId,
       repuestoId: dto.repuestoId,
-      cantidad: dto.cantidad > 0 ? dto.cantidad : 1,
+      cantidad,
       costoUnitario: costoFinal
     })
+
+    // Descontar del inventario institucional
+    await this.repuestos.actualizar(repuesto.id, {
+      stock: repuesto.stock - cantidad
+    })
+
+    return asociacion
   }
 
   async listarPorMantenimiento(mantenimientoId: number): Promise<MantenimientoRepuesto[]> {
@@ -42,6 +62,19 @@ export class AsociarRepuestoMantenimiento {
   }
 
   async eliminar(id: number): Promise<boolean> {
-    return this.repuestos.eliminarDeMantenimiento(id)
+    const asignacion = await this.repuestos.asociacionPorId(id)
+    if (!asignacion) return false
+
+    const ok = await this.repuestos.eliminarDeMantenimiento(id)
+    if (ok) {
+      const repuesto = await this.repuestos.porId(asignacion.repuestoId)
+      if (repuesto) {
+        // Restaurar inventario institucional
+        await this.repuestos.actualizar(repuesto.id, {
+          stock: repuesto.stock + asignacion.cantidad
+        })
+      }
+    }
+    return ok
   }
 }

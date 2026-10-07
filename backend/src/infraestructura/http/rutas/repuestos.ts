@@ -9,6 +9,7 @@ import {
   RepuestoNoEncontrado
 } from '../../../aplicacion/casos-uso/GestionarRepuestos.js'
 import type { AsociarRepuestoMantenimiento } from '../../../aplicacion/casos-uso/AsociarRepuestoMantenimiento.js'
+import { StockInsuficiente } from '../../../aplicacion/casos-uso/AsociarRepuestoMantenimiento.js'
 import { MantenimientoNoEncontrado } from '../../../aplicacion/casos-uso/ConsultarMantenimientos.js'
 
 export interface DependenciasRepuestos {
@@ -127,6 +128,9 @@ export function rutasRepuestos(deps: DependenciasRepuestos): Router {
       })
       res.status(201).json(aMantenimientoRepuestoDTO(resultado))
     } catch (error) {
+      if (error instanceof StockInsuficiente) {
+        return void res.status(400).json({ error: error.message })
+      }
       if (error instanceof MantenimientoNoEncontrado || error instanceof RepuestoNoEncontrado) {
         return void res.status(404).json({ error: error.message })
       }

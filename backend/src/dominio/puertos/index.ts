@@ -150,6 +150,7 @@ export interface RepuestoDAO {
   todos(): Promise<Repuesto[]>
   actualizar(id: number, datos: Partial<RepuestoNuevo>): Promise<Repuesto | null>
   asociarAMantenimiento(datos: MantenimientoRepuestoNuevo): Promise<MantenimientoRepuesto>
+  asociacionPorId(id: number): Promise<MantenimientoRepuesto | null>
   listarPorMantenimiento(mantenimientoId: number): Promise<MantenimientoRepuesto[]>
   eliminarDeMantenimiento(id: number): Promise<boolean>
 }
