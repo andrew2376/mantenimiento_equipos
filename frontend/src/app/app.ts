@@ -32,6 +32,10 @@ export class App {
       });
   }
 
+  permitirRuta(ruta: string): void {
+    localStorage.setItem('rutaPermitida', ruta);
+  }
+
   private actualizarPagina(url: string): void {
     const ruta = url.split('?')[0].split('/')[1];
 

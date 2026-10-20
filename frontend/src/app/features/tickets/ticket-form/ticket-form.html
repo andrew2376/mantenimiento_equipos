@@ -2,20 +2,36 @@
 
   <div class="modal">
 
-    <!-- ==========================================
-         ENCABEZADO
-         ========================================== -->
-
     <div class="modal-header">
 
       <div>
 
         <h2>
-          Nuevo ticket
+
+          @if (ticketEditar) {
+
+            Editar ticket
+
+          } @else {
+
+            Nuevo ticket
+
+          }
+
         </h2>
 
         <p>
-          Registra una nueva solicitud de mantenimiento
+
+          @if (ticketEditar) {
+
+            Actualiza la información de la solicitud de mantenimiento
+
+          } @else {
+
+            Registra una nueva solicitud de mantenimiento
+
+          }
+
         </p>
 
       </div>
@@ -26,34 +42,28 @@
         title="Cerrar"
         (click)="cancelar()"
       >
+
         ×
+
       </button>
 
     </div>
 
 
-    <!-- ==========================================
-         ERROR
-         ========================================== -->
-
     @if (error) {
 
       <div class="mensaje error">
+
         {{ error }}
+
       </div>
 
     }
 
 
-    <!-- ==========================================
-         FORMULARIO
-         ========================================== -->
-
     <form
       (ngSubmit)="guardar()"
     >
-
-      <!-- TÍTULO -->
 
       <div class="form-group">
 
@@ -74,8 +84,6 @@
       </div>
 
 
-      <!-- DESCRIPCIÓN -->
-
       <div class="form-group">
 
         <label for="descripcion">
@@ -93,8 +101,6 @@
 
       </div>
 
-
-      <!-- PRIORIDAD -->
 
       <div class="form-group">
 
@@ -129,7 +135,54 @@
       </div>
 
 
-      <!-- EQUIPO -->
+      @if (ticketEditar) {
+
+        <div class="form-group">
+
+          <label for="estado">
+            Estado
+          </label>
+
+          <select
+            id="estado"
+            name="estado"
+            [(ngModel)]="estado"
+          >
+
+            <option value="ABIERTO">
+              Abierto
+            </option>
+
+            <option value="ASIGNADO">
+              Asignado
+            </option>
+
+            <option value="EN_DIAGNOSTICO">
+              En diagnóstico
+            </option>
+
+            <option value="EN_MANTENIMIENTO">
+              En mantenimiento
+            </option>
+
+            <option value="RESUELTO">
+              Resuelto
+            </option>
+
+            <option value="CERRADO">
+              Cerrado
+            </option>
+
+            <option value="CANCELADO">
+              Cancelado
+            </option>
+
+          </select>
+
+        </div>
+
+      }
+
 
       <div class="form-group">
 
@@ -168,8 +221,6 @@
       </div>
 
 
-      <!-- SOLICITANTE -->
-
       <div class="form-group">
 
         <label for="solicitante">
@@ -205,10 +256,6 @@
       </div>
 
 
-      <!-- ==========================================
-           BOTONES
-           ========================================== -->
-
       <div class="modal-actions">
 
         <button
@@ -217,7 +264,9 @@
           (click)="cancelar()"
           [disabled]="guardando"
         >
+
           Cancelar
+
         </button>
 
 
@@ -233,7 +282,15 @@
 
           } @else {
 
-            Guardar ticket
+            @if (ticketEditar) {
+
+              Actualizar ticket
+
+            } @else {
+
+              Guardar ticket
+
+            }
 
           }
 

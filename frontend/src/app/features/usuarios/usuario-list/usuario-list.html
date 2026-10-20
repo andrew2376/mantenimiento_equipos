@@ -18,14 +18,21 @@
         </svg>
 
 
-        <input type="text" placeholder="Buscar usuario...">
+        <input
+          type="text"
+          placeholder="Buscar usuario..."
+        >
 
       </div>
 
     </div>
 
 
-    <button type="button" class="btn-nuevo-modulo" (click)="abrirModal()">
+    <button
+      type="button"
+      class="btn-nuevo-modulo"
+      (click)="abrirModal()"
+    >
 
       + Nuevo usuario
 
@@ -210,9 +217,22 @@
 
           <td class="acciones">
 
-            <button type="button" class="btn-icono" title="Editar usuario">
+            <!-- ==================================
+                 ACT-014
+                 BOTÓN EDITAR
+                 ================================== -->
 
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+            <button
+              type="button"
+              class="btn-icono"
+              title="Editar usuario"
+              (click)="abrirModalEdicion(usuario)"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
 
                 <path d="M12 20h9"></path>
 
@@ -240,7 +260,7 @@
 
 
 <!-- ==========================================
-     MODAL NUEVO USUARIO
+     MODAL NUEVO / EDITAR USUARIO
      ========================================== -->
 
 @if (modalAbierto()) {
@@ -259,17 +279,43 @@
       <div>
 
         <h2>
-          Nuevo usuario
+
+          @if (usuarioEditandoId !== null) {
+
+            Editar usuario
+
+          } @else {
+
+            Nuevo usuario
+
+          }
+
         </h2>
 
         <p>
-          Registra un nuevo usuario en el sistema.
+
+          @if (usuarioEditandoId !== null) {
+
+            Modifica los datos del usuario.
+
+          } @else {
+
+            Registra un nuevo usuario en el sistema.
+
+          }
+
         </p>
 
       </div>
 
 
-      <button type="button" class="modal-close" aria-label="Cerrar" (click)="cerrarModal()" [disabled]="guardando()">
+      <button
+        type="button"
+        class="modal-close"
+        aria-label="Cerrar"
+        (click)="cerrarModal()"
+        [disabled]="guardando()"
+      >
 
         ×
 
@@ -299,8 +345,14 @@
 
           </label>
 
-          <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" placeholder="Nombre completo"
-            autocomplete="off" />
+          <input
+            id="nombre"
+            name="nombre"
+            type="text"
+            [(ngModel)]="nombre"
+            placeholder="Nombre completo"
+            autocomplete="off"
+          />
 
         </div>
 
@@ -317,8 +369,14 @@
 
           </label>
 
-          <input id="correo" name="correo" type="email" [(ngModel)]="correo" placeholder="correo@ejemplo.com"
-            autocomplete="off" />
+          <input
+            id="correo"
+            name="correo"
+            type="email"
+            [(ngModel)]="correo"
+            placeholder="correo@ejemplo.com"
+            autocomplete="off"
+          />
 
         </div>
 
@@ -326,6 +384,8 @@
         <!-- ==================================
                CONTRASEÑA
                ================================== -->
+
+        @if (usuarioEditandoId === null) {
 
         <div class="form-group">
 
@@ -335,10 +395,18 @@
 
           </label>
 
-          <input id="clave" name="clave" type="password" [(ngModel)]="clave" placeholder="Contraseña"
-            autocomplete="new-password" />
+          <input
+            id="clave"
+            name="clave"
+            type="password"
+            [(ngModel)]="clave"
+            placeholder="Contraseña"
+            autocomplete="new-password"
+          />
 
         </div>
+
+        }
 
 
         <!-- ==================================
@@ -353,7 +421,11 @@
 
           </label>
 
-          <select id="rol" name="rol" [(ngModel)]="rol">
+          <select
+            id="rol"
+            name="rol"
+            [(ngModel)]="rol"
+          >
 
             <option value="SOLICITANTE">
               Solicitante
@@ -382,9 +454,17 @@
 
         <div class="form-group form-group-full">
 
-          <label for="activo" class="checkbox-label">
+          <label
+            for="activo"
+            class="checkbox-label"
+          >
 
-            <input id="activo" name="activo" type="checkbox" [(ngModel)]="activo" />
+            <input
+              id="activo"
+              name="activo"
+              type="checkbox"
+              [(ngModel)]="activo"
+            />
 
             <span>
 
@@ -420,22 +500,39 @@
 
       <div class="modal-actions">
 
-        <button type="button" class="btn-cancelar" (click)="cerrarModal()" [disabled]="guardando()">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cerrarModal()"
+          [disabled]="guardando()"
+        >
 
           Cancelar
 
         </button>
 
 
-        <button type="submit" class="btn-guardar" [disabled]="guardando()">
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="guardando()"
+        >
 
           @if (guardando()) {
 
-          Guardando...
+            @if (usuarioEditandoId !== null) {
+              Actualizando...
+            } @else {
+              Guardando...
+            }
 
           } @else {
 
-          Guardar usuario
+            @if (usuarioEditandoId !== null) {
+              Actualizar usuario
+            } @else {
+              Guardar usuario
+            }
 
           }
 

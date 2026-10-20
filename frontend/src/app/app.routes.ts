@@ -6,27 +6,38 @@ import { TicketList } from './features/tickets/ticket-list/ticket-list';
 import { MantenimientoList } from './features/mantenimientos/mantenimiento-list/mantenimiento-list';
 import { Login } from './features/usuarios/login/login';
 
+import { authGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: 'login',
     component: Login
   },
+
   {
     path: 'equipos',
-    component: EquipoList
+    component: EquipoList,
+    canActivate: [authGuard]
   },
+
   {
     path: 'tickets',
-    component: TicketList
+    component: TicketList,
+    canActivate: [authGuard]
   },
+
   {
     path: 'mantenimientos',
-    component: MantenimientoList
+    component: MantenimientoList,
+    canActivate: [authGuard]
   },
+
   {
     path: 'usuarios',
-    component: UsuarioList
+    component: UsuarioList,
+    canActivate: [authGuard]
   },
+
   {
     path: '',
     redirectTo: 'login',
