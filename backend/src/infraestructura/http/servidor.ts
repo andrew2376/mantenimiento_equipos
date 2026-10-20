@@ -38,7 +38,7 @@ const swaggerDocument = {
       "API - Sistema de Gestión y Trazabilidad de Mantenimiento de Equipos",
     version: "1.0.0",
     description:
-      "API REST para la gestión de equipos de cómputo y sus mantenimientos.",
+      "API REST para la gestión de equipos de cómputo y sus mantenimientos.\n\n**Cómo probar la autenticación desde aquí**:\n1. Inicia sesión en `POST /api/usuarios/login` (o registra uno en `POST /api/usuarios`).\n2. Copia el `token` devuelto en la respuesta.\n3. Haz clic en el botón verde **Authorize 🔓** (arriba a la derecha), pega el token y pulsa **Authorize**.\n4. A partir de ese momento, todas las peticiones enviarán automáticamente el encabezado `Authorization: Bearer <token>`.",
   },
 
   servers: [
@@ -47,7 +47,17 @@ const swaggerDocument = {
     },
   ],
 
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+
   tags: [
+    {
+      name: "Autenticación",
+      description: "Inicio de sesión, registro y gestión de usuarios del sistema.",
+    },
     {
       name: "Equipos",
       description:
@@ -56,6 +66,11 @@ const swaggerDocument = {
     {
       name: "Mantenimientos",
       description: "Gestión de los mantenimientos realizados a los equipos.",
+    },
+    {
+      name: "Repuestos",
+      description:
+        "Gestión de repuestos y asociación con mantenimientos (control de stock e inventario).",
     },
   ],
 
@@ -415,6 +430,355 @@ const swaggerDocument = {
             description: "Equipo no encontrado",
           },
         },
+      },
+    },
+
+    "/api/repuestos": {
+      get: {
+        tags: ["Repuestos"],
+        summary: "Listar catálogo completo de repuestos",
+        responses: {
+          "200": {
+            description: "Lista de repuestos registrados en el sistema",
+          },
+        },
+      },
+      post: {
+        tags: ["Repuestos"],
+        summary: "Registrar un nuevo repuesto en inventario",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["nombre", "codigo", "costoUnitario"],
+                properties: {
+                  nombre: {
+                    type: "string",
+                    example: "Memoria RAM 16GB DDR4",
+                  },
+                  codigo: {
+                    type: "string",
+                    example: "RAM-DDR4-16",
+                  },
+                  descripcion: {
+                    type: "string",
+                    example: "Módulo Kingston Fury 3200MHz",
+                  },
+                  costoUnitario: {
+                    type: "number",
+                    example: 45.5,
+                  },
+                  stock: {
+                    type: "integer",
+                    example: 10,
+                  },
+                  activo: {
+                    type: "boolean",
+                    example: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Repuesto creado exitosamente",
+          },
+          "400": {
+            description: "Datos inválidos o faltantes",
+          },
+          "409": {
+            description: "Ya existe un repuesto con ese código",
+          },
+        },
+      },
+    },
+
+    "/api/repuestos/{id}": {
+      get: {
+        tags: ["Repuestos"],
+        summary: "Consultar repuesto por ID",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Detalle del repuesto",
+          },
+          "404": {
+            description: "Repuesto no encontrado",
+          },
+        },
+      },
+    },
+
+    "/api/repuestos/mantenimiento/{mantenimientoId}": {
+      get: {
+        tags: ["Repuestos"],
+        summary: "Listar repuestos utilizados en un mantenimiento",
+        parameters: [
+          {
+            name: "mantenimientoId",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Lista de repuestos asociados al mantenimiento",
+          },
+        },
+      },
+    },
+
+    "/api/repuestos/mantenimiento": {
+      post: {
+        tags: ["Repuestos"],
+        summary: "Asociar repuesto a un mantenimiento (descuenta stock)",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["mantenimientoId", "repuestoId", "cantidad"],
+                properties: {
+                  mantenimientoId: {
+                    type: "integer",
+                    example: 1,
+                  },
+                  repuestoId: {
+                    type: "integer",
+                    example: 1,
+                  },
+                  cantidad: {
+                    type: "integer",
+                    example: 2,
+                  },
+                  costoUnitario: {
+                    type: "number",
+                    example: 45.5,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Repuesto asociado correctamente y stock descontado",
+          },
+          "400": {
+            description: "Stock insuficiente o datos inválidos",
+          },
+          "404": {
+            description: "Mantenimiento o repuesto no encontrado",
+          },
+        },
+      },
+    },
+
+    "/api/repuestos/mantenimiento/{id}": {
+      delete: {
+        tags: ["Repuestos"],
+        summary: "Desasociar repuesto de un mantenimiento (restaura stock)",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        responses: {
+          "204": {
+            description: "Repuesto desasociado y stock restaurado en inventario",
+          },
+          "404": {
+            description: "Registro de repuesto de mantenimiento no encontrado",
+          },
+        },
+      },
+    },
+
+    "/api/usuarios/login": {
+      post: {
+        tags: ["Autenticación"],
+        summary: "Iniciar sesión en el sistema (obtener JWT)",
+        security: [],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["correo", "clave"],
+                properties: {
+                  correo: {
+                    type: "string",
+                    format: "email",
+                    example: "admin@uam.edu.co",
+                  },
+                  clave: {
+                    type: "string",
+                    format: "password",
+                    example: "admin123",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Inicio de sesión exitoso. Retorna el token JWT.",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    token: {
+                      type: "string",
+                      description: "Token JWT para Authorization: Bearer <token>",
+                    },
+                    usuario: {
+                      type: "object",
+                      properties: {
+                        id: { type: "integer", example: 1 },
+                        nombre: { type: "string", example: "Administrador" },
+                        correo: { type: "string", example: "admin@uam.edu.co" },
+                        rol: { type: "string", example: "ADMINISTRADOR" },
+                        activo: { type: "boolean", example: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "400": {
+            description: "Correo y clave son obligatorios",
+          },
+          "401": {
+            description: "Correo o clave incorrectos",
+          },
+        },
+      },
+    },
+
+    "/api/usuarios": {
+      get: {
+        tags: ["Autenticación"],
+        summary: "Listar todos los usuarios del sistema",
+        responses: {
+          "200": {
+            description: "Lista de usuarios registrados",
+          },
+        },
+      },
+      post: {
+        tags: ["Autenticación"],
+        summary: "Registrar un nuevo usuario",
+        security: [],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["nombre", "correo", "clave", "rol"],
+                properties: {
+                  nombre: {
+                    type: "string",
+                    example: "Carlos Agente",
+                  },
+                  correo: {
+                    type: "string",
+                    format: "email",
+                    example: "carlos@uam.edu.co",
+                  },
+                  clave: {
+                    type: "string",
+                    format: "password",
+                    example: "clave123",
+                  },
+                  rol: {
+                    type: "string",
+                    enum: ["SOLICITANTE", "TECNICO", "ADMINISTRADOR", "SUPERVISOR"],
+                    example: "TECNICO",
+                  },
+                  activo: {
+                    type: "boolean",
+                    example: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Usuario registrado correctamente",
+          },
+          "400": {
+            description: "Datos faltantes o inválidos",
+          },
+        },
+      },
+    },
+
+    "/api/usuarios/{id}": {
+      get: {
+        tags: ["Autenticación"],
+        summary: "Consultar usuario por ID",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Detalle del usuario",
+          },
+          "404": {
+            description: "Usuario no encontrado",
+          },
+        },
+      },
+    },
+  },
+
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Token obtenido en `POST /api/usuarios/login`.",
       },
     },
   },
