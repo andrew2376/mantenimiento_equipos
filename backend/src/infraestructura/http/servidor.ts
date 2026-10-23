@@ -1,32 +1,43 @@
-import express, { Router } from "express";
 
+import express, { Router } from "express";
 import type { ErrorRequestHandler, Express } from "express";
 
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 
-import { rutasEquipos, type DependenciasEquipos } from "./rutas/equipos";
+import {
+  rutasEquipos,
+  type DependenciasEquipos,
+} from "./rutas/equipos";
 
 import {
   rutasMantenimientos,
   type DependenciasMantenimientos,
 } from "./rutas/mantenimientos";
 
-import { rutasUsuarios, type DependenciasUsuarios } from "./rutas/usuarios";
+import {
+  rutasUsuarios,
+  type DependenciasUsuarios,
+} from "./rutas/usuarios";
 
-import { rutasTickets, type DependenciasTickets } from "./rutas/tickets";
+import {
+  rutasTickets,
+  type DependenciasTickets,
+} from "./rutas/tickets";
 
-import { rutasRepuestos, type DependenciasRepuestos } from "./rutas/repuestos";
+import {
+  rutasRepuestos,
+  type DependenciasRepuestos,
+} from "./rutas/repuestos";
+
+import { verificarJWT } from "./middleware/verificarJWT";
+import { autorizarRol } from "./middleware/autorizarRol";
 
 export interface DependenciasServidor {
   equipos: DependenciasEquipos;
-
   mantenimientos: DependenciasMantenimientos;
-
   usuarios: DependenciasUsuarios;
-
   tickets: DependenciasTickets;
-
   repuestos: DependenciasRepuestos;
 }
 
@@ -370,7 +381,8 @@ const swaggerDocument = {
                   },
                   diagnostico: {
                     type: "string",
-                    example: "Se realizó limpieza y cambio de pasta térmica",
+                    example:
+                      "Se realizó limpieza y cambio de pasta térmica",
                   },
                   tecnico: {
                     type: "string",
@@ -420,7 +432,12 @@ const swaggerDocument = {
   },
 };
 
-const manejadorErrores: ErrorRequestHandler = (error, _req, res, _next) => {
+const manejadorErrores: ErrorRequestHandler = (
+  error,
+  _req,
+  res,
+  _next,
+) => {
   console.error("[Error no controlado]", error);
 
   res.status(500).json({
@@ -432,34 +449,76 @@ export function crearServidor(deps: DependenciasServidor): Express {
   const app = express();
 
   app.use(cors());
-
   app.use(express.json());
 
   const api = Router();
 
+  // Swagger se conserva y queda accesible sin iniciar sesión.
   api.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  api.use("/equipos", rutasEquipos(deps.equipos));
+  // Equipos: validar JWT y después comprobar el rol.
+  api.use(
+    "/equipos",
+    verificarJWT,
+    autorizarRol,
+    rutasEquipos(deps.equipos),
+  );
 
-  api.use("/mantenimientos", rutasMantenimientos(deps.mantenimientos));
-  api.use("/usuarios", rutasUsuarios(deps.usuarios));
+  // Mantenimientos: validar JWT y después comprobar el rol.
+  api.use(
+    "/mantenimientos",
+    verificarJWT,
+    autorizarRol,
+    rutasMantenimientos(deps.mantenimientos),
+  );
 
+  // Login público; las demás rutas de usuarios requieren autenticación.
+  api.use(
+    "/usuarios",
+    (req, res, next) => {
+      if (req.method === "POST" && req.path === "/login") {
+        next();
+        return;
+      }
+
+      verificarJWT(req, res, (error?: unknown) => {
+        if (error) {
+          next(error);
+          return;
+        }
+
+        autorizarRol(req, res, next);
+      });
+    },
+    rutasUsuarios(deps.usuarios),
+  );
+
+  // Tickets: validar JWT y después comprobar el rol.
   api.use(
     "/tickets",
-
+    verificarJWT,
+    autorizarRol,
     rutasTickets(deps.tickets),
   );
 
-  api.use("/repuestos", rutasRepuestos(deps.repuestos));
+  // Repuestos: validar JWT y después comprobar el rol.
+  api.use(
+    "/repuestos",
+    verificarJWT,
+    autorizarRol,
+    rutasRepuestos(deps.repuestos),
+  );
 
   app.use("/api", api);
 
+  // Se conserva la respuesta para las rutas inexistentes.
   app.use((_req, res) => {
     res.status(404).json({
       error: "Ruta no encontrada",
     });
   });
 
+  // Se conserva el manejador general de errores.
   app.use(manejadorErrores);
 
   return app;
