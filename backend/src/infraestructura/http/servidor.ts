@@ -433,6 +433,56 @@ const swaggerDocument = {
       },
     },
 
+    "/api/mantenimientos/{id}/cerrar": {
+      post: {
+        tags: ["Mantenimientos"],
+        summary: "Cierre de mantenimiento con sincronización de ticket",
+        description: "Finaliza el mantenimiento, verifica el diagnóstico técnico, restablece el equipo a OPERATIVO y sincroniza el ticket asociado a estado RESUELTO con su fecha de cierre.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        requestBody: {
+          required: false,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  diagnostico: {
+                    type: "string",
+                    example: "Mantenimiento preventivo completado, pruebas de rendimiento superadas",
+                  },
+                  tecnico: {
+                    type: "string",
+                    example: "Antonia Gallego",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Mantenimiento finalizado exitosamente y ticket sincronizado",
+          },
+          "400": {
+            description: "Diagnóstico requerido o el mantenimiento ya se encuentra cerrado",
+          },
+          "404": {
+            description: "Mantenimiento no encontrado",
+          },
+        },
+      },
+    },
+
     "/api/repuestos": {
       get: {
         tags: ["Repuestos"],
