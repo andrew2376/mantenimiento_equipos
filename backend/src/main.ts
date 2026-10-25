@@ -1,3 +1,4 @@
+
 // Raíz de composición: único punto de entrada donde se instancian
 // las implementaciones concretas de infraestructura y se inyectan
 // en los casos de uso y servidor HTTP.
@@ -5,45 +6,33 @@
 import { prisma } from './infraestructura/persistencia/prisma'
 
 import { EquipoDAOPrisma } from './infraestructura/persistencia/EquipoDAOPrisma'
-
 import { MantenimientoDAOPrisma } from './infraestructura/persistencia/MantenimientoDAOPrisma'
-
 import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrisma'
-
 import { TicketDAOPrisma } from './infraestructura/persistencia/TicketDAOPrisma'
 import { RepuestoDAOPrisma } from './infraestructura/persistencia/RepuestoDAOPrisma'
 
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
 import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
-
 import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
-
 import { ActualizarEquipo } from './aplicacion/casos-uso/ActualizarEquipo'
-
 import { DesactivarEquipo } from './aplicacion/casos-uso/DesactivarEquipo'
-
 import { ActivarEquipo } from './aplicacion/casos-uso/ActivarEquipo'
 
 import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
-
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
-
 import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
 
 import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
-
 import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
-
 import { ActualizarUsuario } from './aplicacion/casos-uso/ActualizarUsuario'
-
 import { IniciarSesion } from './aplicacion/casos-uso/iniciarSesion'
 
 import { RegistrarTicket } from './aplicacion/casos-uso/RegistrarTicket'
-
 import { ConsultarTickets } from './aplicacion/casos-uso/ConsultarTickets'
-
 import { ActualizarTicket } from './aplicacion/casos-uso/ActualizarTicket'
+import { AsignarTecnico } from './aplicacion/casos-uso/AsignarTecnico'
+
 import { GestionarRepuestos } from './aplicacion/casos-uso/GestionarRepuestos'
 import { AsociarRepuestoMantenimiento } from './aplicacion/casos-uso/AsociarRepuestoMantenimiento'
 
@@ -75,6 +64,7 @@ const servicioClaves =
 
 
 // 3. Casos de uso (Aplicación)
+
 
 // Equipos
 
@@ -147,6 +137,12 @@ const consultarTickets =
 const actualizarTicket =
   new ActualizarTicket(ticketDAO)
 
+const asignarTecnico =
+  new AsignarTecnico(
+    ticketDAO,
+    usuarioDAO
+  )
+
 
 // Repuestos
 
@@ -189,6 +185,7 @@ const app = crearServidor({
     registrarTicket,
     consultarTickets,
     actualizarTicket,
+    asignarTecnico,
   },
 
   repuestos: {

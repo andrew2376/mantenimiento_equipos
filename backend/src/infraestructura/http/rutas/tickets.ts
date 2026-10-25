@@ -1,3 +1,4 @@
+
 import { Router } from "express";
 
 import {
@@ -28,10 +29,18 @@ import type {
   ActualizarTicketDTO,
 } from "../../../aplicacion/casos-uso/ActualizarTicket.js";
 
+import {
+  AsignarTecnico,
+  TecnicoNoEncontrado,
+  UsuarioNoEsTecnico,
+  TecnicoInactivo,
+} from "../../../aplicacion/casos-uso/AsignarTecnico.js";
+
 export interface DependenciasTickets {
   registrarTicket: RegistrarTicket;
   consultarTickets: ConsultarTickets;
   actualizarTicket: ActualizarTicket;
+  asignarTecnico: AsignarTecnico;
 }
 
 // ==========================================
@@ -203,7 +212,9 @@ function validarActualizarTicket(
     id,
     titulo: typeof d["titulo"] === "string" ? d["titulo"] : undefined,
     descripcion:
-      typeof d["descripcion"] === "string" ? d["descripcion"] : undefined,
+      typeof d["descripcion"] === "string"
+        ? d["descripcion"]
+        : undefined,
     prioridad: esPrioridadTicket(d["prioridad"])
       ? d["prioridad"]
       : undefined,
@@ -226,18 +237,17 @@ function validarActualizarTicket(
   };
 }
 
-
+// ==========================================
 // RUTAS
+// ==========================================
 
 export function rutasTickets(
   deps: DependenciasTickets
 ): Router {
   const rutas = Router();
 
- 
   // POST /api/tickets
   // Registrar un nuevo ticket
- 
 
   rutas.post("/", async (req, res, next) => {
     const validacion = validarRegistroTicket(req.body);
@@ -257,10 +267,8 @@ export function rutasTickets(
     }
   });
 
- 
   // GET /api/tickets
   // Listar todos los tickets
-  
 
   rutas.get("/", async (_req, res, next) => {
     try {
@@ -269,6 +277,73 @@ export function rutasTickets(
       res.json(tickets.map(aTicketDTO));
     } catch (error) {
       next(error);
+    }
+  });
+
+  // ========================================
+  // PUT /api/tickets/:id/asignar-tecnico
+  // Asignar un técnico responsable
+  // ========================================
+
+  rutas.put("/:id/asignar-tecnico", async (req, res, next) => {
+    const ticketId = Number(req.params.id);
+
+    if (!Number.isInteger(ticketId) || ticketId <= 0) {
+      return void res.status(400).json({
+        error: "El ID del ticket debe ser un número entero positivo",
+      });
+    }
+
+    const cuerpo = (req.body ?? {}) as Record<string, unknown>;
+    const tecnicoId = cuerpo["tecnicoId"];
+
+    if (
+      typeof tecnicoId !== "number" ||
+      !Number.isInteger(tecnicoId) ||
+      tecnicoId <= 0
+    ) {
+      return void res.status(400).json({
+        error: "El ID del técnico debe ser un número entero positivo",
+      });
+    }
+
+    try {
+      const ticket = await deps.asignarTecnico.ejecutar({
+        ticketId,
+        tecnicoId,
+      });
+
+      return void res.status(200).json(aTicketDTO(ticket));
+    } catch (error) {
+      if (error instanceof TicketNoEncontrado) {
+        return void res.status(404).json({
+          error: error.message,
+          codigo: "TICKET_NO_ENCONTRADO",
+        });
+      }
+
+      if (error instanceof TecnicoNoEncontrado) {
+        return void res.status(404).json({
+          error: error.message,
+          codigo: "TECNICO_NO_ENCONTRADO",
+        });
+      }
+
+      if (error instanceof UsuarioNoEsTecnico) {
+        return void res.status(400).json({
+          error: error.message,
+          codigo: "USUARIO_NO_ES_TECNICO",
+        });
+      }
+
+      if (error instanceof TecnicoInactivo) {
+        return void res.status(400).json({
+          error: error.message,
+          codigo: "TECNICO_INACTIVO",
+        });
+      }
+
+      return next(error);
     }
   });
 
@@ -301,9 +376,10 @@ export function rutasTickets(
     }
   });
 
+  // ========================================
   // PUT /api/tickets/:id
   // Actualizar ticket
-
+  // ========================================
 
   rutas.put("/:id", async (req, res, next) => {
     const id = Number(req.params.id);
