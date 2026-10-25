@@ -6,11 +6,18 @@ import type { ConsultarMantenimientos } from '../../../aplicacion/casos-uso/Cons
 import { MantenimientoNoEncontrado } from '../../../aplicacion/casos-uso/ConsultarMantenimientos'
 import { EquipoNoEncontrado } from '../../../aplicacion/casos-uso/ConsultarEquipos'
 import type { ActualizarEstadoMantenimiento, ActualizarMantenimientoDTO } from '../../../aplicacion/casos-uso/ActualizarEstadoMantenimiento'
+import type { RegistrarDiagnostico } from '../../../aplicacion/casos-uso/RegistrarDiagnostico'
+import {
+  DiagnosticoInvalido,
+  TecnicoInvalido,
+  MantenimientoNoModificable
+} from '../../../aplicacion/casos-uso/RegistrarDiagnostico'
 
 export interface DependenciasMantenimientos {
   registrarMantenimiento: RegistrarMantenimiento
   consultarMantenimientos: ConsultarMantenimientos
   actualizarEstadoMantenimiento: ActualizarEstadoMantenimiento
+  registrarDiagnostico: RegistrarDiagnostico
 }
 
 function validarRegistroMantenimiento(cuerpo: unknown): RegistroMantenimientoDTO | string {
@@ -141,6 +148,43 @@ export function rutasMantenimientos(deps: DependenciasMantenimientos): Router {
     } catch (error) {
       if (error instanceof MantenimientoNoEncontrado) {
         return void res.status(404).json({ error: error.message })
+      }
+      next(error)
+    }
+  })
+
+  // PATCH /api/mantenimientos/:id/diagnostico - Registrar o actualizar diagnóstico detallado (ACT-024)
+  rutas.patch('/:id/diagnostico', async (req, res, next) => {
+    const mantenimientoId = Number(req.params.id)
+    if (isNaN(mantenimientoId) || mantenimientoId <= 0) {
+      return void res.status(400).json({ error: 'El ID del mantenimiento debe ser un número entero positivo' })
+    }
+
+    const d = (req.body ?? {}) as Record<string, unknown>
+    if (typeof d['diagnostico'] !== 'string' || d['diagnostico'].trim().length < 10) {
+      return void res.status(400).json({ error: 'El diagnóstico debe tener al menos 10 caracteres detallando la falla y la solución' })
+    }
+
+    if (typeof d['tecnico'] !== 'string' || d['tecnico'].trim().length < 2) {
+      return void res.status(400).json({ error: 'El nombre del técnico es obligatorio (mínimo 2 caracteres)' })
+    }
+
+    try {
+      const actualizado = await deps.registrarDiagnostico.ejecutar({
+        mantenimientoId,
+        diagnostico: d['diagnostico'],
+        tecnico: d['tecnico']
+      })
+      res.json(aMantenimientoDTO(actualizado))
+    } catch (error) {
+      if (error instanceof MantenimientoNoEncontrado) {
+        return void res.status(404).json({ error: error.message })
+      }
+      if (error instanceof DiagnosticoInvalido || error instanceof TecnicoInvalido) {
+        return void res.status(400).json({ error: error.message })
+      }
+      if (error instanceof MantenimientoNoModificable) {
+        return void res.status(409).json({ error: error.message })
       }
       next(error)
     }

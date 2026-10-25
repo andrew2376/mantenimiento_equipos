@@ -419,6 +419,61 @@ const swaggerDocument = {
       },
     },
 
+    "/api/mantenimientos/{id}/diagnostico": {
+      patch: {
+        tags: ["Mantenimientos"],
+        summary: "Registrar o actualizar diagnóstico detallado del equipo (ACT-024)",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["diagnostico", "tecnico"],
+                properties: {
+                  diagnostico: {
+                    type: "string",
+                    minLength: 10,
+                    example: "Falla en sectores del disco duro y memoria RAM desajustada. Se requiere reemplazo de unidad SSD.",
+                  },
+                  tecnico: {
+                    type: "string",
+                    minLength: 2,
+                    example: "Carlos Técnico",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Diagnóstico registrado exitosamente. Si estaba PENDIENTE, pasa a EN_PROCESO.",
+          },
+          "400": {
+            description: "Diagnóstico menor a 10 caracteres o técnico no especificado",
+          },
+          "404": {
+            description: "Mantenimiento no encontrado",
+          },
+          "409": {
+            description: "No se puede registrar diagnóstico en un mantenimiento finalizado o cancelado",
+          },
+        },
+      },
+    },
+
     "/api/mantenimientos/equipo/{equipoId}": {
       get: {
         tags: ["Mantenimientos"],
