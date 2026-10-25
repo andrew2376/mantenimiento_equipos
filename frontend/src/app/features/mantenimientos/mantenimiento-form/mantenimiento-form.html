@@ -93,7 +93,9 @@
           >
             <option value="PENDIENTE">PENDIENTE</option>
             <option value="EN_PROCESO">EN PROCESO</option>
-            <option value="FINALIZADO">FINALIZADO</option>
+            <option value="FINALIZADO" [disabled]="!mantenimientoEditar?.diagnostico">
+              FINALIZADO {{ (!mantenimientoEditar?.diagnostico) ? '(Requiere diagnóstico previo)' : '' }}
+            </option>
             <option value="CANCELADO">CANCELADO</option>
           </select>
         </div>

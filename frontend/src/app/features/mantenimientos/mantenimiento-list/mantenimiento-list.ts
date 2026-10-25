@@ -243,4 +243,60 @@ export class MantenimientoList implements OnInit {
         }
       });
   }
+
+  // --- MODAL Y CIERRE DE MANTENIMIENTO CON SINCRONIZACIÓN DE TICKET (ACT-027) ---
+  mostrarModalCierre = false;
+  mantenimientoParaCierre?: Mantenimiento;
+  errorCierre = '';
+  mensajeExitoCierre = '';
+  guardandoCierre = false;
+
+  abrirModalCierre(m: Mantenimiento): void {
+    if (!m.diagnostico || m.diagnostico.trim().length === 0) {
+      alert('Para finalizar el mantenimiento, es obligatorio registrar previamente el diagnóstico técnico con el botón "Diagnóstico".');
+      return;
+    }
+    this.mantenimientoParaCierre = m;
+    this.errorCierre = '';
+    this.mensajeExitoCierre = '';
+    this.guardandoCierre = false;
+    this.mostrarModalCierre = true;
+  }
+
+  cerrarModalCierre(): void {
+    this.mostrarModalCierre = false;
+    this.mantenimientoParaCierre = undefined;
+    this.errorCierre = '';
+    this.guardandoCierre = false;
+  }
+
+  confirmarCierre(): void {
+    if (!this.mantenimientoParaCierre) return;
+
+    this.guardandoCierre = true;
+    this.errorCierre = '';
+
+    this.mantenimientoService
+      .cerrarMantenimiento(this.mantenimientoParaCierre.id)
+      .subscribe({
+        next: (res) => {
+          this.guardandoCierre = false;
+          let mensaje = `✓ Mantenimiento #${this.mantenimientoParaCierre?.id} finalizado con éxito.`;
+          if (res.ticketSincronizado) {
+            mensaje += `\n✓ El Ticket #${res.ticketSincronizado.id} fue sincronizado y marcado como RESUELTO.`;
+          }
+          if (res.equipoOperativo) {
+            mensaje += `\n✓ El equipo quedó marcado como OPERATIVO.`;
+          }
+          this.mensajeExitoCierre = mensaje;
+          this.cerrarModalCierre();
+          this.cargarDatos();
+          alert(mensaje);
+        },
+        error: (err) => {
+          this.guardandoCierre = false;
+          this.errorCierre = err.error?.error || 'No se pudo cerrar el mantenimiento.';
+        }
+      });
+  }
 }

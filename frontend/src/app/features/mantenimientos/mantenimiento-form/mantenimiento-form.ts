@@ -344,6 +344,12 @@ export class MantenimientoForm implements OnInit {
       return;
     }
 
+    if (this.estado === 'FINALIZADO' && !this.mantenimientoEditar?.diagnostico) {
+      this.error = 'No se puede finalizar el mantenimiento sin haber registrado su diagnóstico técnico previamente.';
+      this.changeDetectorRef.detectChanges();
+      return;
+    }
+
     this.guardando = true;
     this.changeDetectorRef.detectChanges();
 
