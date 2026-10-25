@@ -201,6 +201,18 @@
                       </button>
                     }
 
+                    <!-- Botón Registrar Diagnóstico (ACT-024) -->
+                    @if (m.estado === 'PENDIENTE' || m.estado === 'EN_PROCESO') {
+                      <button
+                        type="button"
+                        title="Registrar diagnóstico técnico (ACT-024)"
+                        style="padding: 6px 10px; background: #6366f1; color: #ffffff; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;"
+                        (click)="abrirModalDiagnostico(m)"
+                      >
+                        Diagnóstico
+                      </button>
+                    }
+
                     <!-- Botón editar / diagnóstico completo -->
                     <button
                       type="button"
@@ -229,5 +241,92 @@
       (cerrar)="cerrarFormulario()"
       (guardado)="onGuardado()"
     />
+  }
+
+  <!-- Modal Registrar Diagnóstico (ACT-024) -->
+  @if (mostrarModalDiagnostico && mantenimientoParaDiagnostico) {
+    <div class="modal-overlay">
+      <div class="modal" style="width: min(580px, 95vw); max-width: 580px;">
+        <div class="modal-header">
+          <div>
+            <h2>Diagnóstico Técnico</h2>
+            <p>Registra el análisis técnico y la causa de la falla para el mantenimiento #{{ mantenimientoParaDiagnostico.id }}</p>
+          </div>
+          <button
+            type="button"
+            class="modal-close"
+            aria-label="Cerrar"
+            (click)="cerrarModalDiagnostico()"
+          >
+            ×
+          </button>
+        </div>
+
+        <form (ngSubmit)="guardarDiagnostico()">
+          @if (errorDiagnostico) {
+            <div class="mensaje error" style="margin: 0 0 18px; padding: 10px 14px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px;">
+              {{ errorDiagnostico }}
+            </div>
+          }
+
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; font-size: 13px; color: #334155;">
+            <div><strong>Equipo:</strong> {{ obtenerNombreEquipo(mantenimientoParaDiagnostico.equipoId) }}</div>
+            <div style="margin-top: 4px;"><strong>Tipo:</strong> {{ mantenimientoParaDiagnostico.tipo }} | <strong>Estado actual:</strong> {{ mantenimientoParaDiagnostico.estado }}</div>
+            <div style="margin-top: 4px;"><strong>Problema reportado:</strong> {{ mantenimientoParaDiagnostico.descripcion }}</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="campoTecnico">
+              Técnico responsable <span>*</span>
+            </label>
+            <input
+              id="campoTecnico"
+              name="campoTecnico"
+              type="text"
+              placeholder="Ej: Juan Pérez / Soporte Nivel 2"
+              [(ngModel)]="campoTecnicoDiagnostico"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="campoDiagnostico">
+              Detalle del diagnóstico técnico <span>*</span>
+              <span style="font-size: 12px; font-weight: normal; color: #64748b; margin-left: 6px;">
+                (Mínimo 10 caracteres - Actual: {{ campoDiagnostico.length }})
+              </span>
+            </label>
+            <textarea
+              id="campoDiagnostico"
+              name="campoDiagnostico"
+              rows="4"
+              placeholder="Describe detalladamente las pruebas realizadas, causa raíz de la falla y solución propuesta o implementada..."
+              [(ngModel)]="campoDiagnostico"
+              required
+              style="width: 100%; padding: 10px 12px; border: 1px solid #d0d5dd; border-radius: 9px; font-family: inherit; font-size: 14px; outline: none; resize: vertical;"
+            ></textarea>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 20px;">
+            <button
+              type="button"
+              class="btn-cancelar"
+              (click)="cerrarModalDiagnostico()"
+              [disabled]="guardandoDiagnostico"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-guardar"
+              style="background: #6366f1; color: white; border: none; cursor: pointer;"
+              [disabled]="guardandoDiagnostico"
+            >
+              {{ guardandoDiagnostico ? 'Guardando...' : 'Guardar Diagnóstico' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   }
 </div>
