@@ -186,4 +186,61 @@ export class MantenimientoList implements OnInit {
     const tk = this.ticketsMap.get(ticketId);
     return tk ? `#${tk.id} - ${tk.titulo}` : `#${ticketId}`;
   }
+
+  // --- MODAL DIAGNÓSTICO (ACT-024) ---
+  mostrarModalDiagnostico = false;
+  mantenimientoParaDiagnostico?: Mantenimiento;
+  campoDiagnostico = '';
+  campoTecnicoDiagnostico = '';
+  errorDiagnostico = '';
+  guardandoDiagnostico = false;
+
+  abrirModalDiagnostico(m: Mantenimiento): void {
+    this.mantenimientoParaDiagnostico = m;
+    this.campoDiagnostico = m.diagnostico || '';
+    this.campoTecnicoDiagnostico = m.tecnico || '';
+    this.errorDiagnostico = '';
+    this.guardandoDiagnostico = false;
+    this.mostrarModalDiagnostico = true;
+  }
+
+  cerrarModalDiagnostico(): void {
+    this.mostrarModalDiagnostico = false;
+    this.mantenimientoParaDiagnostico = undefined;
+    this.errorDiagnostico = '';
+  }
+
+  guardarDiagnostico(): void {
+    if (!this.mantenimientoParaDiagnostico) return;
+
+    if (!this.campoDiagnostico || this.campoDiagnostico.trim().length < 10) {
+      this.errorDiagnostico = 'El diagnóstico debe tener al menos 10 caracteres detallando la falla y la solución.';
+      return;
+    }
+
+    if (!this.campoTecnicoDiagnostico || this.campoTecnicoDiagnostico.trim().length < 2) {
+      this.errorDiagnostico = 'El nombre del técnico es obligatorio (mínimo 2 caracteres).';
+      return;
+    }
+
+    this.guardandoDiagnostico = true;
+    this.errorDiagnostico = '';
+
+    this.mantenimientoService
+      .registrarDiagnostico(this.mantenimientoParaDiagnostico.id, {
+        diagnostico: this.campoDiagnostico.trim(),
+        tecnico: this.campoTecnicoDiagnostico.trim()
+      })
+      .subscribe({
+        next: () => {
+          this.guardandoDiagnostico = false;
+          this.cerrarModalDiagnostico();
+          this.cargarDatos();
+        },
+        error: (err) => {
+          this.guardandoDiagnostico = false;
+          this.errorDiagnostico = err.error?.error || 'No se pudo registrar el diagnóstico.';
+        }
+      });
+  }
 }

@@ -37,6 +37,11 @@ export interface ActualizarMantenimiento {
   ticketId?: number | null;
 }
 
+export interface RegistrarDiagnosticoDTO {
+  diagnostico: string;
+  tecnico: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,5 +67,9 @@ export class MantenimientoService {
 
   actualizarEstado(id: number, datos: ActualizarMantenimiento): Observable<Mantenimiento> {
     return this.http.patch<Mantenimiento>(`${this.apiUrl}/${id}`, datos);
+  }
+
+  registrarDiagnostico(id: number, datos: RegistrarDiagnosticoDTO): Observable<Mantenimiento> {
+    return this.http.patch<Mantenimiento>(`${this.apiUrl}/${id}/diagnostico`, datos);
   }
 }
