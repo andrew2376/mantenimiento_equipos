@@ -135,7 +135,7 @@
       </div>
 
 
-      @if (ticketEditar) {
+           @if (ticketEditar) {
 
         <div class="form-group">
 
@@ -147,42 +147,65 @@
             id="estado"
             name="estado"
             [(ngModel)]="estado"
+            [disabled]="guardando"
           >
 
-            <option value="ABIERTO">
-              Abierto
-            </option>
+            @for (
+              estadoDisponible of estadosDisponibles;
+              track estadoDisponible
+            ) {
 
-            <option value="ASIGNADO">
-              Asignado
-            </option>
+              <option [value]="estadoDisponible">
 
-            <option value="EN_DIAGNOSTICO">
-              En diagnóstico
-            </option>
+                @switch (estadoDisponible) {
 
-            <option value="EN_MANTENIMIENTO">
-              En mantenimiento
-            </option>
+                  @case ('ABIERTO') {
+                    Abierto
+                  }
 
-            <option value="RESUELTO">
-              Resuelto
-            </option>
+                  @case ('ASIGNADO') {
+                    Asignado
+                  }
 
-            <option value="CERRADO">
-              Cerrado
-            </option>
+                  @case ('EN_DIAGNOSTICO') {
+                    En diagnóstico
+                  }
 
-            <option value="CANCELADO">
-              Cancelado
-            </option>
+                  @case ('EN_MANTENIMIENTO') {
+                    En mantenimiento
+                  }
+
+                  @case ('RESUELTO') {
+                    Resuelto
+                  }
+
+                  @case ('CERRADO') {
+                    Cerrado
+                  }
+
+                  @case ('CANCELADO') {
+                    Cancelado
+                  }
+
+                }
+
+              </option>
+
+            }
 
           </select>
+
+          @if (sinTransicionesDisponibles) {
+
+            <small class="mensaje-info">
+              Este ticket no tiene transiciones de estado disponibles.
+            </small>
+
+          }
 
         </div>
 
       }
-
 
       <div class="form-group">
 
