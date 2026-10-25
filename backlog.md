@@ -52,10 +52,10 @@
 - [x] **ACT-011** Backend: Endpoints para registro y consulta de mantenimientos (4h) • *Andrew B.* • `feature/ACT-011-mantenimientos-api`
 - [x] **ACT-012** Frontend: Formulario y tabla de mantenimientos (4h) • *Antonia G.* • `feature/ACT-012-mantenimientos-ui`
 - [x] **ACT-013** Frontend: Diseño de navegación común y navbar (3h) • *Antonia G.* • `feature/ACT-013-navbar-layout`
-- [ ] **ACT-024** Backend: Registro de diagnóstico detallado del equipo • *Andrew B.* • `feature/ACT-024-diagnostico-mantenimiento`
+- [x] **ACT-024** Backend: Registro de diagnóstico detallado del equipo (4h) • *Andrew B. / Antonia G.* • `feature/ACT-024-diagnostico-mantenimiento`
 - [x] **ACT-025** Backend: Modelo Prisma y DAO para repuestos utilizados (4h) • *Antonia G.* • `feature/ACT-025-repuestos-prisma`
 - [x] **ACT-026** Frontend: Formulario para asociar repuestos al mantenimiento (4h) • *Antonia G.* • `feature/ACT-026-repuestos-ui`
-- [ ] **ACT-027** Backend: Cierre de mantenimiento con sincronización de ticket • *Andrew B.* • `feature/ACT-027-cierre-mantenimiento`
+- [x] **ACT-027** Backend: Cierre de mantenimiento con sincronización de ticket (4h) • *Andrew B. / Antonia G.* • `feature/ACT-027-cierre-mantenimiento`
 
 ### E6 • Trazabilidad y Calidad del Software
 - [ ] **ACT-028** Frontend: Vista de hoja de vida e historial por equipo • *Yulian O.* • `feature/ACT-028-hoja-vida-equipo`
@@ -85,16 +85,16 @@
 | **ACT-015** | Frontend: Habilitar modal de edición de usuarios y selector de rol | Yulian O. | Por hacer | `feature/ACT-015-editar-usuario-ui` | - | - |
 | **ACT-016** | Backend: Middleware de verificación JWT para rutas protegidas | Antonia G. | En desarrollo | `feature/ACT-016-middleware-jwt` | - | - |
 | **ACT-017** | Frontend: Implementar AuthGuard para proteger rutas en Angular | Antonia G. | Por hacer | `feature/ACT-017-authguard-angular` | - | - |
-| **ACT-018** | Backend: Middleware de autorización según rol (RBAC) | Andrew B. | Por hacer | `feature/ACT-018-autorizacion-roles` | - | - |
+| **ACT-018** | Backend: Middleware de autorización según rol (RBAC) | Andrew B. | Terminado | `feature/ACT-018-middleware-autorizacion-rol` | `80530df` | 4h |
 | **ACT-019** | Frontend: Ocultar o mostrar opciones del menú según rol | Antonia G. | Por hacer | `feature/ACT-019-menu-segun-rol` | - | - |
 | **ACT-020** | Backend: Implementar baja lógica de equipos (desactivar) | Andrew B. | Por hacer | `feature/ACT-020-desactivar-equipo` | - | - |
 | **ACT-021** | Frontend: Filtros avanzados de equipos por tipo y estado | Yulian O. | Por hacer | `feature/ACT-021-filtros-equipos` | - | - |
-| **ACT-022** | Backend: Validar transiciones de estado en tickets | Andrew B. | Por hacer | `feature/ACT-022-estados-ticket` | - | - |
-| **ACT-023** | Frontend: Vista para asignar técnico responsable | Yulian O. | Por hacer | `feature/ACT-023-asignar-tecnico` | - | - |
-| **ACT-024** | Backend: Registro y actualización de diagnóstico detallado | Andrew B. | Por hacer | `feature/ACT-024-diagnostico-mantenimiento` | - | - |
+| **ACT-022** | Backend: Validar transiciones de estado en tickets | Andrew B. | Terminado | `feature/ACT-022-validar-transiciones` | `5171c38` | 4h |
+| **ACT-023** | Frontend: Vista para asignar técnico responsable | Yulian O. | Terminado | `feature/ACT-023-asignar-tecnico-responsable` | `397b40a` | 4h |
+| **ACT-024** | Backend: Registro y actualización de diagnóstico detallado | Andrew B. / Antonia G. | Terminado | `feature/ACT-024-diagnostico-mantenimiento` | `81e8588` | 4h |
 | **ACT-025** | Backend: Modelo Prisma y DAO para repuestos utilizados | Antonia G. | Terminado | `feature/ACT-025-repuestos-prisma` | `a8b0f5a` | 4h |
 | **ACT-026** | Frontend: Formulario para asociar repuestos al mantenimiento | Antonia G. | Terminado | `feature/ACT-026-repuestos-ui` | `42fd853` | 4h |
-| **ACT-027** | Backend: Cierre de mantenimiento con sincronización de ticket | Andrew B. | Por hacer | `feature/ACT-027-cierre-mantenimiento` | - | - |
+| **ACT-027** | Backend: Cierre de mantenimiento con sincronización de ticket | Andrew B. / Antonia G. | Terminado | `feature/ACT-027-cierre-mantenimiento` | `fa8d87d` | 4h |
 | **ACT-028** | Frontend: Vista de historial de mantenimientos por equipo | Yulian O. | Por hacer | `feature/ACT-028-hoja-vida-equipo` | - | - |
 | **ACT-029** | Pruebas: Pruebas unitarias de casos de uso con Vitest | Andrew B. | Por hacer | `feature/ACT-029-pruebas-unitarias` | - | - |
 | **ACT-030** | Pruebas: Validación e integración de flujo completo | Antonia G. | Por hacer | `feature/ACT-030-prueba-flujo-completo` | - | - |
