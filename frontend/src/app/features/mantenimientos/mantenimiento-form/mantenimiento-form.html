@@ -93,26 +93,14 @@
           >
             <option value="PENDIENTE">PENDIENTE</option>
             <option value="EN_PROCESO">EN PROCESO</option>
-            <option value="FINALIZADO">FINALIZADO</option>
+            <option value="FINALIZADO" [disabled]="!mantenimientoEditar?.diagnostico">
+              FINALIZADO {{ (!mantenimientoEditar?.diagnostico) ? '(Requiere diagnóstico previo)' : '' }}
+            </option>
             <option value="CANCELADO">CANCELADO</option>
           </select>
         </div>
 
-        <!-- Técnico responsable -->
-        <div class="form-group form-group-full">
-          <label for="tecnico">
-            Técnico responsable
-          </label>
-          <input
-            id="tecnico"
-            name="tecnico"
-            type="text"
-            [(ngModel)]="tecnico"
-            placeholder="Ej. Antonia Gallego"
-          />
-        </div>
-
-        <!-- Descripción -->
+        <!-- Descripción de la intervención -->
         <div class="form-group form-group-full">
           <label for="descripcion">
             Descripción de la intervención <span>*</span>
@@ -127,19 +115,34 @@
           ></textarea>
         </div>
 
-        <!-- Diagnóstico / Observaciones -->
-        <div class="form-group form-group-full">
-          <label for="diagnostico">
-            Diagnóstico / Trabajo realizado
-          </label>
-          <textarea
-            id="diagnostico"
-            name="diagnostico"
-            rows="3"
-            [(ngModel)]="diagnostico"
-            placeholder="Observaciones técnicas, hallazgos o solución implementada..."
-          ></textarea>
-        </div>
+        <!-- Diagnóstico y Técnico (Informativo de solo lectura en Detalle) -->
+        @if (mantenimientoEditar) {
+          <div class="form-group form-group-full">
+            <label style="color: #344054; font-size: 13px; font-weight: 600;">
+              Diagnóstico y Técnico Responsable
+            </label>
+            @if (mantenimientoEditar.diagnostico) {
+              <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9px; padding: 14px 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span style="color: #166534; font-weight: 700; font-size: 13px;">
+                    ✓ Diagnóstico Registrado
+                  </span>
+                  <span style="color: #15803d; font-size: 12px; font-weight: 600;">
+                    Técnico: {{ mantenimientoEditar.tecnico || 'Sin asignar' }}
+                  </span>
+                </div>
+                <p style="margin: 0; color: #1e293b; font-size: 14px; line-height: 1.5; white-space: pre-wrap;">{{ mantenimientoEditar.diagnostico }}</p>
+                <div style="margin-top: 8px; font-size: 11px; color: #64748b;">
+                  * Para actualizar o agregar más detalles al diagnóstico, utiliza el botón "Diagnóstico" en la tabla principal.
+                </div>
+              </div>
+            } @else {
+              <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 9px; padding: 14px 16px; color: #64748b; font-size: 13px;">
+                ℹ️ <strong>Pendiente por diagnóstico técnico.</strong> Este equipo aún no cuenta con análisis registrado. Puedes ingresarlo desde la tabla principal usando el botón morado <strong>"Diagnóstico"</strong>.
+              </div>
+            }
+          </div>
+        }
       </div>
 
       <!-- SECCIÓN DEDICADA DE REPUESTOS (Ocupa todo el ancho al final) -->

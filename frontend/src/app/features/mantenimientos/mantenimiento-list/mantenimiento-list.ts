@@ -186,4 +186,117 @@ export class MantenimientoList implements OnInit {
     const tk = this.ticketsMap.get(ticketId);
     return tk ? `#${tk.id} - ${tk.titulo}` : `#${ticketId}`;
   }
+
+  // --- MODAL DIAGNÓSTICO (ACT-024) ---
+  mostrarModalDiagnostico = false;
+  mantenimientoParaDiagnostico?: Mantenimiento;
+  campoDiagnostico = '';
+  campoTecnicoDiagnostico = '';
+  errorDiagnostico = '';
+  guardandoDiagnostico = false;
+
+  abrirModalDiagnostico(m: Mantenimiento): void {
+    this.mantenimientoParaDiagnostico = m;
+    this.campoDiagnostico = m.diagnostico || '';
+    this.campoTecnicoDiagnostico = m.tecnico || '';
+    this.errorDiagnostico = '';
+    this.guardandoDiagnostico = false;
+    this.mostrarModalDiagnostico = true;
+  }
+
+  cerrarModalDiagnostico(): void {
+    this.mostrarModalDiagnostico = false;
+    this.mantenimientoParaDiagnostico = undefined;
+    this.errorDiagnostico = '';
+  }
+
+  guardarDiagnostico(): void {
+    if (!this.mantenimientoParaDiagnostico) return;
+
+    if (!this.campoDiagnostico || this.campoDiagnostico.trim().length < 10) {
+      this.errorDiagnostico = 'El diagnóstico debe tener al menos 10 caracteres detallando la falla y la solución.';
+      return;
+    }
+
+    if (!this.campoTecnicoDiagnostico || this.campoTecnicoDiagnostico.trim().length < 2) {
+      this.errorDiagnostico = 'El nombre del técnico es obligatorio (mínimo 2 caracteres).';
+      return;
+    }
+
+    this.guardandoDiagnostico = true;
+    this.errorDiagnostico = '';
+
+    this.mantenimientoService
+      .registrarDiagnostico(this.mantenimientoParaDiagnostico.id, {
+        diagnostico: this.campoDiagnostico.trim(),
+        tecnico: this.campoTecnicoDiagnostico.trim()
+      })
+      .subscribe({
+        next: () => {
+          this.guardandoDiagnostico = false;
+          this.cerrarModalDiagnostico();
+          this.cargarDatos();
+        },
+        error: (err) => {
+          this.guardandoDiagnostico = false;
+          this.errorDiagnostico = err.error?.error || 'No se pudo registrar el diagnóstico.';
+        }
+      });
+  }
+
+  // --- MODAL Y CIERRE DE MANTENIMIENTO CON SINCRONIZACIÓN DE TICKET (ACT-027) ---
+  mostrarModalCierre = false;
+  mantenimientoParaCierre?: Mantenimiento;
+  errorCierre = '';
+  mensajeExitoCierre = '';
+  guardandoCierre = false;
+
+  abrirModalCierre(m: Mantenimiento): void {
+    if (!m.diagnostico || m.diagnostico.trim().length === 0) {
+      alert('Para finalizar el mantenimiento, es obligatorio registrar previamente el diagnóstico técnico con el botón "Diagnóstico".');
+      return;
+    }
+    this.mantenimientoParaCierre = m;
+    this.errorCierre = '';
+    this.mensajeExitoCierre = '';
+    this.guardandoCierre = false;
+    this.mostrarModalCierre = true;
+  }
+
+  cerrarModalCierre(): void {
+    this.mostrarModalCierre = false;
+    this.mantenimientoParaCierre = undefined;
+    this.errorCierre = '';
+    this.guardandoCierre = false;
+  }
+
+  confirmarCierre(): void {
+    if (!this.mantenimientoParaCierre) return;
+
+    this.guardandoCierre = true;
+    this.errorCierre = '';
+
+    this.mantenimientoService
+      .cerrarMantenimiento(this.mantenimientoParaCierre.id)
+      .subscribe({
+        next: (res) => {
+          this.guardandoCierre = false;
+          let mensaje = `✓ Mantenimiento #${this.mantenimientoParaCierre?.id} finalizado con éxito.`;
+          if (res.ticketSincronizado) {
+            mensaje += `\n✓ El Ticket #${res.ticketSincronizado.id} fue sincronizado y marcado como RESUELTO.`;
+          }
+          if (res.equipoOperativo) {
+            mensaje += `\n✓ El equipo quedó marcado como OPERATIVO.`;
+          }
+          this.mensajeExitoCierre = mensaje;
+          this.cerrarModalCierre();
+          this.cargarDatos();
+          alert(mensaje);
+        },
+        error: (err) => {
+          this.guardandoCierre = false;
+          this.errorCierre = err.error?.error || 'No se pudo cerrar el mantenimiento.';
+        }
+      });
+  }
 }

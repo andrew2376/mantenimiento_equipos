@@ -37,6 +37,18 @@ export interface ActualizarMantenimiento {
   ticketId?: number | null;
 }
 
+export interface RegistrarDiagnosticoDTO {
+  diagnostico: string;
+  tecnico: string;
+}
+
+export interface ResultadoCierreMantenimientoDTO {
+  mantenimiento: Mantenimiento;
+  ticketSincronizado: any | null;
+  equipoOperativo: boolean;
+  mensaje: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,5 +74,13 @@ export class MantenimientoService {
 
   actualizarEstado(id: number, datos: ActualizarMantenimiento): Observable<Mantenimiento> {
     return this.http.patch<Mantenimiento>(`${this.apiUrl}/${id}`, datos);
+  }
+
+  registrarDiagnostico(id: number, datos: RegistrarDiagnosticoDTO): Observable<Mantenimiento> {
+    return this.http.patch<Mantenimiento>(`${this.apiUrl}/${id}/diagnostico`, datos);
+  }
+
+  cerrarMantenimiento(id: number, datos?: { diagnostico?: string; tecnico?: string }): Observable<ResultadoCierreMantenimientoDTO> {
+    return this.http.post<ResultadoCierreMantenimientoDTO>(`${this.apiUrl}/${id}/cerrar`, datos ?? {});
   }
 }

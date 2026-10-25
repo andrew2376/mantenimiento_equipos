@@ -189,15 +189,27 @@
                       </button>
                     }
 
-                    <!-- Botón para finalizar -->
+                    <!-- Botón para finalizar con sincronización de ticket (ACT-027) -->
                     @if (m.estado === 'EN_PROCESO') {
                       <button
                         type="button"
-                        title="Finalizar mantenimiento"
-                        style="padding: 6px 10px; background: #10b981; color: #ffffff; border-radius: 6px; font-size: 12px; font-weight: 600;"
-                        (click)="cambiarEstadoRapido(m, 'FINALIZADO')"
+                        title="Finalizar mantenimiento con sincronización de ticket (ACT-027)"
+                        style="padding: 6px 10px; background: #059669; color: #ffffff; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;"
+                        (click)="abrirModalCierre(m)"
                       >
                         Finalizar
+                      </button>
+                    }
+
+                    <!-- Botón Registrar Diagnóstico (ACT-024) -->
+                    @if (m.estado === 'PENDIENTE' || m.estado === 'EN_PROCESO') {
+                      <button
+                        type="button"
+                        title="Registrar diagnóstico técnico (ACT-024)"
+                        style="padding: 6px 10px; background: #6366f1; color: #ffffff; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;"
+                        (click)="abrirModalDiagnostico(m)"
+                      >
+                        Diagnóstico
                       </button>
                     }
 
@@ -229,5 +241,179 @@
       (cerrar)="cerrarFormulario()"
       (guardado)="onGuardado()"
     />
+  }
+
+  <!-- Modal Registrar Diagnóstico (ACT-024) -->
+  @if (mostrarModalDiagnostico && mantenimientoParaDiagnostico) {
+    <div class="modal-overlay">
+      <div class="modal" style="width: min(580px, 95vw); max-width: 580px;">
+        <div class="modal-header">
+          <div>
+            <h2>Diagnóstico Técnico</h2>
+            <p>Registra el análisis técnico y la causa de la falla para el mantenimiento #{{ mantenimientoParaDiagnostico.id }}</p>
+          </div>
+          <button
+            type="button"
+            class="modal-close"
+            aria-label="Cerrar"
+            (click)="cerrarModalDiagnostico()"
+          >
+            ×
+          </button>
+        </div>
+
+        <form (ngSubmit)="guardarDiagnostico()">
+          @if (errorDiagnostico) {
+            <div class="mensaje error" style="margin: 0 0 18px; padding: 10px 14px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px;">
+              {{ errorDiagnostico }}
+            </div>
+          }
+
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; font-size: 13px; color: #334155;">
+            <div><strong>Equipo:</strong> {{ obtenerNombreEquipo(mantenimientoParaDiagnostico.equipoId) }}</div>
+            <div style="margin-top: 4px;"><strong>Tipo:</strong> {{ mantenimientoParaDiagnostico.tipo }} | <strong>Estado actual:</strong> {{ mantenimientoParaDiagnostico.estado }}</div>
+            <div style="margin-top: 4px;"><strong>Problema reportado:</strong> {{ mantenimientoParaDiagnostico.descripcion }}</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="campoTecnico">
+              Técnico responsable <span>*</span>
+            </label>
+            <input
+              id="campoTecnico"
+              name="campoTecnico"
+              type="text"
+              placeholder="Ej: Juan Pérez / Soporte Nivel 2"
+              [(ngModel)]="campoTecnicoDiagnostico"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="campoDiagnostico">
+              Detalle del diagnóstico técnico <span>*</span>
+              <span style="font-size: 12px; font-weight: normal; color: #64748b; margin-left: 6px;">
+                (Mínimo 10 caracteres - Actual: {{ campoDiagnostico.length }})
+              </span>
+            </label>
+            <textarea
+              id="campoDiagnostico"
+              name="campoDiagnostico"
+              rows="4"
+              placeholder="Describe detalladamente las pruebas realizadas, causa raíz de la falla y solución propuesta o implementada..."
+              [(ngModel)]="campoDiagnostico"
+              required
+              style="width: 100%; padding: 10px 12px; border: 1px solid #d0d5dd; border-radius: 9px; font-family: inherit; font-size: 14px; outline: none; resize: vertical;"
+            ></textarea>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 20px;">
+            <button
+              type="button"
+              class="btn-cancelar"
+              (click)="cerrarModalDiagnostico()"
+              [disabled]="guardandoDiagnostico"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-guardar"
+              style="background: #6366f1; color: white; border: none; cursor: pointer;"
+              [disabled]="guardandoDiagnostico"
+            >
+              {{ guardandoDiagnostico ? 'Guardando...' : 'Guardar Diagnóstico' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Finalizar Mantenimiento con Sincronización de Ticket (ACT-027) -->
+  @if (mostrarModalCierre && mantenimientoParaCierre) {
+    <div class="modal-overlay">
+      <div class="modal" style="width: min(580px, 95vw); max-width: 580px;">
+        <div class="modal-header">
+          <div>
+            <h2>Finalizar Mantenimiento</h2>
+            <p>Confirma el cierre técnico de la orden #{{ mantenimientoParaCierre.id }}</p>
+          </div>
+          <button
+            type="button"
+            class="modal-close"
+            aria-label="Cerrar"
+            (click)="cerrarModalCierre()"
+          >
+            ×
+          </button>
+        </div>
+
+        <div style="padding: 24px 28px;">
+          @if (errorCierre) {
+            <div class="mensaje error" style="margin: 0 0 18px; padding: 10px 14px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px;">
+              {{ errorCierre }}
+            </div>
+          }
+
+          <!-- Tarjeta de resumen de trabajo -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 16px; margin-bottom: 20px;">
+            <div style="font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
+              Resumen de la intervención
+            </div>
+            <div style="font-size: 13px; color: #475569; display: grid; gap: 6px;">
+              <div><strong>Equipo:</strong> {{ obtenerNombreEquipo(mantenimientoParaCierre.equipoId) }}</div>
+              <div><strong>Falla reportada:</strong> {{ mantenimientoParaCierre.descripcion }}</div>
+              <div><strong>Técnico responsable:</strong> {{ mantenimientoParaCierre.tecnico || 'Sin asignar' }}</div>
+              <div style="margin-top: 4px; padding-top: 6px; border-top: 1px dashed #cbd5e1;">
+                <strong>Diagnóstico técnico:</strong>
+                <span style="color: #059669; font-weight: 600;"> {{ mantenimientoParaCierre.diagnostico }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sincronización del Ticket -->
+          @if (mantenimientoParaCierre.ticketId) {
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 9px; padding: 14px 16px; margin-bottom: 20px;">
+              <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <span style="font-size: 20px; line-height: 1;">🎫</span>
+                <div>
+                  <div style="font-size: 13px; font-weight: 700; color: #1e40af;">
+                    Sincronización Automática de Ticket (ACT-027)
+                  </div>
+                  <div style="font-size: 13px; color: #1e3a8a; margin-top: 3px; line-height: 1.4;">
+                    Al confirmar, el <strong>Ticket #{{ mantenimientoParaCierre.ticketId }}</strong> pasará automáticamente a estado <strong>RESUELTO</strong> con su fecha de cierre registrada.
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 9px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #64748b;">
+              ℹ️ Mantenimiento directo sin ticket asociado. El equipo pasará a estado <strong>OPERATIVO</strong>.
+            </div>
+          }
+
+          <div class="modal-actions" style="margin-top: 10px; padding-top: 16px;">
+            <button
+              type="button"
+              class="btn-cancelar"
+              (click)="cerrarModalCierre()"
+              [disabled]="guardandoCierre"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn-guardar"
+              style="background: #059669; color: white; border: none; cursor: pointer;"
+              (click)="confirmarCierre()"
+              [disabled]="guardandoCierre"
+            >
+              {{ guardandoCierre ? 'Finalizando...' : 'Confirmar y Cerrar Mantenimiento' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   }
 </div>
