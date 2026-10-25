@@ -1631,3 +1631,211 @@ td:first-child {
   color: #b42318;
   background: #fef3f2;
 }
+
+
+
+/* Columna de asignación de técnicos */
+.columna-tecnico {
+  min-width: 220px;
+  vertical-align: middle;
+}
+
+.columna-tecnico strong {
+  display: inline-block;
+  color: #27364b;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.columna-tecnico small {
+  display: block;
+  color: #718096;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.sin-tecnico {
+  display: inline-block;
+  color: #9ca3af;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+/* Contenedor del selector y botón */
+.asignacion-tecnico {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Selector de técnicos */
+.asignacion-tecnico select {
+  flex: 1;
+  min-width: 0;
+  width: 150px;
+  height: 36px;
+  padding: 0 32px 0 11px;
+  border: 1px solid #d1d9e6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #344256;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.asignacion-tecnico select:hover {
+  border-color: #8da9d6;
+}
+
+.asignacion-tecnico select:focus {
+  border-color: #3975d5;
+  box-shadow: 0 0 0 3px rgba(57, 117, 213, 0.12);
+}
+
+.asignacion-tecnico select:disabled {
+  background-color: #f3f5f8;
+  cursor: not-allowed;
+}
+
+/* Botón Asignar */
+.btn-asignar-tecnico {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 8px;
+  background-color: #2864c5;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-asignar-tecnico:hover:not(:disabled) {
+  background-color: #1e4fa3;
+}
+
+.btn-asignar-tecnico:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-asignar-tecnico:disabled {
+  background-color: #e5e9f0;
+  color: #9aa4b2;
+  cursor: not-allowed;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .columna-tecnico {
+    min-width: 200px;
+  }
+
+  .asignacion-tecnico select {
+    width: 120px;
+  }
+}
+
+
+
+
+.alerta-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.alerta-modal {
+  position: relative;
+  z-index: 10001;
+
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 28px;
+
+  text-align: center;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+
+  animation: alertaEntrada 0.25s ease-out;
+}
+
+.alerta-modal-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+
+  color: #b45309;
+  font-size: 36px;
+  font-weight: 800;
+
+  background: #fef3c7;
+  border: 3px solid #fcd34d;
+  border-radius: 50%;
+}
+
+.alerta-modal h2 {
+  margin: 0 0 12px;
+  color: #1e293b;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.alerta-modal p {
+  margin: 0 0 24px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.btn-alerta-modal {
+  width: 100%;
+  padding: 12px 20px;
+
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+
+  background: #4f46e5;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-alerta-modal:hover {
+  background: #4338ca;
+}
+
+@keyframes alertaEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
