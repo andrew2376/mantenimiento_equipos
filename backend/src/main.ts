@@ -23,6 +23,7 @@ import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenim
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
 import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
 import { RegistrarDiagnostico } from './aplicacion/casos-uso/RegistrarDiagnostico'
+import { CerrarMantenimiento } from './aplicacion/casos-uso/CerrarMantenimiento'
 
 import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
 import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
@@ -102,7 +103,15 @@ const consultarMantenimientos =
 const actualizarEstadoMantenimiento =
   new ActualizarEstadoMantenimiento(
     mantenimientoDAO,
-    equipoDAO
+    equipoDAO,
+    ticketDAO
+  )
+
+const cerrarMantenimiento =
+  new CerrarMantenimiento(
+    mantenimientoDAO,
+    equipoDAO,
+    ticketDAO
   )
 
 const registrarDiagnostico =
@@ -177,6 +186,7 @@ const app = crearServidor({
     consultarMantenimientos,
     actualizarEstadoMantenimiento,
     registrarDiagnostico,
+    cerrarMantenimiento,
   },
 
   usuarios: {

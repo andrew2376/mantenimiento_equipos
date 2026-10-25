@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { aMantenimientoDTO, esEstadoMantenimiento, esTipoMantenimiento } from '../../../dominio/modelo/Mantenimiento'
+import { aTicketDTO } from '../../../dominio/modelo/Ticket'
 import type { RegistrarMantenimiento, RegistroMantenimientoDTO } from '../../../aplicacion/casos-uso/RegistrarMantenimiento'
 import { EquipoInexistente } from '../../../aplicacion/casos-uso/RegistrarMantenimiento'
 import type { ConsultarMantenimientos } from '../../../aplicacion/casos-uso/ConsultarMantenimientos'
@@ -12,12 +13,15 @@ import {
   TecnicoInvalido,
   MantenimientoNoModificable
 } from '../../../aplicacion/casos-uso/RegistrarDiagnostico'
+import type { CerrarMantenimiento } from '../../../aplicacion/casos-uso/CerrarMantenimiento'
+import { MantenimientoYaCerrado, DiagnosticoRequeridoParaCierre } from '../../../aplicacion/casos-uso/CerrarMantenimiento'
 
 export interface DependenciasMantenimientos {
   registrarMantenimiento: RegistrarMantenimiento
   consultarMantenimientos: ConsultarMantenimientos
   actualizarEstadoMantenimiento: ActualizarEstadoMantenimiento
   registrarDiagnostico: RegistrarDiagnostico
+  cerrarMantenimiento?: CerrarMantenimiento
 }
 
 function validarRegistroMantenimiento(cuerpo: unknown): RegistroMantenimientoDTO | string {
@@ -185,6 +189,46 @@ export function rutasMantenimientos(deps: DependenciasMantenimientos): Router {
       }
       if (error instanceof MantenimientoNoModificable) {
         return void res.status(409).json({ error: error.message })
+      }
+      next(error)
+    }
+  })
+
+  // POST /api/mantenimientos/:id/cerrar - Cierre de mantenimiento con sincronización de ticket (ACT-027)
+  rutas.post('/:id/cerrar', async (req, res, next) => {
+    const id = Number(req.params.id)
+    if (isNaN(id)) {
+      return void res.status(400).json({ error: 'El ID del mantenimiento debe ser un número entero' })
+    }
+
+    const d = (req.body ?? {}) as Record<string, unknown>
+    const diagnostico = typeof d['diagnostico'] === 'string' ? d['diagnostico'] : undefined
+    const tecnico = typeof d['tecnico'] === 'string' ? d['tecnico'] : undefined
+
+    try {
+      if (deps.cerrarMantenimiento) {
+        const resultado = await deps.cerrarMantenimiento.ejecutar({ id, diagnostico, tecnico })
+        return void res.json({
+          mantenimiento: aMantenimientoDTO(resultado.mantenimiento),
+          ticketSincronizado: resultado.ticketSincronizado ? aTicketDTO(resultado.ticketSincronizado) : null,
+          equipoOperativo: resultado.equipoOperativo,
+          mensaje: 'Mantenimiento finalizado exitosamente y ticket sincronizado'
+        })
+      } else {
+        const actualizado = await deps.actualizarEstadoMantenimiento.ejecutar({
+          id,
+          estado: 'FINALIZADO',
+          diagnostico,
+          tecnico
+        })
+        return void res.json(aMantenimientoDTO(actualizado))
+      }
+    } catch (error) {
+      if (error instanceof MantenimientoNoEncontrado) {
+        return void res.status(404).json({ error: error.message })
+      }
+      if (error instanceof MantenimientoYaCerrado || error instanceof DiagnosticoRequeridoParaCierre) {
+        return void res.status(400).json({ error: error.message })
       }
       next(error)
     }

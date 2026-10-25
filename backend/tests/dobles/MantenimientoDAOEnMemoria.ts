@@ -16,6 +16,7 @@ export class MantenimientoDAOEnMemoria implements MantenimientoDAO {
       tecnico: m.tecnico,
       fecha: new Date(),
       equipoId: m.equipoId,
+      ticketId: m.ticketId ?? null,
     }
     this.registros.set(id, nuevo)
     return nuevo
@@ -44,6 +45,7 @@ export class MantenimientoDAOEnMemoria implements MantenimientoDAO {
       estado: datos.estado ?? actual.estado,
       diagnostico: datos.diagnostico !== undefined ? datos.diagnostico : actual.diagnostico,
       tecnico: datos.tecnico !== undefined ? datos.tecnico : actual.tecnico,
+      ticketId: datos.ticketId !== undefined ? datos.ticketId : actual.ticketId,
     }
     this.registros.set(id, actualizado)
     return actualizado
