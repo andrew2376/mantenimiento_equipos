@@ -67,7 +67,8 @@ const swaggerDocument = {
   tags: [
     {
       name: "Autenticación",
-      description: "Inicio de sesión, registro y gestión de usuarios del sistema.",
+      description:
+        "Inicio de sesión, registro y gestión de usuarios del sistema.",
     },
     {
       name: "Equipos",
@@ -77,6 +78,12 @@ const swaggerDocument = {
     {
       name: "Mantenimientos",
       description: "Gestión de los mantenimientos realizados a los equipos.",
+    },
+
+    {
+      name: "Tickets",
+      description:
+        "Gestión de tickets de soporte, asignación de técnicos y actualización de estados.",
     },
     {
       name: "Repuestos",
@@ -500,6 +507,226 @@ const swaggerDocument = {
       },
     },
 
+    "/api/tickets": {
+      get: {
+        tags: ["Tickets"],
+        summary: "Consultar todos los tickets",
+        description: "Obtiene la lista de tickets registrados en el sistema.",
+        responses: {
+          "200": {
+            description: "Lista de tickets obtenida correctamente.",
+          },
+          "500": {
+            description: "Error interno del servidor.",
+          },
+        },
+      },
+
+      post: {
+        tags: ["Tickets"],
+        summary: "Registrar un ticket",
+        description: "Registra un nuevo ticket de soporte.",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: [
+                  "titulo",
+                  "descripcion",
+                  "equipoId",
+                  "solicitanteId",
+                ],
+                properties: {
+                  titulo: {
+                    type: "string",
+                    example: "Equipo no enciende",
+                  },
+                  descripcion: {
+                    type: "string",
+                    example: "El computador no enciende al presionar el botón.",
+                  },
+                  equipoId: {
+                    type: "integer",
+                    example: 1,
+                  },
+                  solicitanteId: {
+                    type: "integer",
+                    example: 2,
+                  },
+                  prioridad: {
+                    type: "string",
+                    example: "ALTA",
+                  },
+                  tecnicoId: {
+                    type: "integer",
+                    example: 3,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Ticket registrado correctamente.",
+          },
+          "400": {
+            description: "Datos inválidos o incompletos.",
+          },
+        },
+      },
+    },
+
+    "/api/tickets/{id}": {
+      get: {
+        tags: ["Tickets"],
+        summary: "Consultar un ticket por ID",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Ticket encontrado.",
+          },
+          "400": {
+            description: "El ID del ticket no es válido.",
+          },
+          "404": {
+            description: "Ticket no encontrado.",
+          },
+        },
+      },
+
+      put: {
+        tags: ["Tickets"],
+        summary: "Actualizar un ticket",
+        description: "Actualiza los datos permitidos de un ticket existente.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  titulo: {
+                    type: "string",
+                    example: "Equipo no enciende",
+                  },
+                  descripcion: {
+                    type: "string",
+                    example: "Se revisará la fuente de alimentación.",
+                  },
+                  prioridad: {
+                    type: "string",
+                    example: "MEDIA",
+                  },
+                  estado: {
+                    type: "string",
+                    example: "EN_PROCESO",
+                  },
+                  equipoId: {
+                    type: "integer",
+                    example: 1,
+                  },
+                  solicitanteId: {
+                    type: "integer",
+                    example: 2,
+                  },
+                  tecnicoId: {
+                    type: "integer",
+                    example: 3,
+                  },
+                  fechaCierre: {
+                    type: "string",
+                    format: "date-time",
+                    example: "2026-10-25T15:30:00.000Z",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Ticket actualizado correctamente.",
+          },
+          "400": {
+            description: "Datos inválidos o transición de estado no permitida.",
+          },
+          "404": {
+            description: "Ticket no encontrado.",
+          },
+        },
+      },
+    },
+
+    "/api/tickets/{id}/asignar-tecnico": {
+      put: {
+        tags: ["Tickets"],
+        summary: "Asignar un técnico a un ticket",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "integer",
+            },
+            example: 1,
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["tecnicoId"],
+                properties: {
+                  tecnicoId: {
+                    type: "integer",
+                    example: 3,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Técnico asignado correctamente.",
+          },
+          "400": {
+            description: "El usuario no es técnico o el técnico está inactivo.",
+          },
+          "404": {
+            description: "Ticket o técnico no encontrado.",
+          },
+        },
+      },
+    },
+
     "/api/mantenimientos/{id}/cerrar": {
       post: {
         tags: ["Mantenimientos"],
@@ -727,7 +954,8 @@ const swaggerDocument = {
         ],
         responses: {
           "204": {
-            description: "Repuesto desasociado y stock restaurado en inventario",
+            description:
+              "Repuesto desasociado y stock restaurado en inventario",
           },
           "404": {
             description: "Registro de repuesto de mantenimiento no encontrado",
@@ -774,7 +1002,8 @@ const swaggerDocument = {
                   properties: {
                     token: {
                       type: "string",
-                      description: "Token JWT para Authorization: Bearer <token>",
+                      description:
+                        "Token JWT para Authorization: Bearer <token>",
                     },
                     usuario: {
                       type: "object",
@@ -839,7 +1068,12 @@ const swaggerDocument = {
                   },
                   rol: {
                     type: "string",
-                    enum: ["SOLICITANTE", "TECNICO", "ADMINISTRADOR", "SUPERVISOR"],
+                    enum: [
+                      "SOLICITANTE",
+                      "TECNICO",
+                      "ADMINISTRADOR",
+                      "SUPERVISOR",
+                    ],
                     example: "TECNICO",
                   },
                   activo: {

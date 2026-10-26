@@ -1,325 +1,349 @@
 <div class="equipos-container">
 
+  @if (mensajeAsignacion) {
+  <div class="mensaje">
+    {{ mensajeAsignacion }}
+  </div>
+  }
+
+  @if (errorAsignacion) {
+  <div class="mensaje error">
+    {{ errorAsignacion }}
+  </div>
+  }
+
   @if (cargando) {
 
-    <div class="mensaje">
+  <div class="mensaje">
 
-      Cargando tickets...
+    Cargando tickets...
 
-    </div>
+  </div>
 
   }
 
   @if (error) {
 
-    <div class="mensaje error">
+  <div class="mensaje error">
 
-      {{ error }}
+    {{ error }}
 
-    </div>
+  </div>
 
   }
 
   @if (!cargando && !error) {
 
-    @if (tickets.length > 0) {
+  @if (tickets.length > 0) {
 
-      <div class="tickets-toolbar">
+  <div class="tickets-toolbar">
 
-        <div class="busqueda-container">
+    <div class="busqueda-container">
 
-          <div class="busqueda">
+      <div class="busqueda">
 
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
 
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-              ></circle>
+          <circle cx="11" cy="11" r="7"></circle>
 
-              <path
-                d="m20 20-4-4"
-              ></path>
+          <path d="m20 20-4-4"></path>
 
-            </svg>
+        </svg>
 
-            <input
-              type="text"
-              placeholder="Buscar ticket por título, estado, prioridad..."
-              [(ngModel)]="textoBusqueda"
-              (input)="buscarTickets()"
-            />
+        <input type="text" placeholder="Buscar ticket por título, estado, prioridad..." [(ngModel)]="textoBusqueda"
+          (input)="buscarTickets()" />
 
-            @if (textoBusqueda) {
+        @if (textoBusqueda) {
 
-              <button
-                type="button"
-                class="btn-limpiar-busqueda"
-                title="Limpiar búsqueda"
-                (click)="limpiarBusqueda()"
-              >
+        <button type="button" class="btn-limpiar-busqueda" title="Limpiar búsqueda" (click)="limpiarBusqueda()">
 
-                ×
-
-              </button>
-
-            }
-
-          </div>
-
-        </div>
-
-        <button
-          type="button"
-          class="btn-nuevo-ticket"
-          (click)="abrirFormulario()"
-        >
-
-          + Nuevo ticket
+          ×
 
         </button>
 
-      </div>
-
-    }
-
-    @if (tickets.length === 0) {
-
-      <div class="mensaje">
-
-        No hay tickets registrados.
+        }
 
       </div>
 
-    }
+    </div>
 
-    @if (
-      tickets.length > 0 &&
-      ticketsFiltrados.length === 0
-    ) {
+    <button type="button" class="btn-nuevo-ticket" (click)="abrirFormulario()">
 
-      <div class="mensaje">
+      + Nuevo ticket
 
-        No se encontraron tickets que coincidan
-        con "{{ textoBusqueda }}".
+    </button>
 
-      </div>
+  </div>
 
-    }
+  }
 
-    @if (ticketsFiltrados.length > 0) {
+  @if (tickets.length === 0) {
 
-      <div class="tabla-container">
+  <div class="mensaje">
 
-        <table>
+    No hay tickets registrados.
 
-          <thead>
+  </div>
 
-            <tr>
+  }
 
-              <th>
-                Título
-              </th>
+  @if (
+  tickets.length > 0 &&
+  ticketsFiltrados.length === 0
+  ) {
 
-              <th>
-                Prioridad
-              </th>
+  <div class="mensaje">
 
-              <th>
-                Estado
-              </th>
+    No se encontraron tickets que coincidan
+    con "{{ textoBusqueda }}".
 
-              <th>
-                Equipo
-              </th>
+  </div>
 
-              <th>
-                Solicitante
-              </th>
+  }
 
-              <th>
-                Técnico
-              </th>
+  @if (ticketsFiltrados.length > 0) {
 
-              <th>
-                Fecha
-              </th>
+  <div class="tabla-container">
 
-              <th>
-                Acciones
-              </th>
+    <table>
 
-            </tr>
+      <thead>
 
-          </thead>
+        <tr>
 
-          <tbody>
+          <th>
+            Título
+          </th>
 
-            @for (
-              ticket of ticketsFiltrados;
-              track ticket.id
-            ) {
+          <th>
+            Prioridad
+          </th>
 
-              <tr>
+          <th>
+            Estado
+          </th>
 
-                <td class="titulo-ticket">
+          <th>
+            Equipo
+          </th>
 
-                  <strong>
+          <th>
+            Solicitante
+          </th>
 
-                    {{ ticket.titulo }}
+          <th>
+            Técnico
+          </th>
 
-                  </strong>
+          <th>
+            Fecha
+          </th>
 
-                  <br>
+          <th>
+            Acciones
+          </th>
 
-                  <small>
+        </tr>
 
-                    {{ ticket.descripcion }}
+      </thead>
 
-                  </small>
+      <tbody>
 
-                </td>
+        @for (
+        ticket of ticketsFiltrados;
+        track ticket.id
+        ) {
 
-                <td>
+        <tr>
 
-                  <span
-                    class="prioridad"
-                    [class.prioridad-baja]="ticket.prioridad === 'BAJA'"
-                    [class.prioridad-media]="ticket.prioridad === 'MEDIA'"
-                    [class.prioridad-alta]="ticket.prioridad === 'ALTA'"
-                    [class.prioridad-critica]="ticket.prioridad === 'CRITICA'"
-                  >
+          <td class="titulo-ticket">
 
-                    {{ ticket.prioridad }}
+            <strong>
 
-                  </span>
+              {{ ticket.titulo }}
 
-                </td>
+            </strong>
 
-                <td>
+            <br>
 
-                  <span
-                    class="estado-ticket"
-                    [class.estado-abierto]="ticket.estado === 'ABIERTO'"
-                    [class.estado-asignado]="ticket.estado === 'ASIGNADO'"
-                    [class.estado-diagnostico]="ticket.estado === 'EN_DIAGNOSTICO'"
-                    [class.estado-mantenimiento]="ticket.estado === 'EN_MANTENIMIENTO'"
-                    [class.estado-resuelto]="ticket.estado === 'RESUELTO'"
-                    [class.estado-cerrado]="ticket.estado === 'CERRADO'"
-                    [class.estado-cancelado]="ticket.estado === 'CANCELADO'"
-                  >
+            <small>
 
-                    {{ ticket.estado }}
+              {{ ticket.descripcion }}
 
-                  </span>
+            </small>
 
-                </td>
+          </td>
 
-                <td>
+          <td>
 
-                  @if (ticket.equipo) {
+            <span class="prioridad" [class.prioridad-baja]="ticket.prioridad === 'BAJA'"
+              [class.prioridad-media]="ticket.prioridad === 'MEDIA'"
+              [class.prioridad-alta]="ticket.prioridad === 'ALTA'"
+              [class.prioridad-critica]="ticket.prioridad === 'CRITICA'">
 
-                    <strong>
+              {{ ticket.prioridad }}
 
-                      {{ ticket.equipo.codigoInventario }}
+            </span>
 
-                    </strong>
+          </td>
 
-                    <br>
+          <td>
 
-                    <small>
+            <span class="estado-ticket" [class.estado-abierto]="ticket.estado === 'ABIERTO'"
+              [class.estado-asignado]="ticket.estado === 'ASIGNADO'"
+              [class.estado-diagnostico]="ticket.estado === 'EN_DIAGNOSTICO'"
+              [class.estado-mantenimiento]="ticket.estado === 'EN_MANTENIMIENTO'"
+              [class.estado-resuelto]="ticket.estado === 'RESUELTO'"
+              [class.estado-cerrado]="ticket.estado === 'CERRADO'"
+              [class.estado-cancelado]="ticket.estado === 'CANCELADO'">
 
-                      {{ ticket.equipo.nombre }}
+              {{ ticket.estado }}
 
-                    </small>
+            </span>
 
-                  } @else {
+          </td>
 
-                    #{{ ticket.equipoId }}
+          <td>
 
-                  }
+            @if (ticket.equipo) {
 
-                </td>
+            <strong>
 
-                <td>
+              {{ ticket.equipo.codigoInventario }}
 
-                  @if (ticket.solicitante) {
+            </strong>
 
-                    {{ ticket.solicitante.nombre }}
+            <br>
 
-                  } @else {
+            <small>
 
-                    #{{ ticket.solicitanteId }}
+              {{ ticket.equipo.nombre }}
 
-                  }
+            </small>
 
-                </td>
+            } @else {
 
-                <td>
-
-                  @if (ticket.tecnico) {
-
-                    {{ ticket.tecnico.nombre }}
-
-                  } @else {
-
-                    —
-
-                  }
-
-                </td>
-
-                <td>
-
-                  {{ ticket.creadoEn | date:'dd/MM/yyyy HH:mm' }}
-
-                </td>
-
-                <td class="acciones">
-
-                  <button
-                    type="button"
-                    class="btn-icono"
-                    title="Editar ticket"
-                    (click)="abrirFormulario(ticket)"
-                  >
-
-                    <svg
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-
-                      <path
-                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
-                      ></path>
-
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="3"
-                      ></circle>
-
-                    </svg>
-
-                  </button>
-
-                </td>
-
-              </tr>
+            #{{ ticket.equipoId }}
 
             }
 
-          </tbody>
+          </td>
 
-        </table>
+          <td>
 
-      </div>
+            @if (ticket.solicitante) {
 
-    }
+            {{ ticket.solicitante.nombre }}
+
+            } @else {
+
+            #{{ ticket.solicitanteId }}
+
+            }
+
+          </td>
+
+          <td class="columna-tecnico">
+
+            @if (ticket.tecnico) {
+
+            <strong>
+              {{ ticket.tecnico.nombre }}
+            </strong>
+
+            <br>
+
+            <small>
+              Técnico asignado
+            </small>
+
+            } @else {
+
+            <span class="sin-tecnico">
+              Sin asignar
+            </span>
+
+            }
+
+            @if (tecnicos.length > 0) {
+
+            <div class="asignacion-tecnico">
+
+              <select [id]="'tecnico-' + ticket.id" [(ngModel)]="tecnicoSeleccionado[ticket.id]"
+                [disabled]="asignandoTicketId === ticket.id">
+
+                <option [ngValue]="null">
+                  Seleccionar técnico
+                </option>
+
+                @for (tecnico of tecnicos; track tecnico.id) {
+
+                <option [ngValue]="tecnico.id">
+                  {{ tecnico.nombre }}
+                </option>
+
+                }
+
+              </select>
+
+              <button type="button" class="btn-asignar-tecnico" [disabled]="
+          !tecnicoSeleccionado[ticket.id] ||
+          asignandoTicketId === ticket.id
+        " (click)="asignarTecnico(ticket)">
+
+                @if (asignandoTicketId === ticket.id) {
+                Asignando...
+                } @else {
+                Asignar
+                }
+
+              </button>
+
+            </div>
+
+            } @else {
+
+            <small>
+              No hay técnicos activos disponibles.
+            </small>
+
+            }
+
+          </td>
+
+          <td>
+
+            {{ ticket.creadoEn | date:'dd/MM/yyyy HH:mm' }}
+
+          </td>
+
+          <td class="acciones">
+
+            <button type="button" class="btn-icono" title="Editar ticket" (click)="abrirFormulario(ticket)">
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+
+                <circle cx="12" cy="12" r="3"></circle>
+
+              </svg>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  }
 
   }
 
@@ -327,10 +351,6 @@
 
 @if (mostrarFormulario) {
 
-  <app-ticket-form
-    [ticketEditar]="ticketSeleccionado"
-    (cerrar)="cerrarFormulario()"
-    (guardado)="ticketGuardado()"
-  />
+<app-ticket-form [ticketEditar]="ticketSeleccionado" (cerrar)="cerrarFormulario()" (guardado)="ticketGuardado()" />
 
 }

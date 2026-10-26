@@ -1,3 +1,4 @@
+
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -66,22 +67,18 @@ export class TicketService {
 
 
   obtenerTodos(): Observable<Ticket[]> {
-
     return this.http.get<Ticket[]>(
       this.apiUrl
     );
-
   }
 
 
   obtenerPorId(
     id: number
   ): Observable<Ticket> {
-
     return this.http.get<Ticket>(
       `${this.apiUrl}/${id}`
     );
-
   }
 
 
@@ -94,12 +91,10 @@ export class TicketService {
       | 'actualizadoEn'
     >
   ): Observable<Ticket> {
-
     return this.http.post<Ticket>(
       this.apiUrl,
       ticket
     );
-
   }
 
 
@@ -107,12 +102,21 @@ export class TicketService {
     id: number,
     datos: Partial<Ticket>
   ): Observable<Ticket> {
-
     return this.http.put<Ticket>(
       `${this.apiUrl}/${id}`,
       datos
     );
+  }
 
+
+  asignarTecnico(
+    ticketId: number,
+    tecnicoId: number
+  ): Observable<Ticket> {
+    return this.http.put<Ticket>(
+      `${this.apiUrl}/${ticketId}/asignar-tecnico`,
+      { tecnicoId }
+    );
   }
 
 }

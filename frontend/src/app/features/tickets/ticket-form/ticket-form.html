@@ -1,3 +1,4 @@
+
 <div class="modal-overlay">
 
   <div class="modal">
@@ -5,35 +6,21 @@
     <div class="modal-header">
 
       <div>
-
         <h2>
-
           @if (ticketEditar) {
-
             Editar ticket
-
           } @else {
-
             Nuevo ticket
-
           }
-
         </h2>
 
         <p>
-
           @if (ticketEditar) {
-
             Actualiza la información de la solicitud de mantenimiento
-
           } @else {
-
             Registra una nueva solicitud de mantenimiento
-
           }
-
         </p>
-
       </div>
 
       <button
@@ -42,28 +29,18 @@
         title="Cerrar"
         (click)="cancelar()"
       >
-
         ×
-
       </button>
 
     </div>
 
-
     @if (error) {
-
       <div class="mensaje error">
-
         {{ error }}
-
       </div>
-
     }
 
-
-    <form
-      (ngSubmit)="guardar()"
-    >
+    <form (ngSubmit)="guardar()">
 
       <div class="form-group">
 
@@ -83,7 +60,6 @@
 
       </div>
 
-
       <div class="form-group">
 
         <label for="descripcion">
@@ -101,7 +77,6 @@
 
       </div>
 
-
       <div class="form-group">
 
         <label for="prioridad">
@@ -113,7 +88,6 @@
           name="prioridad"
           [(ngModel)]="prioridad"
         >
-
           <option value="BAJA">
             Baja
           </option>
@@ -129,11 +103,9 @@
           <option value="CRITICA">
             Crítica
           </option>
-
         </select>
 
       </div>
-
 
            @if (ticketEditar) {
 
@@ -219,30 +191,18 @@
           [(ngModel)]="equipoId"
           required
         >
-
           <option [ngValue]="null">
             Selecciona un equipo
           </option>
 
-          @for (
-            equipo of equipos;
-            track equipo.id
-          ) {
-
+          @for (equipo of equipos; track equipo.id) {
             <option [ngValue]="equipo.id">
-
-              {{ equipo.codigoInventario }}
-              -
-              {{ equipo.nombre }}
-
+              {{ equipo.codigoInventario }} - {{ equipo.nombre }}
             </option>
-
           }
-
         </select>
 
       </div>
-
 
       <div class="form-group">
 
@@ -256,28 +216,18 @@
           [(ngModel)]="solicitanteId"
           required
         >
-
           <option [ngValue]="null">
             Selecciona el solicitante
           </option>
 
-          @for (
-            usuario of usuarios;
-            track usuario.id
-          ) {
-
+          @for (usuario of usuarios; track usuario.id) {
             <option [ngValue]="usuario.id">
-
               {{ usuario.nombre }}
-
             </option>
-
           }
-
         </select>
 
       </div>
-
 
       <div class="modal-actions">
 
@@ -287,36 +237,23 @@
           (click)="cancelar()"
           [disabled]="guardando"
         >
-
           Cancelar
-
         </button>
-
 
         <button
           type="submit"
           class="btn-guardar"
           [disabled]="guardando"
         >
-
           @if (guardando) {
-
             Guardando...
-
           } @else {
-
             @if (ticketEditar) {
-
               Actualizar ticket
-
             } @else {
-
               Guardar ticket
-
             }
-
           }
-
         </button>
 
       </div>
@@ -326,3 +263,48 @@
   </div>
 
 </div>
+
+<!-- ==========================================
+     ALERTA PARA TICKETS CERRADOS
+=========================================== -->
+
+@if (mostrarAlertaEstadoCerrado) {
+
+  <div
+    class="alerta-modal-overlay"
+    (click)="cerrarAlertaEstadoCerrado()"
+  >
+
+    <div
+      class="alerta-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="titulo-alerta-cerrado"
+      (click)="$event.stopPropagation()"
+    >
+
+      <div class="alerta-modal-icono">
+        !
+      </div>
+
+      <h2 id="titulo-alerta-cerrado">
+        Ticket cerrado
+      </h2>
+
+      <p>
+        {{ mensajeAlertaEstadoCerrado }}
+      </p>
+
+      <button
+        type="button"
+        class="btn-alerta-modal"
+        (click)="cerrarAlertaEstadoCerrado()"
+      >
+        Entendido
+      </button>
+
+    </div>
+
+  </div>
+
+}

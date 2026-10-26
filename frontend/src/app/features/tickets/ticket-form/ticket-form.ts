@@ -1,15 +1,19 @@
+
 import {
   Component,
   EventEmitter,
   Input,
   OnInit,
   Output,
-  inject,
+  inject
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Ticket, TicketService } from '../../../core/services/ticket.service';
+import {
+  Ticket,
+  TicketService
+} from '../../../core/services/ticket.service';
 
 interface Equipo {
   id: number;
@@ -40,6 +44,7 @@ type EstadoTicket =
   templateUrl: './ticket-form.html',
 })
 export class TicketForm implements OnInit {
+
   private readonly http = inject(HttpClient);
   private readonly ticketService = inject(TicketService);
 
@@ -62,6 +67,19 @@ export class TicketForm implements OnInit {
   cargando = false;
   guardando = false;
   error = '';
+
+  // ==========================================
+  // MODAL DE ALERTA PARA TICKETS CERRADOS
+  // ==========================================
+
+  mostrarAlertaEstadoCerrado = false;
+
+  mensajeAlertaEstadoCerrado =
+    'Una vez que un ticket se cierra, no se puede volver a abrir ni modificar su estado.';
+
+  // ==========================================
+  // CAMPOS DEL FORMULARIO
+  // ==========================================
 
   // Campos del formulario.
   titulo = '';
@@ -150,7 +168,10 @@ export class TicketForm implements OnInit {
       return;
     }
 
-    console.log('✏️ TICKET RECIBIDO PARA EDITAR:', this.ticketEditar);
+    console.log(
+      '✏️ TICKET RECIBIDO PARA EDITAR:',
+      this.ticketEditar
+    );
 
     this.titulo = this.ticketEditar.titulo;
     this.descripcion = this.ticketEditar.descripcion;
@@ -174,59 +195,84 @@ export class TicketForm implements OnInit {
         this.error = 'No se pudieron cargar los equipos.';
       },
     });
+    this.http
+      .get<Equipo[]>('http://localhost:3000/api/equipos')
+      .subscribe({
+        next: (equipos) => {
+          console.log('✅ EQUIPOS PARA TICKET:', equipos);
+          this.equipos = equipos;
+        },
+
+        error: (error) => {
+          console.error('❌ ERROR CARGANDO EQUIPOS:', error);
+          this.error = 'No se pudieron cargar los equipos.';
+        },
+      });
   }
 
-  /**
-   * Carga los usuarios disponibles.
-   */
+  // ==========================================
+  // CARGAR USUARIOS
+  // ==========================================
+
   cargarUsuarios(): void {
-    this.http.get<Usuario[]>('http://localhost:3000/api/usuarios').subscribe({
-      next: (usuarios) => {
-        console.log('✅ USUARIOS PARA TICKET:', usuarios);
-        this.usuarios = usuarios;
-      },
-      error: (error) => {
-        console.error('❌ ERROR CARGANDO USUARIOS:', error);
-        this.error = 'No se pudieron cargar los usuarios.';
-      },
-    });
+    this.http
+      .get<Usuario[]>('http://localhost:3000/api/usuarios')
+      .subscribe({
+        next: (usuarios) => {
+          console.log('✅ USUARIOS PARA TICKET:', usuarios);
+          this.usuarios = usuarios;
+        },
+
+        error: (error) => {
+          console.error('❌ ERROR CARGANDO USUARIOS:', error);
+          this.error = 'No se pudieron cargar los usuarios.';
+        },
+      });
   }
 
-  /**
-   * Valida que el cambio de estado esté permitido.
-   */
-  private validarTransicionEstado(): boolean {
-    if (!this.ticketEditar) {
-      return true;
-    }
+  // ==========================================
+  // MOSTRAR ALERTA DE TICKET CERRADO
+  // ==========================================
 
-    const estadoActual = this.ticketEditar.estado as EstadoTicket;
+  private mostrarAlertaCerrado(): void {
+    this.mensajeAlertaEstadoCerrado =
+      'Este ticket ya está cerrado definitivamente. No es posible volver a abrirlo ni cambiar su estado.';
 
-    // Si no se cambia el estado, se permite actualizar los demás datos.
-    if (this.estado === estadoActual) {
-      return true;
-    }
-
-    const siguientesEstados =
-      this.transicionesPermitidas[estadoActual] ?? [];
-
-    if (!siguientesEstados.includes(this.estado)) {
-      this.error =
-        `No se permite cambiar el estado de ${estadoActual} a ${this.estado}.`;
-
-      return false;
-    }
-
-    return true;
+    this.mostrarAlertaEstadoCerrado = true;
   }
 
-  /**
-   * Guarda un ticket nuevo o actualiza uno existente.
-   */
+  // ==========================================
+  // CERRAR ALERTA DE TICKET CERRADO
+  // ==========================================
+
+  cerrarAlertaEstadoCerrado(): void {
+    this.mostrarAlertaEstadoCerrado = false;
+  }
+
+  // ==========================================
+  // GUARDAR
+  // ==========================================
+
   guardar(): void {
     this.error = '';
 
-    // Validaciones generales.
+    // ========================================
+    // VALIDAR SI EL TICKET YA ESTÁ CERRADO
+    // ========================================
+
+    if (
+      this.ticketEditar &&
+      this.ticketEditar.estado === 'CERRADO' &&
+      this.estado !== 'CERRADO'
+    ) {
+      this.mostrarAlertaCerrado();
+      return;
+    }
+
+    // ========================================
+    // VALIDACIONES DEL FORMULARIO
+    // ========================================
+
     if (!this.titulo.trim()) {
       this.error = 'El título es obligatorio.';
       return;
@@ -247,26 +293,37 @@ export class TicketForm implements OnInit {
       return;
     }
 
-    // Validación ACT-022: transiciones de estado.
-    if (!this.validarTransicionEstado()) {
-      return;
-    }
-
     this.guardando = true;
 
-    // Editar un ticket existente.
+    // ========================================
+    // ACTUALIZAR TICKET EXISTENTE
+    // ========================================
+
     if (this.ticketEditar) {
-      console.log('✏️ ACTUALIZANDO TICKET:', this.ticketEditar.id);
+      console.log(
+        '✏️ ACTUALIZANDO TICKET:',
+        this.ticketEditar.id
+      );
+
+      const datosActualizacion = {
+        titulo: this.titulo.trim(),
+        descripcion: this.descripcion.trim(),
+        prioridad: this.prioridad,
+        estado: this.estado,
+        equipoId: this.equipoId,
+        solicitanteId: this.solicitanteId,
+      };
+
+      console.log(
+        '📤 DATOS ENVIADOS PARA ACTUALIZAR:',
+        datosActualizacion
+      );
 
       this.ticketService
-        .actualizar(this.ticketEditar.id, {
-          titulo: this.titulo.trim(),
-          descripcion: this.descripcion.trim(),
-          prioridad: this.prioridad,
-          estado: this.estado,
-          equipoId: this.equipoId,
-          solicitanteId: this.solicitanteId,
-        })
+        .actualizar(
+          this.ticketEditar.id,
+          datosActualizacion
+        )
         .subscribe({
           next: (ticket) => {
             console.log('✅ TICKET ACTUALIZADO:', ticket);
@@ -275,13 +332,21 @@ export class TicketForm implements OnInit {
             this.guardado.emit();
           },
           error: (error) => {
-            console.error('❌ ERROR ACTUALIZANDO TICKET:', error);
+            console.error(
+              '❌ ERROR ACTUALIZANDO TICKET:',
+              error
+            );
+
+            console.error(
+              '❌ RESPUESTA DEL BACKEND:',
+              error?.error
+            );
 
             this.guardando = false;
 
             this.error =
-              error?.error?.mensaje ??
               error?.error?.error ??
+              error?.error?.mensaje ??
               error?.error?.message ??
               'No se pudo actualizar el ticket.';
           },
@@ -290,17 +355,27 @@ export class TicketForm implements OnInit {
       return;
     }
 
-    // Crear un ticket nuevo.
+    // ========================================
+    // CREAR NUEVO TICKET
+    // ========================================
+
     console.log('🆕 CREANDO TICKET');
 
+    const nuevoTicket = {
+      titulo: this.titulo.trim(),
+      descripcion: this.descripcion.trim(),
+      prioridad: this.prioridad,
+      equipoId: this.equipoId,
+      solicitanteId: this.solicitanteId,
+    };
+
+    console.log(
+      '📤 DATOS ENVIADOS PARA CREAR:',
+      nuevoTicket
+    );
+
     this.ticketService
-      .crear({
-        titulo: this.titulo.trim(),
-        descripcion: this.descripcion.trim(),
-        prioridad: this.prioridad,
-        equipoId: this.equipoId,
-        solicitanteId: this.solicitanteId,
-      })
+      .crear(nuevoTicket)
       .subscribe({
         next: (ticket) => {
           console.log('✅ TICKET CREADO:', ticket);
@@ -309,22 +384,31 @@ export class TicketForm implements OnInit {
           this.guardado.emit();
         },
         error: (error) => {
-          console.error('❌ ERROR CREANDO TICKET:', error);
+          console.error(
+            '❌ ERROR CREANDO TICKET:',
+            error
+          );
+
+          console.error(
+            '❌ RESPUESTA DEL BACKEND:',
+            error?.error
+          );
 
           this.guardando = false;
 
           this.error =
-            error?.error?.mensaje ??
             error?.error?.error ??
+            error?.error?.mensaje ??
             error?.error?.message ??
             'No se pudo guardar el ticket.';
         },
       });
   }
 
-  /**
-   * Cancela y cierra el formulario.
-   */
+  // ==========================================
+  // CANCELAR
+  // ==========================================
+
   cancelar(): void {
     this.cerrar.emit();
   }
