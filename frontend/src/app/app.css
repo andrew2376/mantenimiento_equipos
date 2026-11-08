@@ -1839,3 +1839,728 @@ td:first-child {
     transform: translateY(0) scale(1);
   }
 }
+
+
+
+
+/* ==========================================
+   ACT-056: PANEL DE PERFIL DE USUARIO
+   ========================================== */
+
+.navbar-user-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Botón del usuario en el navbar */
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  font-family: inherit;
+  color: inherit;
+}
+
+.navbar-user:hover {
+  background: #f5f3ff;
+  border-color: #e9e4ff;
+}
+
+.navbar-user:focus-visible {
+  outline: 2px solid #6856ed;
+  outline-offset: 3px;
+}
+
+/* Avatar del navbar */
+
+.navbar-user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7565f5, #5945dc);
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 700;
+  box-shadow: 0 3px 8px rgba(104, 86, 237, 0.2);
+}
+
+/* Información del usuario */
+
+.navbar-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.navbar-user-info strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #202033;
+}
+
+.navbar-user-info span {
+  font-size: 13px;
+  color: #77778b;
+}
+
+/* Flecha del menú */
+
+.profile-chevron {
+  margin-left: 3px;
+  color: #85859a;
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+
+.navbar-user[aria-expanded="true"] .profile-chevron {
+  transform: rotate(180deg);
+}
+
+/* ==========================================
+   PANEL DESPLEGABLE
+   ========================================== */
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 310px;
+  max-width: calc(100vw - 24px);
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #eeeeF4;
+  border-radius: 17px;
+  box-shadow:
+    0 12px 35px rgba(25, 25, 50, 0.12),
+    0 3px 10px rgba(25, 25, 50, 0.05);
+  z-index: 1000;
+  animation: profileDropdownIn 0.18s ease-out;
+  transform-origin: top right;
+}
+
+/* Animación de apertura */
+
+@keyframes profileDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   ENCABEZADO DEL PERFIL
+   ========================================== */
+
+.profile-dropdown-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 19px 10px 17px;
+  text-align: center;
+}
+
+.profile-dropdown-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7565f5, #5945dc);
+  color: #ffffff;
+  font-size: 27px;
+  font-weight: 700;
+  box-shadow: 0 5px 14px rgba(104, 86, 237, 0.22);
+}
+
+.profile-dropdown-header h3 {
+  margin: 0;
+  color: #202033;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.profile-role {
+  margin-top: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: #f0edff;
+  color: #6856ed;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: #77778b;
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ==========================================
+   SEPARADORES
+   ========================================== */
+
+.profile-dropdown-divider {
+  height: 1px;
+  margin: 5px 2px;
+  background: #eeeeF4;
+}
+
+/* ==========================================
+   OPCIONES DEL PANEL
+   ========================================== */
+
+.profile-dropdown-options {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 0;
+}
+
+.profile-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.profile-option:hover {
+  background: #f7f6ff;
+}
+
+.profile-option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
+  height: 37px;
+  min-width: 37px;
+  border-radius: 10px;
+  background: #f0edff;
+  color: #6856ed;
+  font-size: 19px;
+}
+
+.profile-option > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-option strong {
+  color: #29293b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.profile-option small {
+  color: #85859a;
+  font-size: 11px;
+}
+
+.option-arrow {
+  color: #aaaabb;
+  font-size: 21px;
+  transition: transform 0.2s ease;
+}
+
+.profile-option:hover .option-arrow {
+  transform: translateX(3px);
+  color: #6856ed;
+}
+
+/* ==========================================
+   CERRAR SESIÓN
+   ========================================== */
+
+.profile-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  margin-top: 4px;
+  border-radius: 10px;
+  color: #dc4545;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.profile-logout:hover {
+  background: #fff1f1;
+}
+
+.profile-logout > span {
+  font-size: 20px;
+}
+
+.profile-logout strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 600px) {
+  .profile-dropdown {
+    right: -5px;
+    width: 290px;
+  }
+
+  .navbar-user {
+    gap: 7px;
+    padding: 5px;
+  }
+
+  .navbar-user-info {
+    display: none;
+  }
+
+  .navbar-user-avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-dropdown {
+    animation: none;
+  }
+
+  .navbar-user,
+  .profile-option,
+  .profile-logout,
+  .profile-chevron {
+    transition: none;
+  }
+}
+
+
+
+/* ==========================================
+   MODAL CAMBIAR CONTRASEÑA
+   ManteniSys
+   ========================================== */
+
+.modal-clave-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.60);
+  backdrop-filter: blur(4px);
+}
+
+.modal-clave {
+  width: 100%;
+  max-width: 460px;
+
+  padding: 28px;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  box-shadow: 0 20px 55px rgba(15, 23, 42, 0.22);
+
+  animation: modalClaveEntrada 0.22s ease-out;
+}
+
+@keyframes modalClaveEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-clave-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-bottom: 24px;
+}
+
+.modal-clave-header h2 {
+  margin: 0 0 7px;
+  color: #202033;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.modal-clave-header p {
+  margin: 0;
+  color: #77778b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.modal-clave-cerrar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: #f5f3ff;
+  color: #6856ed;
+
+  border-radius: 8px;
+  font-size: 23px;
+}
+
+.modal-clave-cerrar:hover {
+  background: #ece8ff;
+}
+
+.modal-clave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.campo-clave {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.campo-clave label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.campo-clave-input {
+  display: flex;
+  align-items: center;
+
+  height: 45px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-clave-input:focus-within {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+}
+
+.campo-clave-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+
+  padding: 0 12px;
+
+  border: none;
+  outline: none;
+
+  color: #172033;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.campo-clave-input input:focus {
+  box-shadow: none;
+}
+
+.btn-ver-clave {
+  height: 100%;
+  padding: 0 13px;
+
+  background: transparent;
+  color: #6856ed;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-ver-clave:hover {
+  background: #f7f5ff;
+}
+
+.clave-requisitos {
+  padding: 13px;
+
+  background: #f8f7ff;
+  border: 1px solid #ece9ff;
+  border-radius: 10px;
+}
+
+.clave-requisitos strong {
+  display: block;
+  margin-bottom: 9px;
+
+  color: #344054;
+  font-size: 12px;
+}
+
+.clave-requisitos ul {
+  margin: 0;
+  padding-left: 19px;
+
+  color: #77778b;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.clave-mensaje {
+  padding: 11px 13px;
+  border-radius: 9px;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.clave-mensaje.error {
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+}
+
+.clave-mensaje.exito {
+  color: #067647;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.modal-clave-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  margin-top: 5px;
+  padding-top: 18px;
+
+  border-top: 1px solid #eeeeF4;
+}
+
+.modal-clave-acciones button {
+  min-height: 42px;
+  padding: 0 17px;
+
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-clave-cancelar {
+  background: #ffffff;
+  color: #344054;
+  border: 1px solid #d0d5dd;
+}
+
+.btn-clave-cancelar:hover {
+  background: #f9fafb;
+}
+
+.btn-clave-guardar {
+  background: #6c5ce7;
+  color: #ffffff;
+}
+
+.btn-clave-guardar:hover:not(:disabled) {
+  background: #5b4bd5;
+}
+
+.btn-clave-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 500px) {
+  .modal-clave {
+    padding: 22px 18px;
+  }
+
+  .modal-clave-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .modal-clave-acciones button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-clave {
+    animation: none;
+  }
+}
+
+
+/* ==========================================
+   INDICADOR ANIMADO DE SEGURIDAD
+   MANTIX
+   ========================================== */
+
+.clave-fortaleza {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+
+  margin-top: -8px;
+  margin-bottom: 2px;
+
+  animation: fortalezaEntrada 0.3s ease-out;
+}
+
+@keyframes fortalezaEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Texto y nivel de seguridad */
+
+.clave-fortaleza-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 12px;
+}
+
+.clave-fortaleza-info span {
+  color: #77778b;
+  font-weight: 500;
+}
+
+.clave-fortaleza-info strong {
+  font-size: 12px;
+  font-weight: 700;
+
+  transition: color 0.3s ease;
+}
+
+.clave-fortaleza-info strong.debil {
+  color: #dc4545;
+}
+
+.clave-fortaleza-info strong.media {
+  color: #d69b20;
+}
+
+.clave-fortaleza-info strong.fuerte {
+  color: #219563;
+}
+
+/* Barra de progreso */
+
+.clave-fortaleza-barra {
+  width: 100%;
+  height: 7px;
+
+  overflow: hidden;
+
+  background: #e9eaf0;
+  border-radius: 20px;
+}
+
+.clave-fortaleza-progreso {
+  height: 100%;
+  width: 0;
+
+  border-radius: 20px;
+
+  transition:
+    width 0.45s ease,
+    background-color 0.35s ease;
+}
+
+/* Contraseña débil: rojo */
+
+.clave-fortaleza-progreso.debil {
+  background: #dc4545;
+}
+
+/* Contraseña aceptable: amarillo */
+
+.clave-fortaleza-progreso.media {
+  background: #e8b33d;
+}
+
+/* Contraseña fuerte: verde */
+
+.clave-fortaleza-progreso.fuerte {
+  background: #26a269;
+}
+
+/* Texto de ayuda */
+
+.clave-fortaleza small {
+  color: #85869a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Accesibilidad: reducir animaciones */
+
+@media (prefers-reduced-motion: reduce) {
+  .clave-fortaleza,
+  .clave-fortaleza-progreso,
+  .clave-fortaleza-info strong {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,5 +1,6 @@
+
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Usuario {
@@ -43,6 +44,15 @@ export interface LoginDatos {
 export interface LoginRespuesta {
   token: string;
   usuario: Usuario;
+}
+
+// ==========================================
+// DATOS PARA CAMBIAR CONTRASEÑA
+// ==========================================
+
+export interface CambioClaveDatos {
+  claveActual: string;
+  claveNueva: string;
 }
 
 @Injectable({
@@ -90,10 +100,35 @@ export class UsuarioService {
     );
   }
 
+  // ==========================================
+  // INICIAR SESIÓN
+  // ==========================================
+
   login(datos: LoginDatos): Observable<LoginRespuesta> {
     return this.http.post<LoginRespuesta>(
       `${this.apiUrl}/login`,
       datos
+    );
+  }
+
+  // ==========================================
+  // CAMBIAR CONTRASEÑA
+  // ==========================================
+
+  cambiarClave(
+    datos: CambioClaveDatos
+  ): Observable<{ mensaje: string }> {
+
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.put<{ mensaje: string }>(
+      `${this.apiUrl}/cambiar-clave`,
+      datos,
+      { headers }
     );
   }
 }

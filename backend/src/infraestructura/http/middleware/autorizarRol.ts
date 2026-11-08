@@ -1,9 +1,4 @@
-
-import type {
-  Request,
-  Response,
-  NextFunction,
-} from "express";
+import type { Request, Response, NextFunction } from "express";
 
 interface UsuarioAutenticado {
   id: number;
@@ -31,10 +26,7 @@ function rutaPermitida(
   }
 
   // EQUIPOS
-  if (
-    ruta === "/equipos" ||
-    ruta.startsWith("/equipos/")
-  ) {
+  if (ruta === "/equipos" || ruta.startsWith("/equipos/")) {
     // Todos los roles autenticados pueden consultar equipos.
     if (metodo === "GET") {
       return true;
@@ -46,27 +38,22 @@ function rutaPermitida(
   }
 
   // USUARIOS
-  if (
-    ruta === "/usuarios" ||
-    ruta.startsWith("/usuarios/")
-  ) {
-    // El inicio de sesión público se exceptúa en servidor.ts.
+  // USUARIOS
+  if (ruta === "/usuarios" || ruta.startsWith("/usuarios/")) {
+    // Todos los roles autenticados pueden cambiar su propia contraseña.
+    if (ruta === "/usuarios/cambiar-clave" && metodo === "PUT") {
+      return true;
+    }
+
     // Las demás operaciones quedan reservadas al administrador.
     return false;
   }
 
   // TICKETS
-  if (
-    ruta === "/tickets" ||
-    ruta.startsWith("/tickets/")
-  ) {
+  if (ruta === "/tickets" || ruta.startsWith("/tickets/")) {
     // El solicitante solo puede registrar un ticket a su nombre,
     // sin asignar directamente un técnico.
-    if (
-      rol === ROLES.SOLICITANTE &&
-      metodo === "POST" &&
-      ruta === "/tickets"
-    ) {
+    if (rol === ROLES.SOLICITANTE && metodo === "POST" && ruta === "/tickets") {
       const cuerpo = req.body as {
         solicitanteId?: unknown;
         tecnicoId?: unknown;
@@ -74,19 +61,14 @@ function rutaPermitida(
 
       return (
         Number(cuerpo.solicitanteId) === usuario.id &&
-        (
-          cuerpo.tecnicoId === undefined ||
+        (cuerpo.tecnicoId === undefined ||
           cuerpo.tecnicoId === null ||
-          cuerpo.tecnicoId === ""
-        )
+          cuerpo.tecnicoId === "")
       );
     }
 
     // Técnicos y supervisores pueden consultar y actualizar tickets.
-    const rolesPermitidos: string[] = [
-      ROLES.TECNICO,
-      ROLES.SUPERVISOR,
-    ];
+    const rolesPermitidos: string[] = [ROLES.TECNICO, ROLES.SUPERVISOR];
 
     if (
       rolesPermitidos.includes(rol) &&
@@ -108,35 +90,21 @@ function rutaPermitida(
   }
 
   // MANTENIMIENTOS
-  if (
-    ruta === "/mantenimientos" ||
-    ruta.startsWith("/mantenimientos/")
-  ) {
-    const rolesPermitidos: string[] = [
-      ROLES.TECNICO,
-      ROLES.SUPERVISOR,
-    ];
+  if (ruta === "/mantenimientos" || ruta.startsWith("/mantenimientos/")) {
+    const rolesPermitidos: string[] = [ROLES.TECNICO, ROLES.SUPERVISOR];
 
     return (
       rolesPermitidos.includes(rol) &&
-      (
-        metodo === "GET" ||
+      (metodo === "GET" ||
         metodo === "POST" ||
         metodo === "PATCH" ||
-        metodo === "PUT"
-      )
+        metodo === "PUT")
     );
   }
 
   // REPUESTOS
-  if (
-    ruta === "/repuestos" ||
-    ruta.startsWith("/repuestos/")
-  ) {
-    const rolesOperativos: string[] = [
-      ROLES.TECNICO,
-      ROLES.SUPERVISOR,
-    ];
+  if (ruta === "/repuestos" || ruta.startsWith("/repuestos/")) {
+    const rolesOperativos: string[] = [ROLES.TECNICO, ROLES.SUPERVISOR];
 
     // Consultar repuestos y asociaciones.
     if (metodo === "GET") {
@@ -144,10 +112,7 @@ function rutaPermitida(
     }
 
     // Asociar un repuesto a un mantenimiento.
-    if (
-      metodo === "POST" &&
-      ruta === "/repuestos/mantenimiento"
-    ) {
+    if (metodo === "POST" && ruta === "/repuestos/mantenimiento") {
       return rolesOperativos.includes(rol);
     }
 
@@ -174,9 +139,7 @@ export function autorizarRol(
   res: Response,
   next: NextFunction,
 ): void {
-  const usuario = res.locals.usuario as
-    | UsuarioAutenticado
-    | undefined;
+  const usuario = res.locals.usuario as UsuarioAutenticado | undefined;
 
   if (!usuario || typeof usuario.rol !== "string") {
     res.status(401).json({
@@ -192,13 +155,7 @@ export function autorizarRol(
   const ruta = rutaOriginal.replace(/^\/api(?=\/|$)/, "") || "/";
   const metodo = req.method.toUpperCase();
 
-  const permitida = rutaPermitida(
-    ruta,
-    metodo,
-    rol,
-    usuario,
-    req,
-  );
+  const permitida = rutaPermitida(ruta, metodo, rol, usuario, req);
 
   if (!permitida) {
     res.status(403).json({

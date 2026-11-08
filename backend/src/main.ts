@@ -3,6 +3,10 @@
 // las implementaciones concretas de infraestructura y se inyectan
 // en los casos de uso y servidor HTTP.
 
+// ==========================================
+// 1. IMPORTACIONES DE INFRAESTRUCTURA
+// ==========================================
+
 import { prisma } from './infraestructura/persistencia/prisma'
 
 import { EquipoDAOPrisma } from './infraestructura/persistencia/EquipoDAOPrisma'
@@ -13,35 +17,47 @@ import { RepuestoDAOPrisma } from './infraestructura/persistencia/RepuestoDAOPri
 
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
+import { crearServidor } from './infraestructura/http/servidor'
+
+// ==========================================
+// 2. IMPORTACIONES DE CASOS DE USO
+// ==========================================
+
+// Equipos
 import { RegistrarEquipo } from './aplicacion/casos-uso/RegistrarEquipo'
 import { ConsultarEquipos } from './aplicacion/casos-uso/ConsultarEquipos'
 import { ActualizarEquipo } from './aplicacion/casos-uso/ActualizarEquipo'
 import { DesactivarEquipo } from './aplicacion/casos-uso/DesactivarEquipo'
 import { ActivarEquipo } from './aplicacion/casos-uso/ActivarEquipo'
 
+// Mantenimientos
 import { RegistrarMantenimiento } from './aplicacion/casos-uso/RegistrarMantenimiento'
 import { ConsultarMantenimientos } from './aplicacion/casos-uso/ConsultarMantenimientos'
 import { ActualizarEstadoMantenimiento } from './aplicacion/casos-uso/ActualizarEstadoMantenimiento'
 import { RegistrarDiagnostico } from './aplicacion/casos-uso/RegistrarDiagnostico'
 import { CerrarMantenimiento } from './aplicacion/casos-uso/CerrarMantenimiento'
 
+// Usuarios
 import { RegistrarUsuario } from './aplicacion/casos-uso/RegistrarUsuario'
 import { ConsultarUsuarios } from './aplicacion/casos-uso/ConsultarUsuarios'
 import { ActualizarUsuario } from './aplicacion/casos-uso/ActualizarUsuario'
 import { IniciarSesion } from './aplicacion/casos-uso/iniciarSesion'
+import { CambiarClave } from './aplicacion/casos-uso/CambiarClave'
 
+// Tickets
 import { RegistrarTicket } from './aplicacion/casos-uso/RegistrarTicket'
 import { ConsultarTickets } from './aplicacion/casos-uso/ConsultarTickets'
 import { ActualizarTicket } from './aplicacion/casos-uso/ActualizarTicket'
 import { AsignarTecnico } from './aplicacion/casos-uso/AsignarTecnico'
 
+// Repuestos
 import { GestionarRepuestos } from './aplicacion/casos-uso/GestionarRepuestos'
 import { AsociarRepuestoMantenimiento } from './aplicacion/casos-uso/AsociarRepuestoMantenimiento'
 
-import { crearServidor } from './infraestructura/http/servidor'
 
-
-// 1. Adaptadores de persistencia (Infraestructura)
+// ==========================================
+// 3. ADAPTADORES DE PERSISTENCIA
+// ==========================================
 
 const equipoDAO =
   new EquipoDAOPrisma(prisma)
@@ -59,16 +75,19 @@ const repuestoDAO =
   new RepuestoDAOPrisma(prisma)
 
 
-// 2. Servicios de infraestructura
+// ==========================================
+// 4. SERVICIOS DE INFRAESTRUCTURA
+// ==========================================
 
 const servicioClaves =
   new ServicioClavesBcrypt()
 
 
-// 3. Casos de uso (Aplicación)
+// ==========================================
+// 5. CASOS DE USO
+// ==========================================
 
-
-// Equipos
+// EQUIPOS
 
 const registrarEquipo =
   new RegistrarEquipo(equipoDAO)
@@ -86,7 +105,7 @@ const activarEquipo =
   new ActivarEquipo(equipoDAO)
 
 
-// Mantenimientos
+// MANTENIMIENTOS
 
 const registrarMantenimiento =
   new RegistrarMantenimiento(
@@ -118,7 +137,7 @@ const registrarDiagnostico =
   new RegistrarDiagnostico(mantenimientoDAO)
 
 
-// Usuarios
+// USUARIOS
 
 const registrarUsuario =
   new RegistrarUsuario(
@@ -138,8 +157,14 @@ const iniciarSesion =
     servicioClaves
   )
 
+const cambiarClave =
+  new CambiarClave(
+    usuarioDAO,
+    servicioClaves
+  )
 
-// Tickets
+
+// TICKETS
 
 const registrarTicket =
   new RegistrarTicket(ticketDAO)
@@ -157,7 +182,7 @@ const asignarTecnico =
   )
 
 
-// Repuestos
+// REPUESTOS
 
 const gestionarRepuestos =
   new GestionarRepuestos(repuestoDAO)
@@ -169,7 +194,9 @@ const asociarRepuestoMantenimiento =
   )
 
 
-// 4. Servidor HTTP (Infraestructura)
+// ==========================================
+// 6. CREACIÓN DEL SERVIDOR HTTP
+// ==========================================
 
 const app = crearServidor({
 
@@ -194,6 +221,7 @@ const app = crearServidor({
     consultarUsuarios,
     actualizarUsuario,
     iniciarSesion,
+    cambiarClave,
   },
 
   tickets: {
@@ -207,10 +235,13 @@ const app = crearServidor({
     gestionarRepuestos,
     asociarRepuestoMantenimiento,
   },
+
 })
 
 
-// 5. Iniciar servidor
+// ==========================================
+// 7. INICIAR SERVIDOR
+// ==========================================
 
 const PORT = Number(
   process.env['PORT'] ?? 3000

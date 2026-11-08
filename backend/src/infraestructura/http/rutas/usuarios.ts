@@ -1,97 +1,67 @@
-import { Router } from 'express'
+import { Router } from "express";
 
-import type { RegistrarUsuario } from '../../../aplicacion/casos-uso/RegistrarUsuario'
+import type { RegistrarUsuario } from "../../../aplicacion/casos-uso/RegistrarUsuario";
 
-import type { ConsultarUsuarios } from '../../../aplicacion/casos-uso/ConsultarUsuarios'
+import type { ConsultarUsuarios } from "../../../aplicacion/casos-uso/ConsultarUsuarios";
 
-import type { ActualizarUsuario } from '../../../aplicacion/casos-uso/ActualizarUsuario'
+import type { ActualizarUsuario } from "../../../aplicacion/casos-uso/ActualizarUsuario";
 
-import type { IniciarSesion } from '../../../aplicacion/casos-uso/iniciarSesion'
-
+import type { IniciarSesion } from "../../../aplicacion/casos-uso/iniciarSesion";
+import type { CambiarClave } from "../../../aplicacion/casos-uso/CambiarClave";
 
 export interface DependenciasUsuarios {
+  registrarUsuario: RegistrarUsuario;
 
-  registrarUsuario: RegistrarUsuario
+  consultarUsuarios: ConsultarUsuarios;
 
-  consultarUsuarios: ConsultarUsuarios
+  actualizarUsuario: ActualizarUsuario;
 
-  actualizarUsuario: ActualizarUsuario
-
-  iniciarSesion: IniciarSesion
-
+  iniciarSesion: IniciarSesion;
+  cambiarClave: CambiarClave;
 }
 
-
-export function rutasUsuarios(
-  deps: DependenciasUsuarios
-): Router {
-
-  const router = Router()
-
+export function rutasUsuarios(deps: DependenciasUsuarios): Router {
+  const router = Router();
 
   // POST /api/usuarios/login
-  router.post('/login', async (req, res, next) => {
-
+  router.post("/login", async (req, res, next) => {
     try {
+      const { correo, clave } = req.body ?? {};
 
-      const {
-        correo,
-        clave
-      } = req.body ?? {}
-
-      if (
-        typeof correo !== 'string' ||
-        typeof clave !== 'string'
-      ) {
-
+      if (typeof correo !== "string" || typeof clave !== "string") {
         res.status(400).json({
-          error: 'correo y clave son obligatorios'
-        })
+          error: "correo y clave son obligatorios",
+        });
 
-        return
+        return;
       }
 
-      const resultado =
-        await deps.iniciarSesion.ejecutar({
-          correo,
-          clave
-        })
-
-      res.status(200).json(resultado)
-
-    } catch (error) {
-
-      next(error)
-
-    }
-
-  })
-
-
-  // POST /api/usuarios
-  router.post('/', async (req, res, next) => {
-
-    try {
-
-      const {
-        nombre,
+      const resultado = await deps.iniciarSesion.ejecutar({
         correo,
         clave,
-        rol,
-        activo
-      } = req.body
+      });
+
+      res.status(200).json(resultado);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // POST /api/usuarios
+  router.post("/", async (req, res, next) => {
+    try {
+      const { nombre, correo, clave, rol, activo } = req.body;
 
       if (
-        typeof nombre !== 'string' ||
-        typeof correo !== 'string' ||
-        typeof clave !== 'string'
+        typeof nombre !== "string" ||
+        typeof correo !== "string" ||
+        typeof clave !== "string"
       ) {
-
         res.status(400).json({
-          error: 'nombre, correo y clave son obligatorios'
-        })
+          error: "nombre, correo y clave son obligatorios",
+        });
 
-        return
+        return;
       }
 
       if (
@@ -99,25 +69,22 @@ export function rutasUsuarios(
         correo.trim().length === 0 ||
         clave.length === 0
       ) {
-
         res.status(400).json({
-          error: 'nombre, correo y clave no pueden estar vacíos'
-        })
+          error: "nombre, correo y clave no pueden estar vacíos",
+        });
 
-        return
+        return;
       }
 
-      const usuario =
-        await deps.registrarUsuario.ejecutar({
-          nombre,
-          correo,
-          clave,
-          rol,
-          activo
-        })
+      const usuario = await deps.registrarUsuario.ejecutar({
+        nombre,
+        correo,
+        clave,
+        rol,
+        activo,
+      });
 
       res.status(201).json({
-
         id: usuario.id,
 
         nombre: usuario.nombre,
@@ -128,31 +95,20 @@ export function rutasUsuarios(
 
         activo: usuario.activo,
 
-        creadoEn: usuario.creadoEn.toISOString()
-
-      })
-
+        creadoEn: usuario.creadoEn.toISOString(),
+      });
     } catch (error) {
-
-      next(error)
-
+      next(error);
     }
-
-  })
-
+  });
 
   // GET /api/usuarios
-  router.get('/', async (_req, res, next) => {
-
+  router.get("/", async (_req, res, next) => {
     try {
-
-      const usuarios =
-        await deps.consultarUsuarios.listarTodos()
+      const usuarios = await deps.consultarUsuarios.listarTodos();
 
       res.json(
-
-        usuarios.map(usuario => ({
-
+        usuarios.map((usuario) => ({
           id: usuario.id,
 
           nombre: usuario.nombre,
@@ -163,42 +119,90 @@ export function rutasUsuarios(
 
           activo: usuario.activo,
 
-          creadoEn: usuario.creadoEn.toISOString()
-
-        }))
-
-      )
-
+          creadoEn: usuario.creadoEn.toISOString(),
+        })),
+      );
     } catch (error) {
-
-      next(error)
-
+      next(error);
     }
+  });
 
-  })
-
-
-  // GET /api/usuarios/:id
-  router.get('/:id', async (req, res, next) => {
-
+  // PUT /api/usuarios/cambiar-clave
+  router.put("/cambiar-clave", async (req, res, next) => {
     try {
+      const usuarioId = res.locals.usuario?.id;
 
-      const id = Number(req.params.id)
-
-      if (!Number.isInteger(id) || id <= 0) {
-
-        res.status(400).json({
-          error: 'ID inválido'
-        })
-
-        return
+      if (!Number.isInteger(usuarioId) || usuarioId <= 0) {
+        res.status(401).json({
+          error: "Usuario no autenticado",
+        });
+        return;
       }
 
-      const usuario =
-        await deps.consultarUsuarios.porId(id)
+      const { claveActual, claveNueva } = req.body ?? {};
+
+      if (typeof claveActual !== "string" || typeof claveNueva !== "string") {
+        res.status(400).json({
+          error: "La contraseña actual y la nueva son obligatorias",
+        });
+        return;
+      }
+
+      await deps.cambiarClave.ejecutar({
+        usuarioId,
+        claveActual,
+        claveNueva,
+      });
+
+      res.status(200).json({
+        mensaje: "Contraseña actualizada correctamente",
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        const erroresValidacion = [
+          "La contraseña actual y la nueva son obligatorias",
+          "La nueva contraseña debe tener mínimo 8 caracteres",
+          "La contraseña debe contener al menos una mayúscula",
+          "La contraseña debe contener al menos una minúscula",
+          "La contraseña debe contener al menos un número",
+          "La contraseña actual es incorrecta",
+          "La nueva contraseña debe ser diferente a la actual",
+        ];
+
+        if (erroresValidacion.includes(error.message)) {
+          res.status(400).json({
+            error: error.message,
+          });
+          return;
+        }
+
+        if (error.message === "Usuario no encontrado") {
+          res.status(404).json({
+            error: error.message,
+          });
+          return;
+        }
+      }
+
+      next(error);
+    }
+  });
+  // GET /api/usuarios/:id
+  router.get("/:id", async (req, res, next) => {
+    try {
+      const id = Number(req.params.id);
+
+      if (!Number.isInteger(id) || id <= 0) {
+        res.status(400).json({
+          error: "ID inválido",
+        });
+
+        return;
+      }
+
+      const usuario = await deps.consultarUsuarios.porId(id);
 
       res.json({
-
         id: usuario.id,
 
         nombre: usuario.nombre,
@@ -209,160 +213,108 @@ export function rutasUsuarios(
 
         activo: usuario.activo,
 
-        creadoEn: usuario.creadoEn.toISOString()
-
-      })
-
+        creadoEn: usuario.creadoEn.toISOString(),
+      });
     } catch (error) {
-
-      next(error)
-
+      next(error);
     }
-
-  })
-
+  });
 
   // PUT /api/usuarios/:id
-  router.put('/:id', async (req, res, next) => {
-
+  router.put("/:id", async (req, res, next) => {
     try {
-
       // ==============================
       // VALIDAR ID
       // ==============================
 
-      const id = Number(req.params.id)
+      const id = Number(req.params.id);
 
       if (!Number.isInteger(id) || id <= 0) {
-
         res.status(400).json({
-          error: 'ID inválido'
-        })
+          error: "ID inválido",
+        });
 
-        return
+        return;
       }
-
 
       // ==============================
       // DATOS RECIBIDOS
       // ==============================
 
-      const {
-        nombre,
-        correo,
-        rol,
-        activo
-      } = req.body ?? {}
-
+      const { nombre, correo, rol, activo } = req.body ?? {};
 
       // ==============================
       // VALIDAR DATOS
       // ==============================
 
-      if (
-        nombre !== undefined &&
-        typeof nombre !== 'string'
-      ) {
-
+      if (nombre !== undefined && typeof nombre !== "string") {
         res.status(400).json({
-          error: 'El nombre debe ser un texto'
-        })
+          error: "El nombre debe ser un texto",
+        });
 
-        return
+        return;
       }
 
-
-      if (
-        correo !== undefined &&
-        typeof correo !== 'string'
-      ) {
-
+      if (correo !== undefined && typeof correo !== "string") {
         res.status(400).json({
-          error: 'El correo debe ser un texto'
-        })
+          error: "El correo debe ser un texto",
+        });
 
-        return
+        return;
       }
 
-
-      if (
-        rol !== undefined &&
-        typeof rol !== 'string'
-      ) {
-
+      if (rol !== undefined && typeof rol !== "string") {
         res.status(400).json({
-          error: 'El rol debe ser un texto'
-        })
+          error: "El rol debe ser un texto",
+        });
 
-        return
+        return;
       }
 
-
-      if (
-        activo !== undefined &&
-        typeof activo !== 'boolean'
-      ) {
-
+      if (activo !== undefined && typeof activo !== "boolean") {
         res.status(400).json({
-          error: 'El campo activo debe ser booleano'
-        })
+          error: "El campo activo debe ser booleano",
+        });
 
-        return
+        return;
       }
-
 
       // ==============================
       // VALIDAR CAMPOS VACÍOS
       // ==============================
 
-      if (
-        nombre !== undefined &&
-        nombre.trim().length === 0
-      ) {
-
+      if (nombre !== undefined && nombre.trim().length === 0) {
         res.status(400).json({
-          error: 'El nombre no puede estar vacío'
-        })
+          error: "El nombre no puede estar vacío",
+        });
 
-        return
+        return;
       }
 
-
-      if (
-        correo !== undefined &&
-        correo.trim().length === 0
-      ) {
-
+      if (correo !== undefined && correo.trim().length === 0) {
         res.status(400).json({
-          error: 'El correo no puede estar vacío'
-        })
+          error: "El correo no puede estar vacío",
+        });
 
-        return
+        return;
       }
-
 
       // ==============================
       // ACTUALIZAR USUARIO
       // ==============================
 
-      const usuario =
-        await deps.actualizarUsuario.ejecutar(
-          id,
-          {
-            nombre,
-            correo,
-            rol,
-            activo
-          }
-        )
-
+      const usuario = await deps.actualizarUsuario.ejecutar(id, {
+        nombre,
+        correo,
+        rol,
+        activo,
+      });
 
       // ==============================
       // RESPUESTA
       // ==============================
 
       res.status(200).json({
-
         id: usuario.id,
 
         nombre: usuario.nombre,
@@ -373,35 +325,24 @@ export function rutasUsuarios(
 
         activo: usuario.activo,
 
-        creadoEn: usuario.creadoEn.toISOString()
-
-      })
-
+        creadoEn: usuario.creadoEn.toISOString(),
+      });
     } catch (error) {
-
       // Usuario no encontrado
       if (
         error instanceof Error &&
-        error.message.startsWith(
-          'Usuario no encontrado'
-        )
+        error.message.startsWith("Usuario no encontrado")
       ) {
-
         res.status(404).json({
-          error: error.message
-        })
+          error: error.message,
+        });
 
-        return
+        return;
       }
 
-
-      next(error)
-
+      next(error);
     }
+  });
 
-  })
-
-
-  return router
-
+  return router;
 }
