@@ -1,0 +1,965 @@
+<div class="dashboard-page">
+
+  <!-- ====================================== -->
+  <!-- ENCABEZADO -->
+  <!-- ====================================== -->
+
+  <section class="dashboard-header">
+
+    <div class="dashboard-heading">
+      <span class="dashboard-eyebrow">
+        CENTRO DE CONTROL
+      </span>
+
+      <h1>Panel de control</h1>
+
+      <p>
+        Consulta el estado general de tus equipos,
+        tickets y mantenimientos.
+      </p>
+    </div>
+
+    <div class="dashboard-header-actions">
+
+      <div class="dashboard-update-info">
+        <span class="update-indicator"></span>
+
+        <div>
+          <strong>Información actualizada</strong>
+          <small>{{ obtenerFechaActualizacion() }}</small>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="dashboard-refresh-button"
+        (click)="cargarDashboard()"
+        [disabled]="cargando()"
+      >
+        <span [class.spinning]="cargando()">↻</span>
+        {{ cargando() ? 'Actualizando...' : 'Actualizar' }}
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ====================================== -->
+  <!-- CARGANDO -->
+  <!-- ====================================== -->
+
+  @if (cargando() && !dashboard()) {
+
+    <div class="dashboard-loading">
+      <div class="dashboard-spinner"></div>
+
+      <strong>Preparando tu panel de control</strong>
+
+      <span>Estamos consultando la información del sistema...</span>
+    </div>
+
+  }
+
+
+  <!-- ====================================== -->
+  <!-- ERROR -->
+  <!-- ====================================== -->
+
+  @if (error()) {
+
+    <div class="dashboard-error">
+
+      <div class="dashboard-error-icon">!</div>
+
+      <div class="dashboard-error-content">
+        <strong>No pudimos cargar el Dashboard</strong>
+        <p>{{ error() }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="dashboard-retry-button"
+        (click)="cargarDashboard()"
+      >
+        Intentar nuevamente
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ====================================== -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ====================================== -->
+
+  @if (dashboard(); as datos) {
+
+    <!-- ================================== -->
+    <!-- INDICADORES PRINCIPALES -->
+    <!-- ================================== -->
+
+    <section class="dashboard-kpis">
+
+      <!-- EQUIPOS -->
+
+      <article class="dashboard-kpi-card">
+
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-purple">
+            <span>▣</span>
+          </div>
+
+          <span class="kpi-label">EQUIPOS</span>
+        </div>
+
+        <div class="kpi-value">
+          {{ datos.equipos.total }}
+        </div>
+
+        <div class="kpi-footer">
+          <span class="kpi-positive">
+            {{ datos.equipos.activos }} activos
+          </span>
+
+          <span>
+            {{ datos.equipos.inactivos }} inactivos
+          </span>
+        </div>
+
+      </article>
+
+
+      <!-- TICKETS -->
+
+      <article class="dashboard-kpi-card">
+
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-orange">
+            <span>▤</span>
+          </div>
+
+          <span class="kpi-label">TICKETS</span>
+        </div>
+
+        <div class="kpi-value">
+          {{ datos.tickets.pendientes }}
+        </div>
+
+        <div class="kpi-footer">
+          <span>Tickets pendientes</span>
+
+          @if (datos.tickets.criticosPendientes > 0) {
+            <span class="kpi-danger">
+              {{ datos.tickets.criticosPendientes }} críticos
+            </span>
+          } @else {
+            <span class="kpi-positive">
+              Sin críticos
+            </span>
+          }
+        </div>
+
+      </article>
+
+
+      <!-- MANTENIMIENTOS -->
+
+      <article class="dashboard-kpi-card">
+
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-green">
+            <span>⚙</span>
+          </div>
+
+          <span class="kpi-label">MANTENIMIENTOS</span>
+        </div>
+
+        <div class="kpi-value">
+          {{ datos.mantenimientos.total }}
+        </div>
+
+        <div class="kpi-footer">
+          <span>
+            {{ datos.mantenimientos.finalizados }} finalizados
+          </span>
+
+          <span class="kpi-warning">
+            {{ datos.mantenimientos.pendientes }} pendientes
+          </span>
+        </div>
+
+      </article>
+
+
+      <!-- REPUESTOS -->
+
+      <article class="dashboard-kpi-card">
+
+        <div class="kpi-top">
+          <div class="kpi-icon kpi-blue">
+            <span>▦</span>
+          </div>
+
+          <span class="kpi-label">INVENTARIO</span>
+        </div>
+
+        <div class="kpi-value">
+          {{ datos.repuestos.unidadesDisponibles }}
+        </div>
+
+        <div class="kpi-footer">
+          <span>Unidades disponibles</span>
+
+          @if (datos.repuestos.agotados > 0) {
+            <span class="kpi-danger">
+              {{ datos.repuestos.agotados }} agotados
+            </span>
+          } @else {
+            <span class="kpi-positive">
+              Stock disponible
+            </span>
+          }
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- ACTIVIDAD MENSUAL -->
+    <!-- ================================== -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-chart-card dashboard-activity-card">
+
+        <div class="dashboard-card-header">
+
+          <div>
+            <span class="dashboard-section-label">
+              SEGUIMIENTO
+            </span>
+
+            <h2>Actividad mensual</h2>
+
+            <p>
+              Evolución de tickets y mantenimientos registrados.
+            </p>
+          </div>
+
+          <div class="dashboard-card-icon">
+            ↗
+          </div>
+
+        </div>
+
+        @if (datos.actividadMensual.length > 0) {
+
+          <div class="dashboard-line-chart">
+            <canvas
+              baseChart
+              [type]="'line'"
+              [data]="actividadData()"
+              [options]="actividadOptions"
+            ></canvas>
+          </div>
+
+        } @else {
+
+          <div class="dashboard-empty-chart">
+            <span>◷</span>
+            <strong>Sin actividad registrada</strong>
+            <small>Cuando existan registros, aparecerán aquí.</small>
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- ANÁLISIS DE TICKETS -->
+    <!-- ================================== -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section-heading">
+        <div>
+          <span class="dashboard-section-label">
+            ANÁLISIS OPERATIVO
+          </span>
+
+          <h2>Gestión de tickets</h2>
+
+          <p>
+            Distribución de solicitudes y niveles de prioridad.
+          </p>
+        </div>
+
+        <div class="dashboard-total-badge">
+          {{ datos.tickets.total }} tickets registrados
+        </div>
+      </div>
+
+
+      <div class="dashboard-chart-grid">
+
+        <!-- TICKETS POR ESTADO -->
+
+        <article class="dashboard-chart-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Tickets por estado</h3>
+              <p>Distribución de las solicitudes.</p>
+            </div>
+          </div>
+
+          @if (datos.tickets.porEstado.length > 0) {
+
+            <div class="dashboard-doughnut-layout">
+
+              <div class="dashboard-doughnut">
+                <canvas
+                  baseChart
+                  [type]="'doughnut'"
+                  [data]="ticketsEstadoData()"
+                  [options]="ticketsDonaOptions"
+                ></canvas>
+              </div>
+
+              <div class="dashboard-legend">
+
+                @for (
+                  item of datos.tickets.porEstado;
+                  track item.nombre;
+                  let i = $index
+                ) {
+
+                  <div class="dashboard-legend-item">
+
+                    <span
+                      class="legend-color"
+                      [style.background]="colores[i % colores.length]"
+                    ></span>
+
+                    <span class="legend-name">
+                      {{ formatearEstado(item.nombre) }}
+                    </span>
+
+                    <strong>{{ item.cantidad }}</strong>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-chart">
+              <strong>Sin tickets registrados</strong>
+            </div>
+
+          }
+
+        </article>
+
+
+        <!-- TICKETS POR PRIORIDAD -->
+
+        <article class="dashboard-chart-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Tickets por prioridad</h3>
+              <p>Clasificación según nivel de atención.</p>
+            </div>
+          </div>
+
+          @if (datos.tickets.porPrioridad.length > 0) {
+
+            <div class="dashboard-bar-chart">
+              <canvas
+                baseChart
+                [type]="'bar'"
+                [data]="ticketsPrioridadData()"
+                [options]="ticketsPrioridadOptions"
+              ></canvas>
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-chart">
+              <strong>Sin prioridades registradas</strong>
+            </div>
+
+          }
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- ANÁLISIS DE MANTENIMIENTOS -->
+    <!-- ================================== -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section-heading">
+        <div>
+          <span class="dashboard-section-label">
+            CONTROL TÉCNICO
+          </span>
+
+          <h2>Mantenimientos</h2>
+
+          <p>
+            Seguimiento de las intervenciones técnicas.
+          </p>
+        </div>
+
+        <div class="dashboard-total-badge">
+          {{ datos.mantenimientos.total }} mantenimientos
+        </div>
+      </div>
+
+
+      <div class="dashboard-chart-grid">
+
+        <!-- MANTENIMIENTOS POR TIPO -->
+
+        <article class="dashboard-chart-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Tipo de mantenimiento</h3>
+              <p>Preventivos y correctivos.</p>
+            </div>
+          </div>
+
+          @if (datos.mantenimientos.porTipo.length > 0) {
+
+            <div class="dashboard-doughnut-layout">
+
+              <div class="dashboard-doughnut">
+                <canvas
+                  baseChart
+                  [type]="'doughnut'"
+                  [data]="mantenimientoTipoData()"
+                  [options]="mantenimientoDonaOptions"
+                ></canvas>
+              </div>
+
+              <div class="dashboard-legend">
+
+                @for (
+                  item of datos.mantenimientos.porTipo;
+                  track item.nombre;
+                  let i = $index
+                ) {
+
+                  <div class="dashboard-legend-item">
+
+                    <span
+                      class="legend-color"
+                      [style.background]="colores[i % colores.length]"
+                    ></span>
+
+                    <span class="legend-name">
+                      {{ formatearEstado(item.nombre) }}
+                    </span>
+
+                    <strong>{{ item.cantidad }}</strong>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-chart">
+              <strong>Sin mantenimientos registrados</strong>
+            </div>
+
+          }
+
+        </article>
+
+
+        <!-- MANTENIMIENTOS POR ESTADO -->
+
+        <article class="dashboard-chart-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Mantenimientos por estado</h3>
+              <p>Estado actual de las intervenciones.</p>
+            </div>
+          </div>
+
+          @if (datos.mantenimientos.porEstado.length > 0) {
+
+            <div class="dashboard-bar-chart">
+              <canvas
+                baseChart
+                [type]="'bar'"
+                [data]="mantenimientoEstadoData()"
+                [options]="mantenimientoEstadoOptions"
+              ></canvas>
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-chart">
+              <strong>Sin estados registrados</strong>
+            </div>
+
+          }
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- ACTIVIDAD RECIENTE -->
+    <!-- ================================== -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section-heading">
+        <div>
+          <span class="dashboard-section-label">
+            ÚLTIMOS REGISTROS
+          </span>
+
+          <h2>Actividad reciente</h2>
+
+          <p>
+            Últimos tickets y mantenimientos del sistema.
+          </p>
+        </div>
+      </div>
+
+
+      <div class="dashboard-recent-grid">
+
+        <!-- TICKETS RECIENTES -->
+
+        <article class="dashboard-list-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Tickets recientes</h3>
+              <p>Solicitudes registradas recientemente.</p>
+            </div>
+
+            <span class="dashboard-small-count">
+              {{ datos.ticketsRecientes.length }}
+            </span>
+          </div>
+
+
+          @if (datos.ticketsRecientes.length > 0) {
+
+            <div class="dashboard-recent-list">
+
+              @for (
+                ticket of datos.ticketsRecientes;
+                track ticket.id
+              ) {
+
+                <div class="dashboard-recent-item">
+
+                  <div class="recent-item-icon ticket-icon">
+                    ▤
+                  </div>
+
+                  <div class="recent-item-content">
+
+                    <strong>{{ ticket.titulo }}</strong>
+
+                    <span>
+                      {{ ticket.equipo }}
+                    </span>
+
+                    <small>
+                      {{ ticket.creadoEn | date:'dd/MM/yyyy HH:mm' }}
+                    </small>
+
+                  </div>
+
+                  <div class="recent-item-status">
+
+                    <span
+                      class="dashboard-status"
+                      [ngClass]="'status-' + claseEstado(ticket.estado)"
+                    >
+                      {{ formatearEstado(ticket.estado) }}
+                    </span>
+
+                    <span
+                      class="dashboard-priority"
+                      [ngClass]="clasePrioridad(ticket.prioridad)"
+                    >
+                      {{ formatearEstado(ticket.prioridad) }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-list">
+              No hay tickets recientes.
+            </div>
+
+          }
+
+        </article>
+
+
+        <!-- MANTENIMIENTOS RECIENTES -->
+
+        <article class="dashboard-list-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Mantenimientos recientes</h3>
+              <p>Últimas intervenciones técnicas.</p>
+            </div>
+
+            <span class="dashboard-small-count">
+              {{ datos.mantenimientosRecientes.length }}
+            </span>
+          </div>
+
+
+          @if (datos.mantenimientosRecientes.length > 0) {
+
+            <div class="dashboard-recent-list">
+
+              @for (
+                mantenimiento of datos.mantenimientosRecientes;
+                track mantenimiento.id
+              ) {
+
+                <div class="dashboard-recent-item">
+
+                  <div class="recent-item-icon maintenance-icon">
+                    ⚙
+                  </div>
+
+                  <div class="recent-item-content">
+
+                    <strong>
+                      {{ mantenimiento.descripcion }}
+                    </strong>
+
+                    <span>
+                      Equipo #{{ mantenimiento.equipoId }}
+                      · {{ formatearEstado(mantenimiento.tipo) }}
+                    </span>
+
+                    <small>
+                      {{ mantenimiento.fecha | date:'dd/MM/yyyy HH:mm' }}
+                    </small>
+
+                  </div>
+
+                  <div class="recent-item-status">
+
+                    <span
+                      class="dashboard-status"
+                      [ngClass]="'status-' + claseEstado(mantenimiento.estado)"
+                    >
+                      {{ formatearEstado(mantenimiento.estado) }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-list">
+              No hay mantenimientos recientes.
+            </div>
+
+          }
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- EQUIPOS E INVENTARIO -->
+    <!-- ================================== -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section-heading">
+        <div>
+          <span class="dashboard-section-label">
+            RECURSOS DEL SISTEMA
+          </span>
+
+          <h2>Equipos e inventario</h2>
+
+          <p>
+            Información sobre los recursos que requieren seguimiento.
+          </p>
+        </div>
+      </div>
+
+
+      <div class="dashboard-resources-grid">
+
+        <!-- EQUIPOS FRECUENTES -->
+
+        <article class="dashboard-list-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Equipos con más mantenimientos</h3>
+              <p>Equipos con mayor número de intervenciones.</p>
+            </div>
+          </div>
+
+
+          @if (datos.equiposFrecuentes.length > 0) {
+
+            <div class="dashboard-equipment-list">
+
+              @for (
+                equipo of datos.equiposFrecuentes;
+                track equipo.id;
+                let i = $index
+              ) {
+
+                <div class="dashboard-equipment-item">
+
+                  <div class="equipment-ranking">
+                    {{ i + 1 }}
+                  </div>
+
+                  <div class="equipment-information">
+
+                    <strong>{{ equipo.nombre }}</strong>
+
+                    <span>{{ equipo.codigoInventario }}</span>
+
+                  </div>
+
+                  <div class="equipment-maintenance-count">
+                    <strong>
+                      {{ equipo.cantidadMantenimientos }}
+                    </strong>
+
+                    <small>intervenciones</small>
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <div class="dashboard-empty-list">
+              No hay mantenimientos asociados a equipos.
+            </div>
+
+          }
+
+        </article>
+
+
+        <!-- INVENTARIO -->
+
+        <article class="dashboard-list-card">
+
+          <div class="dashboard-card-header">
+            <div>
+              <h3>Resumen de inventario</h3>
+              <p>Estado general de los repuestos disponibles.</p>
+            </div>
+
+            <div class="inventory-icon">▦</div>
+          </div>
+
+
+          <div class="dashboard-inventory-value">
+            <span>Valor del inventario</span>
+
+            <strong>
+              {{ datos.repuestos.valorInventario | currency:'COP':'symbol-narrow':'1.0-0':'es-CO' }}
+            </strong>
+          </div>
+
+
+          <div class="dashboard-inventory-stats">
+
+            <div class="inventory-stat">
+              <span class="inventory-stat-icon inventory-purple">
+                ▦
+              </span>
+
+              <div>
+                <strong>{{ datos.repuestos.total }}</strong>
+                <small>Repuestos registrados</small>
+              </div>
+            </div>
+
+
+            <div class="inventory-stat">
+              <span class="inventory-stat-icon inventory-green">
+                ✓
+              </span>
+
+              <div>
+                <strong>{{ datos.repuestos.activos }}</strong>
+                <small>Repuestos activos</small>
+              </div>
+            </div>
+
+
+            <div class="inventory-stat">
+              <span class="inventory-stat-icon inventory-orange">
+                !
+              </span>
+
+              <div>
+                <strong>{{ datos.repuestos.agotados }}</strong>
+                <small>Repuestos agotados</small>
+              </div>
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================== -->
+    <!-- ALERTAS DE INVENTARIO -->
+    <!-- ================================== -->
+
+    @if (datos.repuestosAgotados.length > 0) {
+
+      <section class="dashboard-section">
+
+        <article class="dashboard-alert-card">
+
+          <div class="dashboard-alert-heading">
+
+            <div class="dashboard-alert-icon">
+              !
+            </div>
+
+            <div>
+              <h3>Repuestos agotados</h3>
+
+              <p>
+                Hay {{ datos.repuestosAgotados.length }}
+                repuestos que requieren reposición.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-alert-list">
+
+            @for (
+              repuesto of datos.repuestosAgotados;
+              track repuesto.id
+            ) {
+
+              <div class="dashboard-alert-item">
+
+                <div>
+                  <strong>{{ repuesto.nombre }}</strong>
+                  <small>{{ repuesto.codigo }}</small>
+                </div>
+
+                <span class="stock-empty">
+                  Sin existencias
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        </article>
+
+      </section>
+
+    } @else {
+
+      <section class="dashboard-section">
+
+        <div class="dashboard-inventory-ok">
+          <span>✓</span>
+
+          <div>
+            <strong>Inventario sin alertas de agotamiento</strong>
+            <small>No hay repuestos agotados registrados.</small>
+          </div>
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ================================== -->
+    <!-- PIE DEL DASHBOARD -->
+    <!-- ================================== -->
+
+    <footer class="dashboard-footer">
+      <span>Mantix · Sistema de gestión y trazabilidad</span>
+
+      <span>
+        Panel de control
+      </span>
+    </footer>
+
+  }
+
+</div>

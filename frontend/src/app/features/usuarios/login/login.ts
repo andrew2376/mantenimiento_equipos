@@ -50,7 +50,7 @@ export class Login {
           JSON.stringify(respuesta.usuario)
         );
 
-        this.router.navigate(['/equipos']);
+        this.router.navigate(['/dashboard']);
 
       },
 

@@ -1,3 +1,4 @@
+
 import type {
   Equipo,
   EquipoNuevo
@@ -26,6 +27,10 @@ import type {
   MantenimientoRepuesto,
   MantenimientoRepuestoNuevo
 } from '../modelo/Repuesto.js'
+
+import type {
+  Dashboard
+} from '../modelo/Dashboard.js'
 
 /**
  * Puertos de Dominio:
@@ -144,13 +149,51 @@ export interface ServicioClaves {
 }
 
 export interface RepuestoDAO {
-  guardar(repuesto: RepuestoNuevo): Promise<Repuesto>
-  porId(id: number): Promise<Repuesto | null>
-  porCodigo(codigo: string): Promise<Repuesto | null>
+
+  guardar(
+    repuesto: RepuestoNuevo
+  ): Promise<Repuesto>
+
+  porId(
+    id: number
+  ): Promise<Repuesto | null>
+
+  porCodigo(
+    codigo: string
+  ): Promise<Repuesto | null>
+
   todos(): Promise<Repuesto[]>
-  actualizar(id: number, datos: Partial<RepuestoNuevo>): Promise<Repuesto | null>
-  asociarAMantenimiento(datos: MantenimientoRepuestoNuevo): Promise<MantenimientoRepuesto>
-  asociacionPorId(id: number): Promise<MantenimientoRepuesto | null>
-  listarPorMantenimiento(mantenimientoId: number): Promise<MantenimientoRepuesto[]>
-  eliminarDeMantenimiento(id: number): Promise<boolean>
+
+  actualizar(
+    id: number,
+    datos: Partial<RepuestoNuevo>
+  ): Promise<Repuesto | null>
+
+  asociarAMantenimiento(
+    datos: MantenimientoRepuestoNuevo
+  ): Promise<MantenimientoRepuesto>
+
+  asociacionPorId(
+    id: number
+  ): Promise<MantenimientoRepuesto | null>
+
+  listarPorMantenimiento(
+    mantenimientoId: number
+  ): Promise<MantenimientoRepuesto[]>
+
+  eliminarDeMantenimiento(
+    id: number
+  ): Promise<boolean>
+}
+
+/**
+ * Puerto del Dashboard:
+ * Define el contrato para consultar los indicadores
+ * y estadísticas generales del sistema.
+ */
+
+export interface DashboardDAO {
+
+  obtenerResumen(): Promise<Dashboard>
+
 }

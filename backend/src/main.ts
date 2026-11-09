@@ -14,6 +14,7 @@ import { MantenimientoDAOPrisma } from './infraestructura/persistencia/Mantenimi
 import { UsuarioDAOPrisma } from './infraestructura/persistencia/UsuarioDAOPrisma'
 import { TicketDAOPrisma } from './infraestructura/persistencia/TicketDAOPrisma'
 import { RepuestoDAOPrisma } from './infraestructura/persistencia/RepuestoDAOPrisma'
+import { DashboardDAOPrisma } from './infraestructura/persistencia/DashboardDAOPrisma'
 
 import { ServicioClavesBcrypt } from './infraestructura/identidad/ServicioClavesBcrypt'
 
@@ -54,6 +55,8 @@ import { AsignarTecnico } from './aplicacion/casos-uso/AsignarTecnico'
 import { GestionarRepuestos } from './aplicacion/casos-uso/GestionarRepuestos'
 import { AsociarRepuestoMantenimiento } from './aplicacion/casos-uso/AsociarRepuestoMantenimiento'
 
+// Dashboard
+import { ConsultarDashboard } from './aplicacion/casos-uso/ConsultarDashboard'
 
 // ==========================================
 // 3. ADAPTADORES DE PERSISTENCIA
@@ -74,6 +77,9 @@ const ticketDAO =
 const repuestoDAO =
   new RepuestoDAOPrisma(prisma)
 
+// Dashboard
+const dashboardDAO =
+  new DashboardDAOPrisma(prisma)
 
 // ==========================================
 // 4. SERVICIOS DE INFRAESTRUCTURA
@@ -81,7 +87,6 @@ const repuestoDAO =
 
 const servicioClaves =
   new ServicioClavesBcrypt()
-
 
 // ==========================================
 // 5. CASOS DE USO
@@ -103,7 +108,6 @@ const desactivarEquipo =
 
 const activarEquipo =
   new ActivarEquipo(equipoDAO)
-
 
 // MANTENIMIENTOS
 
@@ -136,7 +140,6 @@ const cerrarMantenimiento =
 const registrarDiagnostico =
   new RegistrarDiagnostico(mantenimientoDAO)
 
-
 // USUARIOS
 
 const registrarUsuario =
@@ -163,7 +166,6 @@ const cambiarClave =
     servicioClaves
   )
 
-
 // TICKETS
 
 const registrarTicket =
@@ -181,7 +183,6 @@ const asignarTecnico =
     usuarioDAO
   )
 
-
 // REPUESTOS
 
 const gestionarRepuestos =
@@ -193,6 +194,10 @@ const asociarRepuestoMantenimiento =
     repuestoDAO
   )
 
+// DASHBOARD
+
+const consultarDashboard =
+  new ConsultarDashboard(dashboardDAO)
 
 // ==========================================
 // 6. CREACIÓN DEL SERVIDOR HTTP
@@ -236,8 +241,11 @@ const app = crearServidor({
     asociarRepuestoMantenimiento,
   },
 
-})
+  dashboard: {
+    consultarDashboard,
+  },
 
+})
 
 // ==========================================
 // 7. INICIAR SERVIDOR

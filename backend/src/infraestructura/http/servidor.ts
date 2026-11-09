@@ -30,6 +30,11 @@ import {
   type DependenciasRepuestos,
 } from "./rutas/repuestos";
 
+import {
+  crearRutasDashboard,
+  type DependenciasDashboard,
+} from "./rutas/dashboard";
+
 import { verificarJWT } from "./middleware/verificarJWT";
 import { autorizarRol } from "./middleware/autorizarRol";
 
@@ -39,6 +44,7 @@ export interface DependenciasServidor {
   usuarios: DependenciasUsuarios;
   tickets: DependenciasTickets;
   repuestos: DependenciasRepuestos;
+  dashboard: DependenciasDashboard;
 }
 
 const swaggerDocument = {
@@ -1211,6 +1217,14 @@ export function crearServidor(deps: DependenciasServidor): Express {
     autorizarRol,
     rutasRepuestos(deps.repuestos),
   );
+
+  // Dashboard: validar JWT y después comprobar el rol.
+api.use(
+  "/dashboard",
+  verificarJWT,
+  autorizarRol,
+  crearRutasDashboard(deps.dashboard),
+);
 
   app.use("/api", api);
 
