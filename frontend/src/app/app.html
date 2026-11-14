@@ -1,666 +1,594 @@
-
 @if (mostrarMenu()) {
 
-  <div class="app-layout">
+<div class="app-layout">
 
-    <!-- ==========================================
+  <!-- ==========================================
          SIDEBAR
          ========================================== -->
 
-    <aside class="sidebar">
+  <aside class="sidebar">
 
-      <div class="sidebar-brand">
+    <div class="sidebar-brand">
 
-        <div class="brand-icon">
-          M
-        </div>
-
-        <div class="brand-text">
-
-          <strong>
-            Mantix
-          </strong>
-
-          <span>
-            Gestión de mantenimiento
-          </span>
-
-        </div>
-
+      <div class="brand-icon">
+        M
       </div>
 
+      <div class="brand-text">
 
-      <nav class="sidebar-nav">
+        <strong>
+          Mantix
+        </strong>
 
-        <p class="nav-title">
-          PRINCIPAL
-        </p>
-
-        <a
-  routerLink="/dashboard"
-  routerLinkActive="active"
-  class="nav-item"
-  (click)="permitirRuta('/dashboard')"
->
-  <span class="nav-icon">▦</span>
-  <span>Dashboard</span>
-</a>
-
-
-        <a routerLink="/equipos" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/equipos')">
-
-          <span class="nav-icon">
-            ▣
-          </span>
-
-          <span>
-            Equipos
-          </span>
-
-        </a>
-
-
-        <a routerLink="/tickets" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/tickets')">
-
-          <span class="nav-icon">
-            ▤
-          </span>
-
-          <span>
-            Tickets
-          </span>
-
-        </a>
-
-
-        <a routerLink="/mantenimientos" routerLinkActive="active" class="nav-item"
-          (click)="permitirRuta('/mantenimientos')">
-
-          <span class="nav-icon">
-            🔧
-          </span>
-
-          <span>
-            Mantenimiento
-          </span>
-
-        </a>
-
-
-        <a routerLink="/historial" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/historial')">
-
-          <span class="nav-icon">
-            ◷
-          </span>
-
-          <span>
-            Historial
-          </span>
-
-        </a>
-
-
-        <p class="nav-title nav-title-space">
-          GESTIÓN
-        </p>
-
-
-        <a routerLink="/usuarios" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/usuarios')">
-
-          <span class="nav-icon">
-            ◉
-          </span>
-
-          <span>
-            Usuarios
-          </span>
-
-        </a>
-
-
-        <a routerLink="/reportes" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/reportes')">
-
-          <span class="nav-icon">
-            ▥
-          </span>
-
-          <span>
-            Reportes
-          </span>
-
-        </a>
-
-      </nav>
-
-
-      <div class="sidebar-bottom">
-
-        <a routerLink="/configuracion" routerLinkActive="active" class="nav-item"
-          (click)="permitirRuta('/configuracion')">
-
-          <span class="nav-icon">
-            ⚙
-          </span>
-
-          <span>
-            Configuración
-          </span>
-
-        </a>
-
-
-        <!-- ==========================================
-             USUARIO DEL SIDEBAR
-             ========================================== -->
-
-        <div class="sidebar-user">
-
-          <div class="user-avatar">
-
-            {{ inicialUsuario() }}
-
-          </div>
-
-
-          <div class="user-info">
-
-            <strong>
-              {{ nombreUsuario() }}
-            </strong>
-
-            <span>
-              {{ rolUsuario() }}
-            </span>
-
-          </div>
-
-        </div>
+        <span>
+          Gestión de mantenimiento
+        </span>
 
       </div>
-
-    </aside>
-
-
-    <!-- ==========================================
-         CONTENIDO PRINCIPAL
-         ========================================== -->
-
-    <main class="main-content">
-
-
-      <!-- ========================================
-           NAVBAR SUPERIOR
-           ======================================== -->
-
-      <header class="top-navbar">
-
-        <div class="navbar-left">
-
-          <button type="button" class="navbar-menu-button" aria-label="Abrir menú">
-            ☰
-          </button>
-
-
-          <div class="navbar-title">
-
-            <span>
-              {{ paginaActual() }}
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="navbar-right">
-
-
-          <!-- ========================================
-               NOTIFICACIONES
-               ======================================== -->
-
-          <button type="button" class="navbar-notification" title="Notificaciones">
-            🔔
-          </button>
-
-
-          <!-- PERFIL DE USUARIO -->
-
-          <div class="navbar-user-container" (click)="$event.stopPropagation()">
-
-            <button type="button" class="navbar-user" (click)="alternarPanelPerfil()"
-              [attr.aria-expanded]="panelPerfilAbierto()" aria-label="Abrir menú de perfil">
-
-              <div class="navbar-user-avatar">
-                {{ inicialUsuario() }}
-              </div>
-
-              <div class="navbar-user-info">
-
-                <strong>
-                  {{ nombreUsuario() }}
-                </strong>
-
-                <span>
-                  {{ rolUsuario() }}
-                </span>
-
-              </div>
-
-              <span class="profile-chevron">
-                ▾
-              </span>
-
-            </button>
-
-
-            <!-- PANEL DESPLEGABLE -->
-
-            @if (panelPerfilAbierto()) {
-
-              <div class="profile-dropdown">
-
-                <div class="profile-dropdown-header">
-
-                  <div class="profile-dropdown-avatar">
-                    {{ inicialUsuario() }}
-                  </div>
-
-                  <h3>
-                    {{ nombreUsuario() }}
-                  </h3>
-
-                  <span class="profile-role">
-                    {{ rolUsuario() }}
-                  </span>
-
-                  <span class="profile-status">
-                    <span class="status-dot"></span>
-                    Cuenta activa
-                  </span>
-
-                </div>
-
-
-                <div class="profile-dropdown-divider"></div>
-
-
-                <div class="profile-dropdown-options">
-
-                  <div class="profile-option">
-
-                    <span class="profile-option-icon">♙</span>
-
-                    <div>
-                      <strong>Mi perfil</strong>
-                      <small>Consultar mis datos personales</small>
-                    </div>
-
-                    <span class="option-arrow">›</span>
-
-                  </div>
-
-
-                  <div class="profile-option">
-
-                    <span class="profile-option-icon">⚙</span>
-
-                    <div>
-                      <strong>Configuración</strong>
-                      <small>Preferencias de mi cuenta</small>
-                    </div>
-
-                    <span class="option-arrow">›</span>
-
-                  </div>
-
-
-                  <!-- CAMBIAR CONTRASEÑA -->
-
-                  <div
-                    class="profile-option"
-                    (click)="abrirModalCambioClave()"
-                    role="button"
-                    tabindex="0"
-                    (keydown.enter)="abrirModalCambioClave()"
-                    (keydown.space)="$event.preventDefault(); abrirModalCambioClave()"
-                  >
-
-                    <span class="profile-option-icon">♧</span>
-
-                    <div>
-                      <strong>Cambiar contraseña</strong>
-                      <small>Seguridad de la cuenta</small>
-                    </div>
-
-                    <span class="option-arrow">›</span>
-
-                  </div>
-
-                </div>
-
-
-                <div class="profile-dropdown-divider"></div>
-
-
-                <div class="profile-logout" (click)="cerrarSesion()">
-
-                  <span>↪</span>
-
-                  <strong>Cerrar sesión</strong>
-
-                </div>
-
-              </div>
-
-            }
-
-          </div>
-
-        </div>
-
-      </header>
-
-
-      <!-- ========================================
-           CONTENIDO DE LAS PÁGINAS
-           ======================================== -->
-
-      <div class="page-content">
-
-        <router-outlet />
-
-      </div>
-
-    </main>
-
-  </div>
-
-
-  <!-- ==========================================
-       MODAL CAMBIAR CONTRASEÑA
-       ========================================== -->
-
-  @if (modalCambioClaveAbierto()) {
-
-    <div class="modal-clave-overlay" (click)="cerrarModalCambioClave()">
-
-      <section
-        class="modal-clave"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tituloCambioClave"
-        (click)="$event.stopPropagation()"
-      >
-
-        <!-- ENCABEZADO -->
-
-        <div class="modal-clave-header">
-
-          <div>
-
-            <h2 id="tituloCambioClave">
-              Cambiar contraseña
-            </h2>
-
-            <p>
-              Actualiza la contraseña de tu cuenta de forma segura.
-            </p>
-
-          </div>
-
-          <button
-            type="button"
-            class="modal-clave-cerrar"
-            aria-label="Cerrar ventana"
-            (click)="cerrarModalCambioClave()"
-          >
-            ×
-          </button>
-
-        </div>
-
-
-        <!-- FORMULARIO -->
-
-        <form
-          class="modal-clave-form"
-          autocomplete="off"
-          (submit)="$event.preventDefault(); cambiarClave()"
-        >
-
-          <!-- ======================================
-               CONTRASEÑA ACTUAL
-               ====================================== -->
-
-          <div class="campo-clave">
-
-            <label for="claveActual">
-              Contraseña actual
-            </label>
-
-            <div class="campo-clave-input">
-
-              <input
-                id="claveActual"
-                name="clave-actual-mantix"
-                [type]="mostrarClaveActual() ? 'text' : 'password'"
-                [value]="claveActual()"
-                (input)="claveActual.set($any($event.target).value)"
-                placeholder="Ingresa tu contraseña actual"
-                autocomplete="off"
-                required
-              />
-
-              <button
-                type="button"
-                class="btn-ver-clave"
-                (click)="alternarVisibilidadClaveActual()"
-              >
-                {{ mostrarClaveActual() ? 'Ocultar' : 'Mostrar' }}
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <!-- ======================================
-               NUEVA CONTRASEÑA
-               ====================================== -->
-
-          <div class="campo-clave">
-
-            <label for="claveNueva">
-              Nueva contraseña
-            </label>
-
-            <div class="campo-clave-input">
-
-              <input
-                id="claveNueva"
-                name="nueva-clave-mantix"
-                [type]="mostrarClaveNueva() ? 'text' : 'password'"
-                [value]="claveNueva()"
-                (input)="claveNueva.set($any($event.target).value)"
-                placeholder="Ingresa tu nueva contraseña"
-                autocomplete="new-password"
-                required
-              />
-
-              <button
-                type="button"
-                class="btn-ver-clave"
-                (click)="alternarVisibilidadClaveNueva()"
-              >
-                {{ mostrarClaveNueva() ? 'Ocultar' : 'Mostrar' }}
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <!-- ======================================
-               INDICADOR ANIMADO DE SEGURIDAD
-               ====================================== -->
-
-          @if (claveNueva()) {
-
-            <div class="clave-fortaleza">
-
-              <div class="clave-fortaleza-info">
-
-                <span>
-                  Seguridad de la contraseña
-                </span>
-
-                <strong
-                  [class.debil]="nivelSeguridad().clase === 'debil'"
-                  [class.media]="nivelSeguridad().clase === 'media'"
-                  [class.fuerte]="nivelSeguridad().clase === 'fuerte'"
-                >
-                  {{ nivelSeguridad().texto }}
-                </strong>
-
-              </div>
-
-
-              <div class="clave-fortaleza-barra">
-
-                <div
-                  class="clave-fortaleza-progreso"
-                  [class.debil]="nivelSeguridad().clase === 'debil'"
-                  [class.media]="nivelSeguridad().clase === 'media'"
-                  [class.fuerte]="nivelSeguridad().clase === 'fuerte'"
-                  [style.width.%]="nivelSeguridad().porcentaje"
-                ></div>
-
-              </div>
-
-
-              <small>
-                Usa mayúsculas, minúsculas, números y símbolos para mejorar la seguridad.
-              </small>
-
-            </div>
-
-          }
-
-
-          <!-- ======================================
-               CONFIRMAR NUEVA CONTRASEÑA
-               ====================================== -->
-
-          <div class="campo-clave">
-
-            <label for="confirmarClave">
-              Confirmar nueva contraseña
-            </label>
-
-            <div class="campo-clave-input">
-
-              <input
-                id="confirmarClave"
-                name="confirmar-nueva-clave-mantix"
-                [type]="mostrarConfirmacion() ? 'text' : 'password'"
-                [value]="confirmarClave()"
-                (input)="confirmarClave.set($any($event.target).value)"
-                placeholder="Repite tu nueva contraseña"
-                autocomplete="new-password"
-                required
-              />
-
-              <button
-                type="button"
-                class="btn-ver-clave"
-                (click)="alternarVisibilidadConfirmacion()"
-              >
-                {{ mostrarConfirmacion() ? 'Ocultar' : 'Mostrar' }}
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <!-- ======================================
-               REQUISITOS DE CONTRASEÑA
-               ====================================== -->
-
-          <div class="clave-requisitos">
-
-            La nueva contraseña debe tener mínimo 8 caracteres,
-            una mayúscula, una minúscula y un número.
-
-          </div>
-
-
-          <!-- ======================================
-               MENSAJE DE ERROR
-               ====================================== -->
-
-          @if (errorCambioClave()) {
-
-            <div class="clave-mensaje error" role="alert">
-
-              {{ errorCambioClave() }}
-
-            </div>
-
-          }
-
-
-          <!-- ======================================
-               MENSAJE DE ÉXITO
-               ====================================== -->
-
-          @if (exitoCambioClave()) {
-
-            <div class="clave-mensaje exito" role="status">
-
-              {{ exitoCambioClave() }}
-
-            </div>
-
-          }
-
-
-          <!-- ======================================
-               BOTONES
-               ====================================== -->
-
-          <div class="modal-clave-acciones">
-
-            <button
-              type="button"
-              class="btn-clave-cancelar"
-              (click)="cerrarModalCambioClave()"
-            >
-              Cerrar
-            </button>
-
-
-            <button
-              type="submit"
-              class="btn-clave-guardar"
-              [disabled]="cambiandoClave() || !!exitoCambioClave()"
-            >
-              {{ cambiandoClave() ? 'Actualizando...' : 'Actualizar contraseña' }}
-            </button>
-
-          </div>
-
-        </form>
-
-      </section>
 
     </div>
 
-  }
+
+    <nav class="sidebar-nav">
+
+      <p class="nav-title">
+        PRINCIPAL
+      </p>
+
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/dashboard')">
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </a>
+
+
+      <a routerLink="/equipos" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/equipos')">
+
+        <span class="nav-icon">
+          ▣
+        </span>
+
+        <span>
+          Equipos
+        </span>
+
+      </a>
+
+
+      <a routerLink="/tickets" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/tickets')">
+
+        <span class="nav-icon">
+          ▤
+        </span>
+
+        <span>
+          Tickets
+        </span>
+
+      </a>
+
+
+      <a routerLink="/mantenimientos" routerLinkActive="active" class="nav-item"
+        (click)="permitirRuta('/mantenimientos')">
+
+        <span class="nav-icon">
+          🔧
+        </span>
+
+        <span>
+          Mantenimiento
+        </span>
+
+      </a>
+
+
+      <a routerLink="/historial" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/historial')">
+
+        <span class="nav-icon">
+          ◷
+        </span>
+
+        <span>
+          Historial
+        </span>
+
+      </a>
+
+
+      <p class="nav-title nav-title-space">
+        GESTIÓN
+      </p>
+
+
+      <a routerLink="/usuarios" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/usuarios')">
+
+        <span class="nav-icon">
+          ◉
+        </span>
+
+        <span>
+          Usuarios
+        </span>
+
+      </a>
+
+
+      <a routerLink="/reportes" routerLinkActive="active" class="nav-item" (click)="permitirRuta('/reportes')">
+
+        <span class="nav-icon">
+          ▥
+        </span>
+
+        <span>
+          Reportes
+        </span>
+
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a routerLink="/configuracion" routerLinkActive="active" class="nav-item"
+        (click)="permitirRuta('/configuracion')">
+
+        <span class="nav-icon">
+          ⚙
+        </span>
+
+        <span>
+          Configuración
+        </span>
+
+      </a>
+
+
+      <!-- ==========================================
+             USUARIO DEL SIDEBAR
+             ========================================== -->
+
+      <div class="sidebar-user">
+
+        <div class="user-avatar">
+
+          {{ inicialUsuario() }}
+
+        </div>
+
+
+        <div class="user-info">
+
+          <strong>
+            {{ nombreUsuario() }}
+          </strong>
+
+          <span>
+            {{ rolUsuario() }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ==========================================
+         CONTENIDO PRINCIPAL
+         ========================================== -->
+
+  <main class="main-content">
+
+
+    <!-- ========================================
+           NAVBAR SUPERIOR
+           ======================================== -->
+
+    <header class="top-navbar">
+
+      <div class="navbar-left">
+
+        <button type="button" class="navbar-menu-button" aria-label="Abrir menú">
+          ☰
+        </button>
+
+
+        <div class="navbar-title">
+
+          <span>
+            {{ paginaActual() }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="navbar-right">
+
+
+        <!-- ========================================
+               NOTIFICACIONES
+               ======================================== -->
+
+        <button type="button" class="navbar-notification" title="Notificaciones">
+          🔔
+        </button>
+
+
+        <!-- PERFIL DE USUARIO -->
+
+        <div class="navbar-user-container" (click)="$event.stopPropagation()">
+
+          <button type="button" class="navbar-user" (click)="alternarPanelPerfil()"
+            [attr.aria-expanded]="panelPerfilAbierto()" aria-label="Abrir menú de perfil">
+
+            <div class="navbar-user-avatar">
+              {{ inicialUsuario() }}
+            </div>
+
+            <div class="navbar-user-info">
+
+              <strong>
+                {{ nombreUsuario() }}
+              </strong>
+
+              <span>
+                {{ rolUsuario() }}
+              </span>
+
+            </div>
+
+            <span class="profile-chevron">
+              ▾
+            </span>
+
+          </button>
+
+
+          <!-- PANEL DESPLEGABLE -->
+
+          @if (panelPerfilAbierto()) {
+
+          <div class="profile-dropdown">
+
+            <div class="profile-dropdown-header">
+
+              <div class="profile-dropdown-avatar">
+                {{ inicialUsuario() }}
+              </div>
+
+              <h3>
+                {{ nombreUsuario() }}
+              </h3>
+
+              <span class="profile-role">
+                {{ rolUsuario() }}
+              </span>
+
+              <span class="profile-status">
+                <span class="status-dot"></span>
+                Cuenta activa
+              </span>
+
+            </div>
+
+
+            <div class="profile-dropdown-divider"></div>
+
+
+            <div class="profile-dropdown-options">
+
+              <div class="profile-option">
+
+                <span class="profile-option-icon">♙</span>
+
+                <div>
+                  <strong>Mi perfil</strong>
+                  <small>Consultar mis datos personales</small>
+                </div>
+
+                <span class="option-arrow">›</span>
+
+              </div>
+
+
+              <div class="profile-option">
+
+                <span class="profile-option-icon">⚙</span>
+
+                <div>
+                  <strong>Configuración</strong>
+                  <small>Preferencias de mi cuenta</small>
+                </div>
+
+                <span class="option-arrow">›</span>
+
+              </div>
+
+
+              <!-- CAMBIAR CONTRASEÑA -->
+
+              <div class="profile-option" (click)="abrirModalCambioClave()" role="button" tabindex="0"
+                (keydown.enter)="abrirModalCambioClave()"
+                (keydown.space)="$event.preventDefault(); abrirModalCambioClave()">
+
+                <span class="profile-option-icon">♧</span>
+
+                <div>
+                  <strong>Cambiar contraseña</strong>
+                  <small>Seguridad de la cuenta</small>
+                </div>
+
+                <span class="option-arrow">›</span>
+
+              </div>
+
+            </div>
+
+
+            <div class="profile-dropdown-divider"></div>
+
+
+            <div class="profile-logout" (click)="cerrarSesion()">
+
+              <span>↪</span>
+
+              <strong>Cerrar sesión</strong>
+
+            </div>
+
+          </div>
+
+          }
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- ========================================
+           CONTENIDO DE LAS PÁGINAS
+           ======================================== -->
+
+    <div class="page-content">
+
+      <router-outlet />
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- ==========================================
+       MODAL CAMBIAR CONTRASEÑA
+       ========================================== -->
+
+@if (modalCambioClaveAbierto()) {
+
+<div class="modal-clave-overlay" (click)="cerrarModalCambioClave()">
+
+  <section class="modal-clave" role="dialog" aria-modal="true" aria-labelledby="tituloCambioClave"
+    (click)="$event.stopPropagation()">
+
+    <!-- ENCABEZADO -->
+
+    <div class="modal-clave-header">
+
+      <div>
+
+        <h2 id="tituloCambioClave">
+          Cambiar contraseña
+        </h2>
+
+        <p>
+          Actualiza la contraseña de tu cuenta de forma segura.
+        </p>
+
+      </div>
+
+      <button type="button" class="modal-clave-cerrar" aria-label="Cerrar ventana" (click)="cerrarModalCambioClave()">
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- FORMULARIO -->
+
+    <form class="modal-clave-form" autocomplete="off" (submit)="$event.preventDefault(); cambiarClave()">
+
+      <!-- ======================================
+               CONTRASEÑA ACTUAL
+               ====================================== -->
+
+      <div class="campo-clave">
+
+        <label for="claveActual">
+          Contraseña actual
+        </label>
+
+        <div class="campo-clave-input">
+
+          <input id="claveActual" name="clave-actual-mantix" [type]="mostrarClaveActual() ? 'text' : 'password'"
+            [value]="claveActual()" (input)="claveActual.set($any($event.target).value)"
+            placeholder="Ingresa tu contraseña actual" autocomplete="off" required />
+
+          <button type="button" class="btn-ver-clave" (click)="alternarVisibilidadClaveActual()">
+            {{ mostrarClaveActual() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+               NUEVA CONTRASEÑA
+               ====================================== -->
+
+      <div class="campo-clave">
+
+        <label for="claveNueva">
+          Nueva contraseña
+        </label>
+
+        <div class="campo-clave-input">
+
+          <input id="claveNueva" name="nueva-clave-mantix" [type]="mostrarClaveNueva() ? 'text' : 'password'"
+            [value]="claveNueva()" (input)="claveNueva.set($any($event.target).value)"
+            placeholder="Ingresa tu nueva contraseña" autocomplete="new-password" required />
+
+          <button type="button" class="btn-ver-clave" (click)="alternarVisibilidadClaveNueva()">
+            {{ mostrarClaveNueva() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+               INDICADOR ANIMADO DE SEGURIDAD
+               ====================================== -->
+
+      @if (claveNueva()) {
+
+      <div class="clave-fortaleza">
+
+        <div class="clave-fortaleza-info">
+
+          <span>
+            Seguridad de la contraseña
+          </span>
+
+          <strong [class.debil]="nivelSeguridad().clase === 'debil'" [class.media]="nivelSeguridad().clase === 'media'"
+            [class.fuerte]="nivelSeguridad().clase === 'fuerte'">
+            {{ nivelSeguridad().texto }}
+          </strong>
+
+        </div>
+
+
+        <div class="clave-fortaleza-barra">
+
+          <div class="clave-fortaleza-progreso" [class.debil]="nivelSeguridad().clase === 'debil'"
+            [class.media]="nivelSeguridad().clase === 'media'" [class.fuerte]="nivelSeguridad().clase === 'fuerte'"
+            [style.width.%]="nivelSeguridad().porcentaje"></div>
+
+        </div>
+
+
+        <small>
+          Usa mayúsculas, minúsculas, números y símbolos para mejorar la seguridad.
+        </small>
+
+      </div>
+
+      }
+
+
+      <!-- ======================================
+               CONFIRMAR NUEVA CONTRASEÑA
+               ====================================== -->
+
+      <div class="campo-clave">
+
+        <label for="confirmarClave">
+          Confirmar nueva contraseña
+        </label>
+
+        <div class="campo-clave-input">
+
+          <input id="confirmarClave" name="confirmar-nueva-clave-mantix"
+            [type]="mostrarConfirmacion() ? 'text' : 'password'" [value]="confirmarClave()"
+            (input)="confirmarClave.set($any($event.target).value)" placeholder="Repite tu nueva contraseña"
+            autocomplete="new-password" required />
+
+          <button type="button" class="btn-ver-clave" (click)="alternarVisibilidadConfirmacion()">
+            {{ mostrarConfirmacion() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ======================================
+               REQUISITOS DE CONTRASEÑA
+               ====================================== -->
+
+      <div class="clave-requisitos">
+
+        La nueva contraseña debe tener mínimo 8 caracteres,
+        una mayúscula, una minúscula y un número.
+
+      </div>
+
+
+      <!-- ======================================
+               MENSAJE DE ERROR
+               ====================================== -->
+
+      @if (errorCambioClave()) {
+
+      <div class="clave-mensaje error" role="alert">
+
+        {{ errorCambioClave() }}
+
+      </div>
+
+      }
+
+
+      <!-- ======================================
+               MENSAJE DE ÉXITO
+               ====================================== -->
+
+      @if (exitoCambioClave()) {
+
+      <div class="clave-mensaje exito" role="status">
+
+        {{ exitoCambioClave() }}
+
+      </div>
+
+      }
+
+
+      <!-- ======================================
+               BOTONES
+               ====================================== -->
+
+      <div class="modal-clave-acciones">
+
+        <button type="button" class="btn-clave-cancelar" (click)="cerrarModalCambioClave()">
+          Cerrar
+        </button>
+
+
+        <button type="submit" class="btn-clave-guardar" [disabled]="cambiandoClave() || !!exitoCambioClave()">
+          {{ cambiandoClave() ? 'Actualizando...' : 'Actualizar contraseña' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</div>
+
+}
 
 } @else {
 
-  <router-outlet />
+<router-outlet />
 
 }
