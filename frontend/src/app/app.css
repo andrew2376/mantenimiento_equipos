@@ -3667,3 +3667,1748 @@ td:first-child {
     margin-left: 48px;
   }
 }
+
+
+/* ==========================================
+   CONFIGURACIÓN GENERAL
+========================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ==========================================
+   PANEL IZQUIERDO
+========================================== */
+
+.login-hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 48px 7%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(
+      circle at 80% 75%,
+      rgba(108, 92, 231, 0.45),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #17152b 0%,
+      #211b49 55%,
+      #33246f 100%
+    );
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-circle {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 50%;
+}
+
+.hero-circle-one {
+  width: 650px;
+  height: 650px;
+  right: -280px;
+  top: -250px;
+}
+
+.hero-circle-two {
+  width: 480px;
+  height: 480px;
+  right: -190px;
+  top: -165px;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  right: 0;
+  bottom: 0;
+  background: rgba(108, 92, 231, 0.20);
+  filter: blur(100px);
+}
+
+/* ==========================================
+   CONTENIDO DEL PANEL
+========================================== */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 570px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   MARCA
+========================================== */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 65px;
+}
+
+.brand-icon {
+  width: 49px;
+  height: 49px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.20);
+}
+
+.brand-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.brand > span,
+.mobile-brand > span {
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+
+/* ==========================================
+   MENSAJE PRINCIPAL
+========================================== */
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #d1caff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9b8cff;
+  box-shadow: 0 0 10px #9b8cff;
+}
+
+.hero-message h1 {
+  margin: 25px 0 18px;
+  max-width: 550px;
+  font-size: clamp(38px, 4.1vw, 58px);
+  font-weight: 750;
+  letter-spacing: -2.5px;
+  line-height: 1.12;
+}
+
+.hero-message h1 span {
+  display: block;
+  color: #a99bff;
+}
+
+.hero-message p {
+  max-width: 440px;
+  margin: 0;
+  color: #b9b6d0;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* ==========================================
+   FUNCIONALIDADES
+========================================== */
+
+.hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  margin-top: 43px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.feature-icon {
+  width: 43px;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #b9aaff;
+}
+
+.feature-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.feature-item div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.feature-item strong {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.feature-item span {
+  color: #a8a5c0;
+  font-size: 12px;
+}
+
+/* ==========================================
+   PIE DEL PANEL IZQUIERDO
+========================================== */
+
+.hero-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 55px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  color: #9290ae;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+/* ==========================================
+   ILUSTRACIÓN DECORATIVA
+========================================== */
+
+.hero-visual {
+  position: absolute;
+  width: 370px;
+  height: 300px;
+  right: -50px;
+  bottom: 7%;
+  opacity: 0.48;
+  pointer-events: none;
+}
+
+.visual-device {
+  position: absolute;
+  width: 290px;
+  height: 195px;
+  right: 30px;
+  top: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 13px;
+  background: #19152f;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transform: perspective(700px) rotateY(-12deg) rotateX(4deg);
+}
+
+.device-top {
+  height: 19px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 9px;
+  background: #292344;
+}
+
+.device-top span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8273c8;
+}
+
+.device-content {
+  display: flex;
+  height: calc(100% - 19px);
+}
+
+.device-sidebar {
+  width: 39px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 10px;
+  background: #201c3c;
+}
+
+.mini-logo {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  background: #7865e8;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.device-sidebar i {
+  width: 13px;
+  height: 4px;
+  border-radius: 5px;
+  background: #61558f;
+}
+
+.device-main {
+  flex: 1;
+  padding: 12px;
+}
+
+.device-heading {
+  width: 65px;
+  height: 7px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+  background: #aaa0e8;
+}
+
+.device-cards {
+  display: flex;
+  gap: 8px;
+}
+
+.device-cards div {
+  height: 29px;
+  flex: 1;
+  border-radius: 4px;
+  background: #343052;
+}
+
+.device-chart {
+  position: relative;
+  height: 80px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #282443;
+}
+
+.chart-line {
+  position: absolute;
+  width: 80%;
+  height: 2px;
+  top: 34px;
+  left: 10%;
+  background: #8b7bf0;
+  transform: rotate(-10deg);
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+  height: 100%;
+}
+
+.chart-bars i {
+  width: 15px;
+  border-radius: 3px 3px 0 0;
+  background: #6555bc;
+}
+
+.chart-bars i:nth-child(1) { height: 35%; }
+.chart-bars i:nth-child(2) { height: 55%; }
+.chart-bars i:nth-child(3) { height: 42%; }
+.chart-bars i:nth-child(4) { height: 75%; }
+.chart-bars i:nth-child(5) { height: 60%; }
+.chart-bars i:nth-child(6) { height: 90%; }
+
+.visual-orbit {
+  position: absolute;
+  border: 1px solid rgba(180, 164, 255, 0.28);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+}
+
+.orbit-one {
+  width: 360px;
+  height: 150px;
+  right: 0;
+  top: 90px;
+}
+
+.orbit-two {
+  width: 310px;
+  height: 110px;
+  right: 20px;
+  top: 110px;
+}
+
+.floating-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  background: rgba(37, 31, 74, 0.90);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.20);
+}
+
+.floating-card strong,
+.floating-card small {
+  display: block;
+}
+
+.floating-card strong {
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.floating-card small {
+  margin-top: 4px;
+  color: #aaa4d0;
+  font-size: 9px;
+}
+
+.floating-check {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: rgba(32, 167, 121, 0.20);
+  color: #5ce0ad;
+}
+
+.floating-card-top {
+  top: 20px;
+  right: 0;
+}
+
+.floating-card-bottom {
+  bottom: 8px;
+  left: 0;
+}
+
+.floating-status {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #43d69d;
+  box-shadow: 0 0 10px #43d69d;
+}
+
+/* ==========================================
+   PANEL DERECHO
+========================================== */
+
+.login-panel {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 8%;
+  background: #ffffff;
+}
+
+.login-panel-content {
+  width: 100%;
+  max-width: 410px;
+}
+
+.mobile-brand {
+  display: none;
+}
+
+/* ==========================================
+   ENCABEZADO DEL LOGIN
+========================================== */
+
+.login-heading {
+  margin-bottom: 39px;
+}
+
+.welcome-label {
+  color: #7866e8;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.7px;
+}
+
+.login-heading h2 {
+  margin: 13px 0 10px;
+  color: #19172d;
+  font-size: 35px;
+  font-weight: 750;
+  letter-spacing: -1.4px;
+}
+
+.login-heading p {
+  margin: 0;
+  color: #85899a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ==========================================
+   FORMULARIO
+========================================== */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.campo label {
+  color: #29273e;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 55px;
+  border: 1px solid #e6e5ee;
+  border-radius: 11px;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #7664e8;
+  box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.09);
+}
+
+.input-wrapper > svg {
+  width: 19px;
+  height: 19px;
+  margin-left: 16px;
+  flex-shrink: 0;
+  color: #9b99aa;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 100%;
+  padding: 0 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #242239;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.input-wrapper input::placeholder {
+  color: #b0afbb;
+}
+
+.toggle-password {
+  width: 46px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #9694a5;
+  cursor: pointer;
+}
+
+.toggle-password svg {
+  width: 19px;
+  height: 19px;
+}
+
+.toggle-password:hover {
+  color: #6c5ce7;
+}
+
+/* ==========================================
+   ERRORES
+========================================== */
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  background: #fff1f2;
+  color: #c2414b;
+  font-size: 12px;
+}
+
+.error span {
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fee2e2;
+  font-weight: 800;
+}
+
+/* ==========================================
+   BOTÓN DE INGRESO
+========================================== */
+
+.btn-login {
+  position: relative;
+  width: 100%;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 11px;
+  background: linear-gradient(110deg, #6c5ce7, #816cf0);
+  box-shadow: 0 9px 20px rgba(108, 92, 231, 0.23);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-login:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(108, 92, 231, 0.30);
+}
+
+.btn-login:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.button-arrow {
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* ==========================================
+   CARGANDO
+========================================== */
+
+.loader {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   SEGURIDAD
+========================================== */
+
+.login-security {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  margin-top: 35px;
+  color: #9b99a8;
+  font-size: 11px;
+}
+
+.login-security svg {
+  width: 17px;
+  height: 17px;
+  color: #20a779;
+}
+
+/* ==========================================
+   PIE DEL LOGIN
+========================================== */
+
+.login-bottom {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  color: #b0afbb;
+  font-size: 10px;
+  text-align: center;
+}
+
+/* ==========================================
+   RESPONSIVE: TABLET
+========================================== */
+
+@media (max-width: 1050px) {
+
+  .login-container {
+    grid-template-columns: 1fr 0.9fr;
+  }
+
+  .login-hero {
+    padding: 40px 7%;
+  }
+
+  .hero-message h1 {
+    font-size: 42px;
+  }
+
+  .hero-visual {
+    right: -130px;
+    opacity: 0.30;
+  }
+
+}
+
+/* ==========================================
+   RESPONSIVE: MÓVILES
+========================================== */
+
+@media (max-width: 760px) {
+
+  .login-container {
+    display: block;
+    min-height: 100vh;
+    background: #f7f7fc;
+  }
+
+  .login-hero {
+    display: none;
+  }
+
+  .login-panel {
+    min-height: 100vh;
+    padding: 35px 24px 75px;
+    background: #f7f7fc;
+  }
+
+  .login-panel-content {
+    max-width: 430px;
+    padding: 30px 25px;
+    border: 1px solid #eeedf5;
+    border-radius: 19px;
+    background: #ffffff;
+    box-shadow: 0 15px 45px rgba(23, 21, 43, 0.07);
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    margin-bottom: 38px;
+  }
+
+  .mobile-brand .brand-icon {
+    width: 43px;
+    height: 43px;
+  }
+
+  .mobile-brand > span {
+    color: #211d42;
+    font-size: 23px;
+  }
+
+  .login-heading {
+    margin-bottom: 30px;
+  }
+
+  .login-heading h2 {
+    font-size: 30px;
+  }
+
+  .login-security {
+    margin-top: 27px;
+  }
+
+  .login-bottom {
+    bottom: 20px;
+  }
+
+}
+
+/* ==========================================
+   RESPONSIVE: MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 380px) {
+
+  .login-panel {
+    padding: 20px 14px 65px;
+  }
+
+  .login-panel-content {
+    padding: 25px 19px;
+  }
+
+  .login-heading h2 {
+    font-size: 27px;
+  }
+
+}
+
+
+
+/* ==========================================
+   MANTIX - LOGIN
+   Diseño visual moderno y responsive
+========================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 56% 44%;
+  overflow: hidden;
+  background: #f7f7fc;
+}
+
+/* ==========================================
+   PANEL IZQUIERDO
+========================================== */
+
+.login-hero {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  padding: 55px 9%;
+  color: #ffffff;
+  background:
+    radial-gradient(
+      ellipse at 80% 75%,
+      rgba(111, 48, 215, 0.48),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 5% 0%,
+      rgba(106, 46, 177, 0.45),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #100c27 0%, #17102f 55%, #25114f 100%);
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-circle {
+  position: absolute;
+  border: 1px solid rgba(190, 155, 255, 0.12);
+  border-radius: 50%;
+}
+
+.hero-circle-one {
+  width: 680px;
+  height: 680px;
+  top: -390px;
+  right: -170px;
+}
+
+.hero-circle-two {
+  width: 850px;
+  height: 850px;
+  top: -430px;
+  right: -270px;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  right: -100px;
+  bottom: -170px;
+  border-radius: 50%;
+  background: rgba(113, 63, 230, 0.24);
+  filter: blur(100px);
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 650px;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 65px;
+}
+
+.brand-icon {
+  width: 78px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.brand-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 7px;
+}
+
+.brand > span {
+  color: #ffffff;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+/* ==========================================
+   MENSAJE PRINCIPAL
+========================================== */
+
+.hero-message {
+  max-width: 610px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  margin-bottom: 35px;
+  color: #e4d8ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(202, 174, 255, 0.2);
+}
+
+.tag-dot {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #a78bfa;
+  box-shadow: 0 0 12px #a78bfa;
+}
+
+.hero-message h1 {
+  max-width: 610px;
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(40px, 3.6vw, 60px);
+  line-height: 1.12;
+  font-weight: 850;
+  letter-spacing: -2.8px;
+}
+
+.hero-message h1 span {
+  display: block;
+  color: #a98bff;
+}
+
+.hero-message p {
+  max-width: 530px;
+  margin: 0;
+  color: #c5bddf;
+  font-size: 16px;
+  line-height: 1.85;
+  font-weight: 400;
+}
+
+/* ==========================================
+   FUNCIONALIDADES
+========================================== */
+
+.hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 45px;
+  max-width: 440px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 15px;
+  color: #b8a0ff;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(202, 174, 255, 0.17);
+}
+
+.feature-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.feature-item > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.feature-item strong {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.feature-item span {
+  color: #bdb2db;
+  font-size: 13px;
+}
+
+/* ==========================================
+   PIE DEL PANEL IZQUIERDO
+========================================== */
+
+.hero-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 55px;
+  padding-top: 23px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  color: #a99bcf;
+  font-size: 9px;
+  letter-spacing: 1.1px;
+}
+
+.hero-footer span:last-child {
+  white-space: nowrap;
+}
+
+/* ==========================================
+   ILUSTRACIÓN DEL DASHBOARD
+========================================== */
+
+.hero-visual {
+  position: absolute;
+  z-index: 1;
+  width: 410px;
+  height: 300px;
+  right: -25px;
+  bottom: 105px;
+  pointer-events: none;
+  opacity: 0.78;
+}
+
+.visual-orbit {
+  position: absolute;
+  border: 1px solid rgba(177, 132, 255, 0.2);
+  border-radius: 50%;
+}
+
+.orbit-one {
+  width: 380px;
+  height: 220px;
+  right: -100px;
+  bottom: -20px;
+  transform: rotate(-22deg);
+}
+
+.orbit-two {
+  width: 460px;
+  height: 270px;
+  right: -130px;
+  bottom: -40px;
+  transform: rotate(-22deg);
+}
+
+.visual-device {
+  position: absolute;
+  width: 340px;
+  height: 215px;
+  right: 25px;
+  bottom: 20px;
+  padding: 9px;
+  border-radius: 15px 15px 4px 4px;
+  background: linear-gradient(145deg, #39316f, #171333);
+  border: 4px solid rgba(164, 133, 255, 0.3);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(126, 75, 255, 0.18);
+  transform: perspective(700px) rotateY(-8deg) rotateX(3deg);
+}
+
+.device-top {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-left: 5px;
+}
+
+.device-top span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9b83ef;
+}
+
+.device-content {
+  height: calc(100% - 16px);
+  display: flex;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #211a4b;
+}
+
+.device-sidebar {
+  width: 35px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 5px;
+  background: #30245f;
+}
+
+.mini-logo {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  color: #ffffff;
+  background: #7656d9;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.device-sidebar i {
+  width: 12px;
+  height: 4px;
+  border-radius: 5px;
+  background: #7160b0;
+}
+
+.device-main {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+}
+
+.device-heading {
+  width: 75px;
+  height: 7px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+  background: #a58bff;
+}
+
+.device-cards {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.device-cards div {
+  flex: 1;
+  height: 30px;
+  border-radius: 5px;
+  background: rgba(153, 123, 255, 0.2);
+}
+
+.device-chart {
+  position: relative;
+  height: 83px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chart-bars {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  height: 55px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.chart-bars i {
+  width: 15px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #a78bfa, #6542d3);
+}
+
+.chart-bars i:nth-child(1) { height: 35%; }
+.chart-bars i:nth-child(2) { height: 55%; }
+.chart-bars i:nth-child(3) { height: 40%; }
+.chart-bars i:nth-child(4) { height: 75%; }
+.chart-bars i:nth-child(5) { height: 60%; }
+.chart-bars i:nth-child(6) { height: 95%; }
+
+.chart-line {
+  position: absolute;
+  z-index: 1;
+  left: 15px;
+  right: 10px;
+  top: 42px;
+  height: 2px;
+  background: #a98bff;
+  transform: rotate(-10deg);
+  transform-origin: left;
+  opacity: 0.8;
+}
+
+.floating-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: rgba(55, 41, 108, 0.92);
+  border: 1px solid rgba(180, 153, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.floating-card strong,
+.floating-card small {
+  display: block;
+}
+
+.floating-card strong {
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.floating-card small {
+  margin-top: 4px;
+  color: #b6a9dc;
+  font-size: 9px;
+}
+
+.floating-card-top {
+  top: 10px;
+  right: 0;
+}
+
+.floating-card-bottom {
+  bottom: -15px;
+  left: 0;
+}
+
+.floating-check {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: #70e2bb;
+  background: rgba(49, 197, 151, 0.15);
+  font-weight: 800;
+}
+
+.floating-status {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #48d6b0;
+  box-shadow: 0 0 10px #48d6b0;
+}
+
+/* ==========================================
+   PANEL DERECHO
+========================================== */
+
+.login-panel {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 55px 8%;
+  background:
+    radial-gradient(
+      ellipse at 50% 10%,
+      rgba(124, 92, 230, 0.055),
+      transparent 45%
+    ),
+    #f8f8fd;
+}
+
+.login-panel-content {
+  width: 100%;
+  max-width: 510px;
+  padding: 45px 42px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow:
+    0 20px 65px rgba(38, 25, 87, 0.09),
+    0 2px 8px rgba(38, 25, 87, 0.025);
+}
+
+/* ==========================================
+   LOGO MÓVIL
+========================================== */
+
+.mobile-brand {
+  display: none;
+}
+
+/* ==========================================
+   ENCABEZADO DEL FORMULARIO
+========================================== */
+
+.login-heading {
+  margin-bottom: 40px;
+}
+
+.welcome-label {
+  display: inline-block;
+  margin-bottom: 17px;
+  color: #7453e6;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.4px;
+}
+
+.login-heading h2 {
+  margin: 0 0 12px;
+  color: #17152e;
+  font-size: 36px;
+  font-weight: 850;
+  letter-spacing: -1.5px;
+}
+
+.login-heading p {
+  margin: 0;
+  color: #85849a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ==========================================
+   MANTIX - AJUSTE DE ALTURA EN ESCRITORIO
+   Evita el desplazamiento vertical innecesario
+========================================== */
+
+@media (min-width: 901px) {
+
+  .login-container {
+    height: 100vh;
+    height: 100svh;
+    min-height: 700px;
+    overflow: hidden;
+  }
+
+  .login-hero,
+  .login-panel {
+    min-height: 0;
+    height: 100%;
+  }
+
+  /* Panel izquierdo */
+  .login-hero {
+    padding: 25px 8%;
+    align-items: center;
+  }
+
+  .brand {
+    margin-bottom: 30px;
+  }
+
+  .brand-icon {
+    width: 65px;
+    height: 65px;
+  }
+
+  .brand > span {
+    font-size: 34px;
+  }
+
+  .hero-tag {
+    margin-bottom: 23px;
+    padding: 8px 14px;
+  }
+
+  .hero-message h1 {
+    font-size: clamp(38px, 3.2vw, 52px);
+    line-height: 1.08;
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+
+  .hero-message p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .hero-features {
+    margin-top: 28px;
+    gap: 15px;
+  }
+
+  .feature-icon {
+    width: 49px;
+    height: 49px;
+  }
+
+  .feature-item strong {
+    font-size: 13px;
+  }
+
+  .feature-item span {
+    font-size: 12px;
+  }
+
+  .hero-footer {
+    margin-top: 28px;
+    padding-top: 16px;
+  }
+
+  .hero-visual {
+    bottom: 65px;
+    transform: scale(0.88);
+    transform-origin: bottom right;
+    opacity: 0.55;
+  }
+
+  /* Panel derecho */
+  .login-panel {
+    padding: 25px 7%;
+  }
+
+  .login-panel-content {
+    max-width: 500px;
+    padding: 32px 38px;
+  }
+
+  .login-heading {
+    margin-bottom: 28px;
+  }
+
+  .login-heading h2 {
+    font-size: 33px;
+    margin-bottom: 9px;
+  }
+
+  .login-heading p {
+    font-size: 12px;
+  }
+
+  .welcome-label {
+    margin-bottom: 13px;
+  }
+
+  .login-form {
+    gap: 21px;
+  }
+
+  .campo {
+    gap: 9px;
+  }
+
+  .input-wrapper {
+    height: 54px;
+  }
+
+  .btn-login {
+    height: 55px;
+  }
+
+  .login-security {
+    margin-top: 24px;
+  }
+
+  .login-bottom {
+    bottom: 18px;
+  }
+}
+
+/* ==========================================
+   MONITORES DE MENOR ALTURA
+========================================== */
+
+@media (min-width: 901px) and (max-height: 800px) {
+
+  .login-container {
+    min-height: 620px;
+  }
+
+  .brand {
+    margin-bottom: 20px;
+  }
+
+  .brand-icon {
+    width: 55px;
+    height: 55px;
+  }
+
+  .hero-tag {
+    margin-bottom: 16px;
+  }
+
+  .hero-message h1 {
+    font-size: 39px;
+  }
+
+  .hero-features {
+    margin-top: 19px;
+    gap: 11px;
+  }
+
+  .feature-icon {
+    width: 43px;
+    height: 43px;
+  }
+
+  .hero-footer {
+    margin-top: 18px;
+    padding-top: 12px;
+  }
+
+  .hero-visual {
+    transform: scale(0.72);
+    opacity: 0.35;
+  }
+
+  .login-panel-content {
+    padding: 25px 32px;
+  }
+
+  .login-heading {
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    gap: 16px;
+  }
+
+  .input-wrapper {
+    height: 49px;
+  }
+
+  .btn-login {
+    height: 51px;
+  }
+
+  .login-security {
+    margin-top: 18px;
+  }
+}
+
+
+/* LOGO MANTIX INTEGRADO AL FONDO */
+
+.brand {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.brand-icon {
+  width: 310px;
+  height: 115px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.brand-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: contain;
+  object-position: left center;
+
+  
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+  .brand-icon {
+    width: 230px;
+    height: 85px;
+  }
+}
+
+
+
+/* ==========================================
+   LOGO MANTIX - TAMAÑO Y PROPORCIÓN
+========================================== */
+
+.login-hero .brand {
+  width: 100%;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.login-hero .brand-icon {
+  width: 430px;
+  height: 145px;
+  overflow: visible;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.login-hero .brand-icon img {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: contain;
+  object-position: left center;
+  transform: scale(1.30);
+  transform-origin: left center;
+  mix-blend-mode: screen;
+}
+
+/* Monitores de menor altura */
+@media (min-width: 901px) and (max-height: 800px) {
+  .login-hero .brand-icon {
+    width: 390px;
+    height: 125px;
+  }
+
+  .login-hero .brand-icon img {
+    transform: scale(1.25);
+  }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+  .login-hero .brand-icon {
+    width: 300px;
+    height: 100px;
+  }
+
+  .login-hero .brand-icon img {
+    transform: scale(1.15);
+  }
+}
+
+
+.brand-icon {
+  width: 360px;
+  height: 115px;
+  background: transparent;
+  border: none;
+  overflow: visible;
+}
+
+.brand-icon img {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: contain;
+  mix-blend-mode: normal;
+}
